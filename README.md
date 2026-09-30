@@ -38,10 +38,10 @@ atomic checks, so the reward is dense.
 
 ```bash
 # oracle (expect mean 1.0) and no-op (expect 0.0)
-uvx harbor run --repo https://huggingface.co/datasets/openenvforge/3ambench@v0.1.0 -d 3ambench@0.1.0 -a oracle -n 4
-uvx harbor run --repo https://huggingface.co/datasets/openenvforge/3ambench@v0.1.0 -d 3ambench@0.1.0 -a nop -n 4
+uvx harbor run --repo https://huggingface.co/datasets/openenvforge/3ambench@v0.1.1 -d 3ambench@0.1.1 -a oracle -n 4
+uvx harbor run --repo https://huggingface.co/datasets/openenvforge/3ambench@v0.1.1 -d 3ambench@0.1.1 -a nop -n 4
 # your model on the 5-task smoke set
-uvx harbor run --repo https://huggingface.co/datasets/openenvforge/3ambench@v0.1.0 -d 3ambench-mini@0.1.0 -a terminus-2 -m <model>
+uvx harbor run --repo https://huggingface.co/datasets/openenvforge/3ambench@v0.1.1 -d 3ambench-mini@0.1.1 -a terminus-2 -m <model>
 ```
 
 Tasks set `[agent] network_mode = "no-network"`, because this repo ships the solutions (see Anti-hacking).
@@ -69,8 +69,21 @@ with AlertForgeEnv(base_url="https://openenvforge-3ambench-env.hf.space").sync()
   the page itself is in `space/`.
 - **Run the environment locally** and open the web interface at http://localhost:8000/web:
   ```bash
-  docker run -p 8000:8000 -e ENABLE_WEB_INTERFACE=true ghcr.io/devesh-maheshwari/3ambench-env:0.1.0
+  docker run -p 8000:8000 -e ENABLE_WEB_INTERFACE=true ghcr.io/devesh-maheshwari/3ambench-env:0.1.1
   ```
+
+## Leaderboard (v0.1.1, 6 tasks: af-001, af-009, af-013, af-017, af-021, af-029)
+
+| Agent | Model | Runs | Mean reward | Solved |
+|---|---|---|---|---|
+| claude-code | claude-opus-5-5 | 12 | 1.000 | 12/12 |
+| codex | gpt-6-astra | 12 | 1.000 | 12/12 |
+| terminus-2 | gpt-oss-120b | 13 | 0.436 | 3/13 |
+
+Local Harbor runs on Docker Desktop (agent network enabled, so not sealed). Frontier agents saturate this subset;
+the dense reward separates weaker models (gpt-oss-120b scores between 0.03 and 0.37 on every unsolved run instead of 0).
+Harder tiers are planned for v0.2. Every run can be replayed step by step in the
+[replay Space](https://huggingface.co/spaces/openenvforge/3ambench-replay).
 
 ## What a task looks like
 
@@ -205,6 +218,6 @@ Apache-2.0; see `NOTICE.md` for attribution of adapted community rules (CC BY 4.
 @misc{3ambench2026,
   title  = {3amBench: a behaviorally graded, dense-reward RL environment for Prometheus alerting as code},
   year   = {2026},
-  note   = {Harbor dataset and OpenEnv environment; generator package alertforge v0.1.0}
+  note   = {Harbor dataset and OpenEnv environment; generator package alertforge v0.1.1}
 }
 ```

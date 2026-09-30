@@ -84,9 +84,34 @@ def call_ops(name: str, args: dict) -> tuple[list[tuple], bool]:
                   bool(e.get("replace_all"))) for e in args.get("edits") or []] if path else []), False
     if n == "apply_patch":
         return [("patch", str(args.get("input") or args.get("patch") or command_text(args)))], False
+    if n == "exec" and "tools." in str(args.get("input", "")):
+        return codex_exec_ops(str(args["input"]))
     if n in SHELL_TOOLS:
         return shell_ops(command_text(args))
     return [], False
+
+
+_JS_STR = r'"(?:[^"\\]|\\.)*"'
+_JS_PATCH = re.compile(r"tools\.apply_patch\(\s*(" + _JS_STR + ")")
+_JS_CMD = re.compile(r"\bcmd\s*:\s*(" + _JS_STR + ")")
+
+
+def codex_exec_ops(src: str) -> tuple[list[tuple], bool]:
+    """Codex code-mode: one `exec` call holds JS that calls tools.apply_patch("...") / tools.exec_command({cmd:"..."})."""
+    events = []
+    for m in _JS_PATCH.finditer(src):
+        events.append((m.start(), [("patch", json.loads(m.group(1)))], False))
+    for m in _JS_CMD.finditer(src):
+        ops, maybe = shell_ops(json.loads(m.group(1)))
+        events.append((m.start(), ops, maybe))
+    ops, maybe = [], False
+    for _, o, mb in sorted(events, key=lambda e: e[0]):
+        ops += o
+        maybe = maybe or mb
+    # commands built dynamically (e.g. a JS array passed to exec_command) cannot be replayed exactly
+    if "exec_command" in src and not _JS_CMD.search(src):
+        maybe = maybe or bool(_MUTATING.search(src))
+    return ops, maybe
 
 
 def apply_v4a(files: dict, patch: str) -> tuple[list[tuple], bool]:

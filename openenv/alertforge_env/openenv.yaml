@@ -1,6 +1,6 @@
 spec_version: 1
 name: alertforge_env
-version: 0.1.0
+version: 0.1.1
 type: space
 runtime: fastapi
 app: alertforge_env.server.app:app

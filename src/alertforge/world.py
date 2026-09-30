@@ -194,6 +194,8 @@ def _build_alerts_and_reqs(w: World, wf: dict, mix: dict, rng: random.Random) ->
             rng.shuffle(pool)
     for a, bug in repairs:
         a.req_id = rid("P")
+        if bugs.accepted_for(a, bug):
+            a.params["for_range"] = bugs.accepted_for(a, bug)
         w.reqs.append(Req(a.req_id, "repair", alert=a, defect=bug))
     # H11: no healthy per-service burn siblings on hard
     if w.tier == "hard":

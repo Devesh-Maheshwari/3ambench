@@ -23,7 +23,8 @@ Prometheus scrapes every 1m and evaluates rules every 1m. Every series carries a
   - `http`: requests to `http_requests_total` with `code=~"5.."` (4xx is not an error).
   - `grpc`: calls to `grpc_server_handled_total` with `grpc_code=~"Unavailable|Internal|DeadlineExceeded|Unknown|DataLoss"`.
   - `latency`: requests slower than the SLO threshold: `1 - rate(http_request_duration_seconds_bucket{le="<threshold>"}) / rate(http_request_duration_seconds_count)`.
-- Several services can share a record name; add a separate rule per SLI family.
+- Recording rules cover every service that emits the family's metrics: do not filter them by `service`.
+  Several services can share a record name; add a separate rule per SLI family.
 
 ### SLO burn-rate alerts (multiwindow, multi-burn-rate; 30-day SLO window)
 Error budget `b = 1 - <SLO target>`.
@@ -44,8 +45,9 @@ and `team: <owning team>`.
 
 ### Fleet alerts
 Owned by the `sre-core` team, `severity: warning`, aggregated `by (service)` (one alert per service,
-never per pod). Ratio alerts must also require at least 1 request/second over the same window, so a
-single failure at 4 a.m. does not page anyone.
+never per pod). Error-ratio and latency alerts compute rates over a `5m` window, and thresholds are written
+as fractions (`0.25` means 25%). Ratio alerts must also require at least 1 request/second over the same window,
+so a single failure at 4 a.m. does not page anyone.
 
 ### Annotations (every alert)
 - `summary`: must name the service with `{{ $labels.service }}`; only reference labels the expression keeps.

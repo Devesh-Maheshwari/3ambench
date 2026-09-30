@@ -27,6 +27,9 @@ import shutil
 import sys
 import tempfile
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from redact import redact  # noqa: E402
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
@@ -348,7 +351,7 @@ class Exporter:
         data = {"version": 1, "tasks": tasks, "runs": self.runs}
         os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
         with open(out_path, "w") as fh:
-            json.dump(data, fh, separators=(",", ":"))
+            fh.write(redact(json.dumps(data, separators=(",", ":"))))  # never publish keys or local paths
         return data
 
 

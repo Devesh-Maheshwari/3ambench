@@ -5,7 +5,7 @@ from __future__ import annotations
 import copy
 import random
 
-from .alerts import BURN, RECORD_PREFIX, AlertSpec, fmt
+from .alerts import BURN, FLEET_KINDS, FOR_FLOOR, RECORD_PREFIX, AlertSpec, fmt
 from fractions import Fraction as F
 
 # defect id -> alert kinds it can be planted into
@@ -17,6 +17,15 @@ HOSTS = {
     "B12t": ["burn_page", "burn_ticket", "target_down"], "B13": ["error_ratio", "mem_high", "latency_p99"],
     "B14": ["latency_p99"], "B15": ["target_down"], "B16": ["error_ratio"],
 }
+
+
+def accepted_for(a: AlertSpec, bug: str) -> tuple[int, int] | None:
+    """B02 on a fleet alert: README fixes no `for`, and the postmortem only describes the symptom, so any
+    duration that stays silent through short spikes and still fires within 2x the conventional `for` passes.
+    Burn and service-health alerts keep their README duration (None: exact timing)."""
+    if bug != "B02" or a.kind not in FLEET_KINDS:
+        return None
+    return FOR_FLOOR[a.kind], 2 * a.for_min
 
 
 def mutate(a: AlertSpec, rule: dict, bug: str, old_team: str | None = None) -> dict:

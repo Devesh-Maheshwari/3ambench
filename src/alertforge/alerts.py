@@ -17,6 +17,10 @@ RECORD_PREFIX = "slo:sli_error:ratio_rate"
 WINDOW_MIN = {"5m": 5, "30m": 30, "1h": 60, "6h": 360}
 FOR_MIN = {"burn_page": 2, "burn_ticket": 15, "error_ratio": 5, "mem_high": 5, "crashloop": 10,
            "latency_p99": 10, "target_down": 3}
+# Lowest accepted `for` when a repair leaves the duration to the agent (B02 on fleet alerts): the postmortem
+# only says spikes of "a minute or two" must not page. Instant conditions need 3m (2m spike + 1m margin);
+# 5m-rate conditions keep a short spike inside the window for ~5 evaluations, so they need 5m.
+FOR_FLOOR = {"error_ratio": 5, "latency_p99": 5, "mem_high": 3, "crashloop": 3}
 BURN = {"burn_page": ("1h", "5m", F("14.4")), "burn_ticket": ("6h", "30m", F(6))}
 FLEET_KINDS = ("error_ratio", "mem_high", "crashloop", "latency_p99")
 FLEET_NAMES = {
@@ -45,6 +49,12 @@ class AlertSpec:
     @property
     def for_min(self) -> int:
         return int(self.params.get("for_min", FOR_MIN[self.kind]))
+
+    @property
+    def for_range(self) -> tuple[int, int]:
+        """Accepted `for` minutes (lo, hi); a single value unless the task text leaves it open."""
+        lo, hi = self.params.get("for_range", (self.for_min, self.for_min))
+        return int(lo), int(hi)
 
     @property
     def uses_records(self) -> bool:
@@ -204,9 +214,9 @@ def condition(a: AlertSpec, scen: ps.Scenario) -> Callable[[int], set[str]]:
             "crashloop": crashloop, "latency_p99": latency_p99, "target_down": target_down}[k]
 
 
-def timeline(a: AlertSpec, scen: ps.Scenario) -> tuple[list[set[str]], list[set[str]]]:
-    """(condition per minute, firing per minute) for the whole scenario."""
+def timeline(a: AlertSpec, scen: ps.Scenario, for_min: int | None = None) -> tuple[list[set[str]], list[set[str]]]:
+    """(condition per minute, firing per minute) for the whole scenario (`for_min` defaults to the oracle's)."""
     cond = condition(a, scen)
     conds = [cond(t) for t in range(scen.minutes + 1)]
-    fires = ps.firing_timeline(scen.minutes, lambda t: conds[t], a.for_min)
+    fires = ps.firing_timeline(scen.minutes, lambda t: conds[t], a.for_min if for_min is None else for_min)
     return conds, fires

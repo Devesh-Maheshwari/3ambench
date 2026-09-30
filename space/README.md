@@ -41,7 +41,7 @@ Everything is read from `data/runs.json`, produced by `scripts/export_runs.py` i
 Run the environment yourself:
 
 ```bash
-docker run -p 8000:8000 -e ENABLE_WEB_INTERFACE=true ghcr.io/devesh-maheshwari/3ambench-env:0.1.0
+docker run -p 8000:8000 -e ENABLE_WEB_INTERFACE=true ghcr.io/devesh-maheshwari/3ambench-env:0.1.1
 # then open http://localhost:8000/web
 ```
 

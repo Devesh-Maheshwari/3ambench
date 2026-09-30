@@ -2,12 +2,12 @@
 # Stage (and, only with CONFIRM=1, push) the 3amBench dataset and the OpenEnv Space to Hugging Face.
 # NOT executed by the build. Usage:
 #   HF_REPO=<you>/3ambench scripts/push_to_hf.sh                  # dry run: stages into dist/
-#   HF_REPO=<you>/3ambench CONFIRM=1 scripts/push_to_hf.sh        # upload + tag v0.1.0
+#   HF_REPO=<you>/3ambench CONFIRM=1 scripts/push_to_hf.sh        # upload + tag v0.1.1
 #   SPACE_REPO=<you>/3ambench-env CONFIRM=1 scripts/push_to_hf.sh # also push the OpenEnv Space
 set -euo pipefail
 : "${HF_REPO:?set HF_REPO=<hf-user-or-org>/3ambench}"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="${VERSION:-v0.1.0}"
+VERSION="${VERSION:-v0.1.1}"
 DS="${ROOT}/dist/hf-dataset"
 SP="${ROOT}/dist/hf-space"
 rm -rf "$DS" "$SP"; mkdir -p "$DS/generator" "$SP"
@@ -34,6 +34,7 @@ sed -e 's#^COPY pyproject.toml README.md /app/alertforge/#COPY alertforge_src /a
     "$ROOT/openenv/alertforge_env/server/Dockerfile" > "$SP/Dockerfile"
 find "$SP" -name '__pycache__' -type d -prune -exec rm -rf {} +
 
+python3 "$ROOT/scripts/redact.py" --check "$DS" && python3 "$ROOT/scripts/redact.py" --check "$SP" || { echo "refusing: secrets or local paths in staging"; exit 1; }
 echo "staged dataset at $DS ($(find "$DS/tasks" -name task.toml | wc -l | tr -d ' ') tasks) and Space at $SP"
 if [ "${CONFIRM:-0}" != "1" ]; then
   echo "dry run only. Re-run with CONFIRM=1 to upload to https://huggingface.co/datasets/$HF_REPO"; exit 0
@@ -45,4 +46,4 @@ if [ -n "${SPACE_REPO:-}" ]; then
   (cd "$SP" && openenv push --repo-id "$SPACE_REPO")
 fi
 # clean-cache verification, as a user would run it:
-echo "verify: rm -rf ~/.cache/harbor/tasks && uvx harbor run --repo https://huggingface.co/datasets/$HF_REPO@$VERSION -d 3ambench@0.1.0 -a oracle -n 4"
+echo "verify: rm -rf ~/.cache/harbor/tasks && uvx harbor run --repo https://huggingface.co/datasets/$HF_REPO@$VERSION -d 3ambench@0.1.1 -a oracle -n 4"

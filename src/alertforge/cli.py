@@ -17,7 +17,7 @@ import time
 
 WORKFLOWS = ["slo-onboarding", "alert-storm-cleanup", "missed-page-postmortem", "latency-slo", "team-reorg-migration"]
 TIERS = ["easy", "medium", "hard"]
-RELEASE = "0.1.0"
+RELEASE = "0.1.1"
 
 
 def plan(seeds=(1, 2)) -> list[tuple[str, str, str, int]]:

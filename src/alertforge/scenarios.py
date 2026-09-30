@@ -48,28 +48,32 @@ def ratio_scen(rng: random.Random, name: str, family: str, minutes: int, plans: 
 
 
 def _check(a: AlertSpec, b: Built) -> Built:
-    _, fires = timeline(a, b.scen)
-    for p in b.probes:
-        firing = fires[p.t]
-        got = bool(firing - {p.service}) if p.other else p.service in firing
-        if got != (p.intent == "fire"):
-            raise IntentMismatch(f"{a.name}/{b.name}@{p.t} {p.service}: want {p.intent}")
+    """Every intent must hold for every accepted `for` (firing is monotone in `for`, so the ends suffice)."""
+    for for_min in sorted({*a.for_range, a.for_min}):
+        _, fires = timeline(a, b.scen, for_min)
+        for p in b.probes:
+            firing = fires[p.t]
+            got = bool(firing - {p.service}) if p.other else p.service in firing
+            if got != (p.intent == "fire"):
+                raise IntentMismatch(f"{a.name}/{b.name}@{p.t} {p.service} for={for_min}m: want {p.intent}")
     return b
 
 
 def _timing(a: AlertSpec, b: Built, svc: str, after: int) -> Built:
-    """Add onset probes at t*+for-1 (silent) and t*+for+1 (fire); truncate the scenario after them."""
+    """Add onset probes at t*+lo-1 (silent) and t*+hi+1 (fire), lo..hi the accepted `for` (both the oracle's
+    unless the task leaves it open); truncate the scenario after them."""
+    lo, hi = a.for_range
     conds, _ = timeline(a, b.scen)
     t_star = next((t for t in range(after, len(conds)) if svc in conds[t]), None)
-    if t_star is None or t_star + a.for_min + 2 > b.scen.minutes:
+    if t_star is None or t_star + hi + 2 > b.scen.minutes:
         raise IntentMismatch("onset never crosses the threshold")
-    end = t_star + a.for_min + 2
+    end = t_star + hi + 2
     if not all(svc in conds[t] for t in range(t_star, end + 1)):
         raise IntentMismatch("onset condition flickers")
     for s in b.scen.series:
         s.values = s.values[: end + 1]
-    b.probes += [Probe(t_star + a.for_min - 1, svc, "silent", "timing"),
-                 Probe(t_star + a.for_min + 1, svc, "fire", "timing")]
+    b.probes += [Probe(t_star + lo - 1, svc, "silent", "timing"),
+                 Probe(t_star + hi + 1, svc, "fire", "timing")]
     return b
 
 
@@ -150,7 +154,7 @@ def _ratio_menu(a: AlertSpec, rng: random.Random, s: str, o: str, ns: str) -> li
         return b_
 
     def long_spike():
-        pre, L = 20, a.for_min + rng.randint(6, 12)
+        pre, L = 20, a.for_range[1] + rng.randint(6, 12)
         n = pre + L
         mag = min(cap, T * F(rng.randint(20, 50), 10))
         ratios = [mag if m > pre else norm() for m in range(n + 1)]
@@ -229,9 +233,10 @@ def _gauge_menu(a: AlertSpec, rng: random.Random, s: str, o: str, ns: str) -> li
             return b
         return f
 
+    lo, hi = a.for_range  # short spikes stay below the lowest accepted `for`, long ones outlast the highest
     return [sustained, flat("bracket_silent", lambda: T * F(85, 100), "silent"),
             flat("bracket_fire", lambda: T + (1 - T) / 2, "fire"), flat("normal", low, "silent"), onset,
-            spike("short_spike", rng.randint(1, 4), "silent"), spike("long_spike", rng.randint(8, 14), "fire")]
+            spike("short_spike", rng.randint(1, lo - 1), "silent"), spike("long_spike", rng.randint(hi + 3, hi + 9), "fire")]
 
 
 def _crash_menu(a: AlertSpec, rng: random.Random, s: str, o: str, ns: str) -> list:

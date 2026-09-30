@@ -1,7 +1,7 @@
 [
   {
     "name": "3ambench",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Prometheus alerting-as-code tasks graded behaviorally by promtool/amtool.",
     "tasks": [
       {
@@ -134,7 +134,7 @@
   },
   {
     "name": "3ambench-mini",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "The 5 easy seed-1 tasks.",
     "tasks": [
       {
