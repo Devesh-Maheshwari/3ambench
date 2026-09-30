@@ -1,0 +1,150 @@
+rule_files:
+- ../../rules/*.yml
+- ../../rules/*.yaml
+evaluation_interval: 1m
+tests:
+- name: InvoiceApiErrorBudgetBurnSlow sustained
+  interval: 1m
+  input_series:
+  - series: http_request_duration_seconds_bucket{instance="10.176.175.2:8080",le="0.05",namespace="staging",pod="invoice-api-njnzz",service="invoice-api"}
+    values: 63074+34x23 63891+34x1 63960+34x1 64029+35x2 64133+35x9
+  - series: http_request_duration_seconds_bucket{instance="10.176.175.2:8080",le="0.1",namespace="staging",pod="invoice-api-njnzz",service="invoice-api"}
+    values: 63084+87x4 63520+87x3 63869+88x1 64044+87x1 64219+88x10 65189+88x1 65367+88x1 65545+90x2 65813+90x9
+  - series: http_request_duration_seconds_bucket{instance="10.176.175.2:8080",le="0.25",namespace="staging",pod="invoice-api-njnzz",service="invoice-api"}
+    values: 63099+163x2 63589+164x1 63918+163x2 64408+165x2 64902+164x1 65231+166x1 65562+167x1 65894+166x1 66227+167x2 66727+167x1 67062+167x1 67397+167x1 67732+168x2 68235+168x3 68908+169x1 69247+170x1 69586+170x1
+  - series: http_request_duration_seconds_bucket{instance="10.176.175.2:8080",le="0.5",namespace="staging",pod="invoice-api-njnzz",service="invoice-api"}
+    values: 63133+168x2 63638+169x1 63977+168x2 64482+170x2 64991+169x1 65330+171x1 65671+172x1 66013+171x1 66356+172x2 66871+172x1 67216+172x1 67561+172x1 67906+173x2 68424+173x3 69117+174x1 69466+175x1 69815+175x1
+  - series: http_request_duration_seconds_bucket{instance="10.176.175.2:8080",le="1",namespace="staging",pod="invoice-api-njnzz",service="invoice-api"}
+    values: 63157+174x2 63680+175x1 64031+174x2 64554+176x2 65081+175x1 65432+177x1 65785+178x1 66139+177x1 66494+178x2 67027+178x1 67384+178x1 67741+178x1 68098+179x2 68634+179x3 69351+180x1 69712+181x1 70073+181x1
+  - series: http_request_duration_seconds_bucket{instance="10.176.175.2:8080",le="2.5",namespace="staging",pod="invoice-api-njnzz",service="invoice-api"}
+    values: 63174+178x1 63531+179x1 63890+180x1 64249+179x1 64608+181x1 64969+180x2 65510+181x2 66054+181x1 66417+183x3 67148+183x1 67515+183x1 67882+183x1 68249+184x2 68800+184x3 69537+185x1 69908+186x1 70279+186x1
+  - series: http_request_duration_seconds_bucket{instance="10.176.175.2:8080",le="+Inf",namespace="staging",pod="invoice-api-njnzz",service="invoice-api"}
+    values: 63199+187x1 63574+188x1 63951+189x1 64328+188x1 64705+190x1 65084+189x2 65652+190x1 66033+191x1 66414+191x1 66797+192x2 67372+192x1 67757+192x1 68142+192x1 68527+193x4 69493+194x3 70270+195x1 70659+196x1
+  - series: http_request_duration_seconds_count{instance="10.176.175.2:8080",namespace="staging",pod="invoice-api-njnzz",service="invoice-api"}
+    values: 63199+187x1 63574+188x1 63951+189x1 64328+188x1 64705+190x1 65084+189x2 65652+190x1 66033+191x1 66414+191x1 66797+192x2 67372+192x1 67757+192x1 68142+192x1 68527+193x4 69493+194x3 70270+195x1 70659+196x1
+  - series: http_request_duration_seconds_bucket{instance="10.210.141.3:8080",le="0.05",namespace="staging",pod="invoice-api-9h8bc",service="invoice-api"}
+    values: 11690+65x5 12079+65x7 12600+66x2 12797+66x15 13854+66x2 14053+67x4
+  - series: http_request_duration_seconds_bucket{instance="10.210.141.3:8080",le="0.1",namespace="staging",pod="invoice-api-9h8bc",service="invoice-api"}
+    values: 11691+117x5 12391+117x7 13328+118x1 13565+117x1 13800+119x3 14275+119x10 15585+119x2 15943+121x2 16305+121x1
+  - series: http_request_duration_seconds_bucket{instance="10.210.141.3:8080",le="0.25",namespace="staging",pod="invoice-api-9h8bc",service="invoice-api"}
+    values: 11723+157x4 12509+156x1 12822+157x1 13137+158x4 13928+159x1 14247+158x1 14564+160x3 15203+160x6 16324+161x3 16969+161x2 17453+163x2 17941+163x1
+  - series: http_request_duration_seconds_bucket{instance="10.210.141.3:8080",le="0.5",namespace="staging",pod="invoice-api-9h8bc",service="invoice-api"}
+    values: 11736+161x4 12542+160x1 12863+161x1 13186+162x4 13997+163x1 14324+162x1 14649+164x3 15304+164x6 16453+165x3 17114+165x2 17610+167x2 18110+167x1
+  - series: http_request_duration_seconds_bucket{instance="10.210.141.3:8080",le="1",namespace="staging",pod="invoice-api-9h8bc",service="invoice-api"}
+    values: 11748+164x4 12569+163x1 12896+164x1 13225+165x4 14051+166x1 14384+165x1 14715+167x3 15382+167x6 16552+168x3 17225+168x2 17730+170x2 18239+170x1
+  - series: http_request_duration_seconds_bucket{instance="10.210.141.3:8080",le="2.5",namespace="staging",pod="invoice-api-9h8bc",service="invoice-api"}
+    values: 11780+167x4 12616+166x1 12949+167x1 13284+168x4 14125+169x1 14464+168x1 14801+170x3 15480+170x6 16671+171x3 17356+171x2 17870+173x2 18388+173x1
+  - series: http_request_duration_seconds_bucket{instance="10.210.141.3:8080",le="+Inf",namespace="staging",pod="invoice-api-9h8bc",service="invoice-api"}
+    values: 11826+170x1 12167+170x1 12508+171x1 12849+171x2 13363+171x1 13706+172x3 14395+173x1 14740+173x1 15087+174x2 15608+174x6 16827+175x3 17528+175x2 18054+177x2 18584+177x1
+  - series: http_request_duration_seconds_count{instance="10.210.141.3:8080",namespace="staging",pod="invoice-api-9h8bc",service="invoice-api"}
+    values: 11826+170x1 12167+170x1 12508+171x1 12849+171x2 13363+171x1 13706+172x3 14395+173x1 14740+173x1 15087+174x2 15608+174x6 16827+175x3 17528+175x2 18054+177x2 18584+177x1
+  - series: http_request_duration_seconds_bucket{instance="10.144.72.4:8080",le="0.05",namespace="staging",pod="invoice-api-znxnj",service="invoice-api"}
+    values: 66725+73x1 66872+73x1 67019+74x1 67166+74x6 67685+74x5 68130+75x13 69181+75x1 69332+76x5
+  - series: http_request_duration_seconds_bucket{instance="10.144.72.4:8080",le="0.1",namespace="staging",pod="invoice-api-znxnj",service="invoice-api"}
+    values: 66746+180x1 67109+181x1 67473+183x1 67837+183x6 69120+184x1 69487+184x3 70224+185x3 70965+186x1 71336+186x7 72826+186x1 73200+188x4 74141
+  - series: http_request_duration_seconds_bucket{instance="10.144.72.4:8080",le="0.25",namespace="staging",pod="invoice-api-znxnj",service="invoice-api"}
+    values: 66779+280x1 67342+281x1 67906+283x1 68471+283x2 69322+283x1 69890+285x1 70462+286x1 71033+286x3 72178+288x2 73041+290x1 73620+288x1 74198+289x1 74777+290x1 75356+289x1 75935+291x1 76516+291x2 77391+293x1 77976+294x1
+  - series: http_request_duration_seconds_bucket{instance="10.144.72.4:8080",le="0.5",namespace="staging",pod="invoice-api-znxnj",service="invoice-api"}
+    values: 66828+285x1 67400+286x1 67973+288x1 68547+287x2 69410+288x1 69987+289x1 70567+291x1 71148+291x1 71729+291x1 72312+292x3 73482+294x1 74069+294x6 76128+296x1 76719+296x2 77608+298x1 78203+299x1
+  - series: http_request_duration_seconds_bucket{instance="10.144.72.4:8080",le="1",namespace="staging",pod="invoice-api-znxnj",service="invoice-api"}
+    values: 66833+291x1 67417+292x1 68002+294x1 68588+293x2 69469+294x1 70058+295x1 70650+297x1 71243+297x1 71836+297x1 72431+298x3 73625+300x1 74224+300x6 76325+302x1 76928+302x2 77835+304x1 78442+305x1
+  - series: http_request_duration_seconds_bucket{instance="10.144.72.4:8080",le="2.5",namespace="staging",pod="invoice-api-znxnj",service="invoice-api"}
+    values: 66865+294x1 67455+295x1 68046+297x1 68638+296x2 69528+297x1 70123+298x1 70721+300x1 71320+300x1 71919+300x1 72520+301x3 73726+303x1 74331+303x6 76453+305x1 77062+305x2 77978+307x1 78591+308x1
+  - series: http_request_duration_seconds_bucket{instance="10.144.72.4:8080",le="+Inf",namespace="staging",pod="invoice-api-znxnj",service="invoice-api"}
+    values: 66912+302x1 67518+303x1 68125+305x1 68733+304x2 69647+305x1 70258+306x1 70872+308x1 71487+308x1 72102+308x1 72719+309x3 73957+311x1 74578+311x5 76445+312x1 77070+313x3 78323+315x1 78952+316x1
+  - series: http_request_duration_seconds_count{instance="10.144.72.4:8080",namespace="staging",pod="invoice-api-znxnj",service="invoice-api"}
+    values: 66912+302x1 67518+303x1 68125+305x1 68733+304x2 69647+305x1 70258+306x1 70872+308x1 71487+308x1 72102+308x1 72719+309x3 73957+311x1 74578+311x5 76445+312x1 77070+313x3 78323+315x1 78952+316x1
+  - series: http_request_duration_seconds_bucket{instance="10.222.57.2:8080",le="0.05",namespace="staging",pod="ledger-edge-nqpfl",service="ledger-edge"}
+    values: 45332+444x1 46219+443x2 47547+442x2 48872+441x1 49755+441x7 53281+441x1 54162+439x2 55480+439x1 56359+439x6 59433+439x4 61627+438x1 62502+439x1
+  - series: http_request_duration_seconds_bucket{instance="10.222.57.2:8080",le="0.1",namespace="staging",pod="ledger-edge-nqpfl",service="ledger-edge"}
+    values: 45332+774x1 46878+772x2 49192+770x1 50733+768x1 52270+770x1 53808+769x1 55345+768x1 56882+769x1 58419+765x1 59952+767x1 61484+765x1 63016+765x1 64548+765x6 69905+765x4 73729+764x1 75255+765x1
+  - series: http_request_duration_seconds_bucket{instance="10.222.57.2:8080",le="0.25",namespace="staging",pod="ledger-edge-nqpfl",service="ledger-edge"}
+    values: 45333+1205x1 47741+1203x1 50148+1201x2 53752+1197x1 56147+1200x1 58544+1199x1 60940+1197x1 63335+1198x1 65730+1193x1 68120+1195x1 70509+1194x1 72899+1192x1 75287+1193x1 77674+1192x1 80059+1193x1 82446+1195x1 84834+1193x2 88412+1191x2 91982+1193x1
+  - series: http_request_duration_seconds_bucket{instance="10.222.57.2:8080",le="0.5",namespace="staging",pod="ledger-edge-nqpfl",service="ledger-edge"}
+    values: 45346+1207x1 47758+1205x1 50169+1203x2 53779+1199x1 56178+1202x1 58579+1201x1 60979+1199x1 63378+1200x1 65777+1195x1 68171+1197x1 70564+1196x1 72958+1194x1 75350+1195x1 77741+1194x1 80130+1195x1 82521+1197x1 84913+1195x2 88497+1193x2 92073+1195x1
+  - series: http_request_duration_seconds_bucket{instance="10.222.57.2:8080",le="1",namespace="staging",pod="ledger-edge-nqpfl",service="ledger-edge"}
+    values: 45350+1208x1 47764+1206x1 50177+1204x2 53790+1200x1 56191+1203x1 58594+1202x1 60996+1200x1 63397+1201x1 65798+1196x1 68194+1198x1 70589+1197x1 72985+1195x1 75379+1196x1 77772+1195x1 80163+1196x1 82556+1198x1 84950+1196x2 88537+1194x2 92116+1196x1
+  - series: http_request_duration_seconds_bucket{instance="10.222.57.2:8080",le="2.5",namespace="staging",pod="ledger-edge-nqpfl",service="ledger-edge"}
+    values: 45384+1210x1 47802+1209x2 51427+1207x1 53842+1203x1 56249+1205x1 58656+1204x1 61062+1203x4 67073+1202x1 69476+1200x2 73078+1198x1 75478+1199x1 77877+1198x1 80274+1198x1 82671+1200x1 85070+1198x2 88663+1196x2 92249+1198x1
+  - series: http_request_duration_seconds_bucket{instance="10.222.57.2:8080",le="+Inf",namespace="staging",pod="ledger-edge-nqpfl",service="ledger-edge"}
+    values: 45410+1213x1 47835+1213x2 51472+1211x1 53895+1208x3 58725+1208x1 61139+1208x1 63554+1206x1 65968+1204x1 68378+1205x1 70787+1204x1 73198+1202x1 75606+1203x1 78013+1203x2 81620+1203x2 85230+1202x2 88835+1200x2 92434+1201x1
+  - series: http_request_duration_seconds_count{instance="10.222.57.2:8080",namespace="staging",pod="ledger-edge-nqpfl",service="ledger-edge"}
+    values: 45410+1213x1 47835+1213x2 51472+1211x1 53895+1208x3 58725+1208x1 61139+1208x1 63554+1206x1 65968+1204x1 68378+1205x1 70787+1204x1 73198+1202x1 75606+1203x1 78013+1203x2 81620+1203x2 85230+1202x2 88835+1200x2 92434+1201x1
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="InvoiceApiErrorBudgetBurnSlow",alertstate="firing",service="invoice-api"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="InvoiceApiErrorBudgetBurnSlow",alertstate="firing",service="invoice-api"}) or vector(0)
+    eval_time: 37m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="InvoiceApiErrorBudgetBurnSlow",alertstate="firing",service="ledger-edge"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+- name: InvoiceApiErrorBudgetBurnSlow normal
+  interval: 1m
+  input_series:
+  - series: http_request_duration_seconds_bucket{instance="10.36.86.2:8080",le="0.05",namespace="staging",pod="invoice-api-nppp9",service="invoice-api"}
+    values: 35901+120x2 36262+120x8 37341+119x8 38411+119x1 38648+118x4 39239+118x1 39476+118x7 40419+118x1 40654+118x4 41243+118x1 41478+117x11 42881+117x1
+  - series: http_request_duration_seconds_bucket{instance="10.36.86.2:8080",le="0.1",namespace="staging",pod="invoice-api-nppp9",service="invoice-api"}
+    values: 35942+192x2 36519+192x8 38245+190x8 39954+190x1 40333+188x1 40710+188x1 41087+190x1 41465+190x1 41843+188x1 42220+188x4 43159+188x1 43534+188x4 44473+188x1 44848+187x11 47091+187x1
+  - series: http_request_duration_seconds_bucket{instance="10.36.86.2:8080",le="0.25",namespace="staging",pod="invoice-api-nppp9",service="invoice-api"}
+    values: 35990+308x2 36916+309x2 37842+308x5 39688+307x1 40301+306x3 41524+306x1 42135+304x1 42744+304x1 43351+304x1 43958+304x1 44567+302x1 45174+303x1 45779+304x1 46386+303x3 47596+302x1 48199+303x3 49410+301x1 50013+301x2 50915+300x1 51516+301x1 52117+300x5 53916+301x1
+  - series: http_request_duration_seconds_bucket{instance="10.36.86.2:8080",le="0.5",namespace="staging",pod="invoice-api-nppp9",service="invoice-api"}
+    values: 36035+308x2 36961+309x2 37887+308x5 39733+307x1 40346+306x3 41569+306x1 42180+304x1 42789+304x1 43396+304x1 44003+304x1 44612+302x1 45219+303x1 45824+304x1 46431+303x3 47641+302x1 48244+303x3 49455+301x1 50058+301x2 50960+300x1 51561+301x1 52162+300x5 53961+301x1
+  - series: http_request_duration_seconds_bucket{instance="10.36.86.2:8080",le="1",namespace="staging",pod="invoice-api-nppp9",service="invoice-api"}
+    values: 36052+308x2 36978+309x2 37904+308x5 39750+307x1 40363+306x3 41586+306x1 42197+304x1 42806+304x1 43413+304x1 44020+304x1 44629+302x1 45236+303x1 45841+304x1 46448+303x3 47658+302x1 48261+303x3 49472+301x1 50075+301x2 50977+300x1 51578+301x1 52179+300x5 53978+301x1
+  - series: http_request_duration_seconds_bucket{instance="10.36.86.2:8080",le="2.5",namespace="staging",pod="invoice-api-nppp9",service="invoice-api"}
+    values: 36061+308x2 36987+309x2 37913+308x5 39759+307x1 40372+306x3 41595+306x1 42206+304x1 42815+304x1 43422+304x1 44029+304x1 44638+302x1 45245+303x1 45850+304x1 46457+303x3 47667+302x1 48270+303x3 49481+301x1 50084+301x2 50986+300x1 51587+301x1 52188+300x5 53987+301x1
+  - series: http_request_duration_seconds_bucket{instance="10.36.86.2:8080",le="+Inf",namespace="staging",pod="invoice-api-nppp9",service="invoice-api"}
+    values: 36109+309x2 37038+310x2 37967+309x5 39819+308x1 40434+307x3 41661+307x1 42274+305x1 42885+305x1 43494+305x1 44103+305x1 44714+303x1 45323+304x1 45930+305x1 46539+304x3 47753+303x1 48358+304x3 49573+302x1 50178+302x2 51083+301x1 51686+302x1 52289+301x5 54094+302x1
+  - series: http_request_duration_seconds_count{instance="10.36.86.2:8080",namespace="staging",pod="invoice-api-nppp9",service="invoice-api"}
+    values: 36109+309x2 37038+310x2 37967+309x5 39819+308x1 40434+307x3 41661+307x1 42274+305x1 42885+305x1 43494+305x1 44103+305x1 44714+303x1 45323+304x1 45930+305x1 46539+304x3 47753+303x1 48358+304x3 49573+302x1 50178+302x2 51083+301x1 51686+302x1 52289+301x5 54094+302x1
+  - series: http_request_duration_seconds_bucket{instance="10.179.175.3:8080",le="0.05",namespace="staging",pod="invoice-api-vb9c2",service="invoice-api"}
+    values: 81334+67x2 81536+67x10 82272+67x5 82673+66x28 84586+66x3 84849+66x1 84980+65x4 85306
+  - series: http_request_duration_seconds_bucket{instance="10.179.175.3:8080",le="0.1",namespace="staging",pod="invoice-api-vb9c2",service="invoice-api"}
+    values: 81374+154x2 81838+155x3 82457+154x6 83533+154x5 84455+152x28 88861+152x3 89467+152x1 89769+150x4 90521
+  - series: http_request_duration_seconds_bucket{instance="10.179.175.3:8080",le="0.25",namespace="staging",pod="invoice-api-vb9c2",service="invoice-api"}
+    values: 81421+288x2 82287+289x3 83442+288x1 84017+288x2 84879+287x1 85451+287x1 86024+286x3 87167+284x1 87736+284x1 88305+284x2 89158+284x3 90295+283x1 90863+283x1 91430+283x3 92561+282x1 93126+284x1 93693+284x1 94259+283x1 94824+282x1 95387+282x3 96513+282x1 97076+281x1 97637+281x1 98197+282x1
+  - series: http_request_duration_seconds_bucket{instance="10.179.175.3:8080",le="0.5",namespace="staging",pod="invoice-api-vb9c2",service="invoice-api"}
+    values: 81450+288x2 82316+289x3 83471+288x1 84046+288x2 84908+287x1 85480+287x1 86053+286x3 87196+284x1 87765+284x1 88334+284x2 89187+284x3 90324+283x1 90892+283x1 91459+283x3 92590+282x1 93155+284x1 93722+284x1 94288+283x1 94853+282x1 95416+282x3 96542+282x1 97105+281x1 97666+281x1 98226+282x1
+  - series: http_request_duration_seconds_bucket{instance="10.179.175.3:8080",le="1",namespace="staging",pod="invoice-api-vb9c2",service="invoice-api"}
+    values: 81465+288x2 82331+289x3 83486+288x1 84061+288x2 84923+287x1 85495+287x1 86068+286x3 87211+284x1 87780+284x1 88349+284x2 89202+284x3 90339+283x1 90907+283x1 91474+283x3 92605+282x1 93170+284x1 93737+284x1 94303+283x1 94868+282x1 95431+282x3 96557+282x1 97120+281x1 97681+281x1 98241+282x1
+  - series: http_request_duration_seconds_bucket{instance="10.179.175.3:8080",le="2.5",namespace="staging",pod="invoice-api-vb9c2",service="invoice-api"}
+    values: 81503+288x2 82369+289x3 83524+288x1 84099+288x2 84961+287x1 85533+287x1 86106+286x3 87249+284x1 87818+284x1 88387+284x2 89240+284x3 90377+283x1 90945+283x1 91512+283x3 92643+282x1 93208+284x1 93775+284x1 94341+283x1 94906+282x1 95469+282x3 96595+282x1 97158+281x1 97719+281x1 98279+282x1
+  - series: http_request_duration_seconds_bucket{instance="10.179.175.3:8080",le="+Inf",namespace="staging",pod="invoice-api-vb9c2",service="invoice-api"}
+    values: 81512+290x1 82093+292x3 83260+291x1 83841+290x1 84422+290x1 85001+289x1 85578+289x3 86733+289x1 87309+287x8 89891+287x2 90751+287x1 91324+286x3 92467+285x1 93036+286x4 94465+285x2 95319+284x2 96172+284x1 96739+284x2 97590+283x2 98438+284x1
+  - series: http_request_duration_seconds_count{instance="10.179.175.3:8080",namespace="staging",pod="invoice-api-vb9c2",service="invoice-api"}
+    values: 81512+290x1 82093+292x3 83260+291x1 83841+290x1 84422+290x1 85001+289x1 85578+289x3 86733+289x1 87309+287x8 89891+287x2 90751+287x1 91324+286x3 92467+285x1 93036+286x4 94465+285x2 95319+284x2 96172+284x1 96739+284x2 97590+283x2 98438+284x1
+  - series: http_request_duration_seconds_bucket{instance="10.239.80.2:8080",le="0.05",namespace="staging",pod="ledger-edge-kdprf",service="ledger-edge"}
+    values: 73407+484x2 74860+485x1 75831+485x1 76803+486x1 77776+487x1 78751+487x1 79726+488x2 81191+489x2 82659+491x1 83640+492x2 85117+492x2 86594+493x2 88074+494x2 89557+495x2 91043+496x2 92532+497x1 93525+497x1 94520+498x1 95517+498x1 96514+500x1 97513+499x1 98513+501x1 99514+502x2 101019+503x1 102024+503x1 103029
+  - series: http_request_duration_seconds_bucket{instance="10.239.80.2:8080",le="0.1",namespace="staging",pod="ledger-edge-kdprf",service="ledger-edge"}
+    values: 73422+971x2 76337+973x1 78284+973x1 80233+975x1 82184+977x1 84139+977x1 86094+979x2 89032+981x2 91977+985x1 93945+986x1 95918+988x1 97893+986x1 99867+989x1 101844+990x2 104815+993x3 108789+994x1 110778+997x2 113767+996x1 115762+998x1 117761+999x1 119761+1003x1 121765+1001x1 123771+1005x1 125779+1006x2 128796+1008x1 130811+1009x1 132826
+  - series: http_request_duration_seconds_bucket{instance="10.239.80.2:8080",le="0.25",namespace="staging",pod="ledger-edge-kdprf",service="ledger-edge"}
+    values: 73466+1489x1 76445+1494x1 79432+1495x1 82420+1498x1 85415+1498x1 88412+1501x1 91413+1501x1 94417+1503x1 97424+1505x2 101943+1511x1 104962+1513x1 107989+1516x1 111020+1513x1 114049+1518x1 117083+1519x2 121642+1523x3 127737+1525x1 130788+1529x2 135373+1528x1 138435+1531x1 141502+1534x1 144571+1538x1 147646+1537x1 150724+1543x1 153807+1544x2 158438+1547x1 161531+1548x1 164623
+  - series: http_request_duration_seconds_bucket{instance="10.239.80.2:8080",le="0.5",namespace="staging",pod="ledger-edge-kdprf",service="ledger-edge"}
+    values: 73481+1490x1 76462+1495x1 79451+1496x1 82441+1499x1 85438+1499x1 88437+1502x1 91440+1502x1 94446+1504x1 97455+1506x2 101977+1512x1 104998+1514x1 108027+1517x1 111060+1514x1 114091+1519x1 117127+1520x2 121689+1524x3 127788+1526x1 130841+1530x2 135429+1529x1 138493+1532x1 141562+1535x1 144633+1539x1 147710+1538x1 150790+1544x1 153875+1545x2 158509+1548x1 161604+1549x1 164698
+  - series: http_request_duration_seconds_bucket{instance="10.239.80.2:8080",le="1",namespace="staging",pod="ledger-edge-kdprf",service="ledger-edge"}
+    values: 73523+1491x1 76507+1496x2 80996+1496x1 83992+1500x2 88494+1504x1 91501+1504x1 94511+1506x1 97524+1508x2 102052+1513x1 105076+1515x1 108108+1518x2 112660+1519x1 115700+1519x1 118741+1522x1 121786+1526x3 127892+1528x1 130949+1531x1 134012+1530x1 137073+1537x1 140144+1538x1 143219+1538x1 146297+1539x1 149376+1543x1 152464+1543x1 155554+1547x1 158646+1549x2 163295+1547x1
+  - series: http_request_duration_seconds_bucket{instance="10.239.80.2:8080",le="2.5",namespace="staging",pod="ledger-edge-kdprf",service="ledger-edge"}
+    values: 73528+1492x1 76514+1497x2 81006+1497x1 84004+1501x2 88510+1505x1 91519+1506x1 94532+1507x1 97547+1509x2 102079+1514x1 105106+1516x1 108140+1519x1 111179+1517x1 114217+1523x1 117260+1523x1 120307+1524x1 123358+1527x1 126413+1529x2 131001+1532x1 134066+1532x1 137131+1538x1 140205+1539x1 143282+1539x1 146362+1540x1 149444+1544x1 152534+1544x1 155626+1549x1 158721+1550x1 161822+1552x1 164923
+  - series: http_request_duration_seconds_bucket{instance="10.239.80.2:8080",le="+Inf",namespace="staging",pod="ledger-edge-kdprf",service="ledger-edge"}
+    values: 73542+1494x1 76532+1499x2 81030+1499x1 84032+1503x2 88545+1507x1 91558+1508x1 94575+1509x1 97594+1511x2 102132+1516x1 105163+1518x1 108201+1521x1 111244+1519x1 114286+1525x1 117333+1525x1 120384+1526x1 123439+1529x1 126498+1531x2 131092+1534x1 134161+1534x1 137230+1540x1 140309+1541x1 143390+1541x1 146474+1542x1 149560+1546x1 152654+1546x1 155750+1551x1 158849+1552x1 161954+1554x1 165060
+  - series: http_request_duration_seconds_count{instance="10.239.80.2:8080",namespace="staging",pod="ledger-edge-kdprf",service="ledger-edge"}
+    values: 73542+1494x1 76532+1499x2 81030+1499x1 84032+1503x2 88545+1507x1 91558+1508x1 94575+1509x1 97594+1511x2 102132+1516x1 105163+1518x1 108201+1521x1 111244+1519x1 114286+1525x1 117333+1525x1 120384+1526x1 123439+1529x1 126498+1531x2 131092+1534x1 134161+1534x1 137230+1540x1 140309+1541x1 143390+1541x1 146474+1542x1 149560+1546x1 152654+1546x1 155750+1551x1 158849+1552x1 161954+1554x1 165060
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="InvoiceApiErrorBudgetBurnSlow",alertstate="firing",service="invoice-api"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+  - expr: count(ALERTS{alertname="InvoiceApiErrorBudgetBurnSlow",alertstate="firing",service="invoice-api"}) or vector(0)
+    eval_time: 60m
+    exp_samples:
+    - labels: '{}'
+      value: 0

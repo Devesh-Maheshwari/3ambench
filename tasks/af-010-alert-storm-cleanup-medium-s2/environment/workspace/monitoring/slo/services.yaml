@@ -1,0 +1,13 @@
+services:
+- name: checkout-worker
+  team: data-ingest
+  slo_target: 0.999
+  sli_family: grpc
+  metrics:
+  - grpc_server_handled_total
+- name: cart-edge
+  team: commerce-core
+  slo_target: 0.995
+  sli_family: grpc
+  metrics:
+  - grpc_server_handled_total

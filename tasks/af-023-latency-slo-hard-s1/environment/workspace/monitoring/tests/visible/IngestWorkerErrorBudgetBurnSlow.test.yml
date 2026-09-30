@@ -1,0 +1,150 @@
+rule_files:
+- ../../rules/*.yml
+- ../../rules/*.yaml
+evaluation_interval: 1m
+tests:
+- name: IngestWorkerErrorBudgetBurnSlow sustained
+  interval: 1m
+  input_series:
+  - series: http_request_duration_seconds_bucket{instance="10.106.55.2:8080",le="0.05",namespace="staging",pod="ingest-worker-qmzd7",service="ingest-worker"}
+    values: 22984+28x1 23041+29x2 23127+28x2 23212+29x2 23298+29x2 23384+28x4 23525+29x3 23640+29x4 23784+28x1 23841+28x1 23898+28x1 23955+29x5 24128
+  - series: http_request_duration_seconds_bucket{instance="10.106.55.2:8080",le="0.1",namespace="staging",pod="ingest-worker-qmzd7",service="ingest-worker"}
+    values: 23001+57x1 23117+59x2 23292+57x2 23465+59x2 23640+59x2 23815+57x4 24102+59x3 24336+59x4 24629+57x1 24745+57x1 24861+57x1 24977+59x5 25329
+  - series: http_request_duration_seconds_bucket{instance="10.106.55.2:8080",le="0.25",namespace="staging",pod="ingest-worker-qmzd7",service="ingest-worker"}
+    values: 23035+97x1 23230+98x2 23523+97x2 23815+98x2 24108+98x2 24401+97x4 24887+98x3 25278+98x4 25767+97x1 25962+97x1 26157+97x1 26352+98x5 26939
+  - series: http_request_duration_seconds_bucket{instance="10.106.55.2:8080",le="0.5",namespace="staging",pod="ingest-worker-qmzd7",service="ingest-worker"}
+    values: 23073+97x1 23268+98x2 23561+97x2 23853+98x2 24146+98x2 24439+97x4 24925+98x3 25316+98x4 25805+97x1 26000+97x1 26195+97x1 26390+98x5 26977
+  - series: http_request_duration_seconds_bucket{instance="10.106.55.2:8080",le="1",namespace="staging",pod="ingest-worker-qmzd7",service="ingest-worker"}
+    values: 23111+97x1 23306+98x2 23599+97x2 23891+98x2 24184+98x2 24477+97x4 24963+98x3 25354+98x4 25843+97x1 26038+97x1 26233+97x1 26428+98x5 27015
+  - series: http_request_duration_seconds_bucket{instance="10.106.55.2:8080",le="2.5",namespace="staging",pod="ingest-worker-qmzd7",service="ingest-worker"}
+    values: 23125+97x1 23320+98x2 23613+97x2 23905+98x2 24198+98x2 24491+97x4 24977+98x3 25368+98x4 25857+97x1 26052+97x1 26247+97x1 26442+98x5 27029
+  - series: http_request_duration_seconds_bucket{instance="10.106.55.2:8080",le="+Inf",namespace="staging",pod="ingest-worker-qmzd7",service="ingest-worker"}
+    values: 23132+98x1 23329+99x2 23625+98x2 23920+99x2 24216+99x2 24512+98x4 25003+99x3 25398+99x4 25892+98x1 26089+98x1 26286+98x1 26483+99x5 27076
+  - series: http_request_duration_seconds_count{instance="10.106.55.2:8080",namespace="staging",pod="ingest-worker-qmzd7",service="ingest-worker"}
+    values: 23132+98x1 23329+99x2 23625+98x2 23920+99x2 24216+99x2 24512+98x4 25003+99x3 25398+99x4 25892+98x1 26089+98x1 26286+98x1 26483+99x5 27076
+  - series: http_request_duration_seconds_bucket{instance="10.230.56.3:8080",le="0.05",namespace="staging",pod="ingest-worker-rdpqs",service="ingest-worker"}
+    values: 43980+59x4 44274+58x2 44449+59x5 44802+58x1 44919+58x1 45036+59x9 45625+58x1 45742+59x10
+  - series: http_request_duration_seconds_bucket{instance="10.230.56.3:8080",le="0.1",namespace="staging",pod="ingest-worker-rdpqs",service="ingest-worker"}
+    values: 43991+104x4 44509+102x2 44817+104x5 45439+102x1 45645+102x1 45851+104x9 46889+102x1 47095+104x10
+  - series: http_request_duration_seconds_bucket{instance="10.230.56.3:8080",le="0.25",namespace="staging",pod="ingest-worker-rdpqs",service="ingest-worker"}
+    values: 44008+165x1 44339+165x2 44833+164x2 45327+165x1 45658+165x1 45989+165x1 46318+164x1 46647+164x1 46976+166x2 47473+166x1 47804+166x1 48135+165x2 48629+164x1 48958+166x2 49455+165x2 49951+166x3 50614
+  - series: http_request_duration_seconds_bucket{instance="10.230.56.3:8080",le="0.5",namespace="staging",pod="ingest-worker-rdpqs",service="ingest-worker"}
+    values: 44058+165x1 44389+165x2 44883+164x2 45377+165x1 45708+165x1 46039+165x1 46368+164x1 46697+164x1 47026+166x2 47523+166x1 47854+166x1 48185+165x2 48679+164x1 49008+166x2 49505+165x2 50001+166x3 50664
+  - series: http_request_duration_seconds_bucket{instance="10.230.56.3:8080",le="1",namespace="staging",pod="ingest-worker-rdpqs",service="ingest-worker"}
+    values: 44078+165x1 44409+165x2 44903+164x2 45397+165x1 45728+165x1 46059+165x1 46388+164x1 46717+164x1 47046+166x2 47543+166x1 47874+166x1 48205+165x2 48699+164x1 49028+166x2 49525+165x2 50021+166x3 50684
+  - series: http_request_duration_seconds_bucket{instance="10.230.56.3:8080",le="2.5",namespace="staging",pod="ingest-worker-rdpqs",service="ingest-worker"}
+    values: 44112+165x1 44443+165x2 44937+164x2 45431+165x1 45762+165x1 46093+165x1 46422+164x1 46751+164x1 47080+166x2 47577+166x1 47908+166x1 48239+165x2 48733+164x1 49062+166x2 49559+165x2 50055+166x3 50718
+  - series: http_request_duration_seconds_bucket{instance="10.230.56.3:8080",le="+Inf",namespace="staging",pod="ingest-worker-rdpqs",service="ingest-worker"}
+    values: 44119+165x1 44451+166x2 44948+165x2 45444+166x1 45777+166x1 46110+166x1 46441+165x3 47102+167x2 47602+167x1 47934+167x1 48267+166x2 48764+165x1 49095+166x1 49428+166x3 50093+167x2 50593+166x1
+  - series: http_request_duration_seconds_count{instance="10.230.56.3:8080",namespace="staging",pod="ingest-worker-rdpqs",service="ingest-worker"}
+    values: 44119+165x1 44451+166x2 44948+165x2 45444+166x1 45777+166x1 46110+166x1 46441+165x3 47102+167x2 47602+167x1 47934+167x1 48267+166x2 48764+165x1 49095+166x1 49428+166x3 50093+167x2 50593+166x1
+  - series: http_request_duration_seconds_bucket{instance="10.255.1.4:8080",le="0.05",namespace="staging",pod="ingest-worker-4svhz",service="ingest-worker"}
+    values: 91247+72x1 91392+72x5 91825+73x2 92043+73x1 92188+72x5 92621+73x3 92912+73x1 93057+72x1 93202+72x2 93419+72x1 93564+72x1 93709+72x1 93854+73x3 94145
+  - series: http_request_duration_seconds_bucket{instance="10.255.1.4:8080",le="0.1",namespace="staging",pod="ingest-worker-4svhz",service="ingest-worker"}
+    values: 91270+128x1 91527+128x5 92296+129x2 92682+129x1 92939+128x5 93708+129x3 94223+129x1 94480+128x1 94737+128x2 95122+128x1 95379+128x1 95636+128x1 95893+129x3 96408
+  - series: http_request_duration_seconds_bucket{instance="10.255.1.4:8080",le="0.25",namespace="staging",pod="ingest-worker-4svhz",service="ingest-worker"}
+    values: 91289+163x1 91616+163x5 92595+164x2 93086+164x1 93413+163x5 94392+164x3 95047+164x1 95374+163x1 95701+163x2 96191+163x1 96518+163x1 96845+163x1 97173+165x2 97667+163x1
+  - series: http_request_duration_seconds_bucket{instance="10.255.1.4:8080",le="0.5",namespace="staging",pod="ingest-worker-4svhz",service="ingest-worker"}
+    values: 91289+163x1 91616+163x5 92595+164x2 93086+164x1 93413+163x5 94392+164x3 95047+164x1 95374+163x1 95701+163x2 96191+163x1 96518+163x1 96845+163x1 97173+165x2 97667+163x1
+  - series: http_request_duration_seconds_bucket{instance="10.255.1.4:8080",le="1",namespace="staging",pod="ingest-worker-4svhz",service="ingest-worker"}
+    values: 91302+163x1 91629+163x5 92608+164x2 93099+164x1 93426+163x5 94405+164x3 95060+164x1 95387+163x1 95714+163x2 96204+163x1 96531+163x1 96858+163x1 97186+165x2 97680+163x1
+  - series: http_request_duration_seconds_bucket{instance="10.255.1.4:8080",le="2.5",namespace="staging",pod="ingest-worker-4svhz",service="ingest-worker"}
+    values: 91341+163x1 91668+163x5 92647+164x2 93138+164x1 93465+163x5 94444+164x3 95099+164x1 95426+163x1 95753+163x2 96243+163x1 96570+163x1 96897+163x1 97225+165x2 97719+163x1
+  - series: http_request_duration_seconds_bucket{instance="10.255.1.4:8080",le="+Inf",namespace="staging",pod="ingest-worker-4svhz",service="ingest-worker"}
+    values: 91387+165x1 91718+165x5 92709+166x2 93206+166x1 93537+165x5 94528+166x3 95191+166x1 95522+165x1 95853+165x2 96349+165x1 96680+165x1 97011+165x1 97343+167x2 97843+165x1
+  - series: http_request_duration_seconds_count{instance="10.255.1.4:8080",namespace="staging",pod="ingest-worker-4svhz",service="ingest-worker"}
+    values: 91387+165x1 91718+165x5 92709+166x2 93206+166x1 93537+165x5 94528+166x3 95191+166x1 95522+165x1 95853+165x2 96349+165x1 96680+165x1 97011+165x1 97343+167x2 97843+165x1
+  - series: http_request_duration_seconds_bucket{instance="10.161.52.2:8080",le="0.05",namespace="staging",pod="feed-gw-gvtc5",service="feed-gw"}
+    values: 69394+358x2 70466+357x2 71536+354x1 72246+355x1 72955+352x1 73660+352x3 75067+351x1 75768+351x1 76468+350x2 77517+349x2 78563+348x1 79257+347x1 79949+345x3 81328+344x3 82703+343x2
+  - series: http_request_duration_seconds_bucket{instance="10.161.52.2:8080",le="0.1",namespace="staging",pod="feed-gw-gvtc5",service="feed-gw"}
+    values: 69416+554x2 71075+553x2 72732+548x1 73831+550x1 74929+545x1 76021+545x3 78199+544x1 79285+544x1 80370+542x2 81994+540x2 83613+539x1 84688+537x1 85759+534x3 87894+532x2 89491+531x3
+  - series: http_request_duration_seconds_bucket{instance="10.161.52.2:8080",le="0.25",namespace="staging",pod="feed-gw-gvtc5",service="feed-gw"}
+    values: 69457+991x2 72426+988x2 75389+982x1 77356+983x1 79321+976x1 81276+976x3 85176+973x1 87119+973x1 89060+969x1 90999+967x3 94865+963x1 96787+961x1 98705+955x3 102524+952x2 105381+949x1 107281+949x1
+  - series: http_request_duration_seconds_bucket{instance="10.161.52.2:8080",le="0.5",namespace="staging",pod="feed-gw-gvtc5",service="feed-gw"}
+    values: 69484+991x2 72453+988x2 75416+982x1 77383+983x1 79348+976x1 81303+976x3 85203+973x1 87146+973x1 89087+969x1 91026+967x3 94892+963x1 96814+961x1 98732+955x3 102551+952x2 105408+949x1 107308+949x1
+  - series: http_request_duration_seconds_bucket{instance="10.161.52.2:8080",le="1",namespace="staging",pod="feed-gw-gvtc5",service="feed-gw"}
+    values: 69504+991x2 72473+988x2 75436+982x1 77403+983x1 79368+976x1 81323+976x3 85223+973x1 87166+973x1 89107+969x1 91046+967x3 94912+963x1 96834+961x1 98752+955x3 102571+952x2 105428+949x1 107328+949x1
+  - series: http_request_duration_seconds_bucket{instance="10.161.52.2:8080",le="2.5",namespace="staging",pod="feed-gw-gvtc5",service="feed-gw"}
+    values: 69507+991x2 72476+988x2 75439+982x1 77406+983x1 79371+976x1 81326+976x3 85226+973x1 87169+973x1 89110+969x1 91049+967x3 94915+963x1 96837+961x1 98755+955x3 102574+952x2 105431+949x1 107331+949x1
+  - series: http_request_duration_seconds_bucket{instance="10.161.52.2:8080",le="+Inf",namespace="staging",pod="feed-gw-gvtc5",service="feed-gw"}
+    values: 69546+991x2 72515+988x2 75478+982x1 77445+983x1 79410+977x1 81366+976x3 85266+973x1 87209+973x1 89150+970x2 92057+967x2 94956+963x1 96878+961x1 98796+956x1 100707+955x1 102616+952x2 105473+949x1 107373+949x1
+  - series: http_request_duration_seconds_count{instance="10.161.52.2:8080",namespace="staging",pod="feed-gw-gvtc5",service="feed-gw"}
+    values: 69546+991x2 72515+988x2 75478+982x1 77445+983x1 79410+977x1 81366+976x3 85266+973x1 87209+973x1 89150+970x2 92057+967x2 94956+963x1 96878+961x1 98796+956x1 100707+955x1 102616+952x2 105473+949x1 107373+949x1
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="IngestWorkerErrorBudgetBurnSlow",alertstate="firing",service="ingest-worker"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="IngestWorkerErrorBudgetBurnSlow",alertstate="firing",service="ingest-worker"}) or vector(0)
+    eval_time: 37m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="IngestWorkerErrorBudgetBurnSlow",alertstate="firing",service="feed-gw"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+- name: IngestWorkerErrorBudgetBurnSlow normal
+  interval: 1m
+  input_series:
+  - series: http_request_duration_seconds_bucket{instance="10.220.201.2:8080",le="0.05",namespace="staging",pod="ingest-worker-l8t6j",service="ingest-worker"}
+    values: 15445+61x5 15810+61x1 15931+60x1 16052+60x14 16951+60x3 17190+59x12 17956+59x4 18250+58x4 18541+58x8
+  - series: http_request_duration_seconds_bucket{instance="10.220.201.2:8080",le="0.1",namespace="staging",pod="ingest-worker-l8t6j",service="ingest-worker"}
+    values: 15462+125x2 15836+124x2 16207+124x1 16454+123x1 16701+123x10 18053+123x1 18298+123x1 18542+122x3 19029+121x9 20238+121x1 20479+119x1 20718+121x1 20959+121x1 21199+119x4 21795+119x2 22151+118x3 22624+118x1
+  - series: http_request_duration_seconds_bucket{instance="10.220.201.2:8080",le="0.25",namespace="staging",pod="ingest-worker-l8t6j",service="ingest-worker"}
+    values: 15481+188x2 16044+187x2 16604+187x1 16977+185x1 17349+186x1 17720+186x1 18091+185x6 19385+185x1 19754+185x1 20122+184x3 20857+183x2 21405+182x1 21770+182x1 22135+182x1 22500+181x1 22864+181x1 23225+181x1 23588+181x1 23951+180x5 25032+180x2 25571+179x2 26107+180x1 26466
+  - series: http_request_duration_seconds_bucket{instance="10.220.201.2:8080",le="0.5",namespace="staging",pod="ingest-worker-l8t6j",service="ingest-worker"}
+    values: 15517+188x2 16080+187x2 16640+187x1 17013+185x1 17385+186x1 17756+186x1 18127+185x6 19421+185x1 19790+185x1 20158+184x3 20893+183x2 21441+182x1 21806+182x1 22171+182x1 22536+181x1 22900+181x1 23261+181x1 23624+181x1 23987+180x5 25068+180x2 25607+179x2 26143+180x1 26502
+  - series: http_request_duration_seconds_bucket{instance="10.220.201.2:8080",le="1",namespace="staging",pod="ingest-worker-l8t6j",service="ingest-worker"}
+    values: 15552+188x2 16115+187x2 16675+187x1 17048+185x1 17420+186x1 17791+186x1 18162+185x6 19456+185x1 19825+185x1 20193+184x3 20928+183x2 21476+182x1 21841+182x1 22206+182x1 22571+181x1 22935+181x1 23296+181x1 23659+181x1 24022+180x5 25103+180x2 25642+179x2 26178+180x1 26537
+  - series: http_request_duration_seconds_bucket{instance="10.220.201.2:8080",le="2.5",namespace="staging",pod="ingest-worker-l8t6j",service="ingest-worker"}
+    values: 15575+188x2 16138+187x2 16698+187x1 17071+185x1 17443+186x1 17814+186x1 18185+185x6 19479+185x1 19848+185x1 20216+184x3 20951+183x2 21499+182x1 21864+182x1 22229+182x1 22594+181x1 22958+181x1 23319+181x1 23682+181x1 24045+180x5 25126+180x2 25665+179x2 26201+180x1 26560
+  - series: http_request_duration_seconds_bucket{instance="10.220.201.2:8080",le="+Inf",namespace="staging",pod="ingest-worker-l8t6j",service="ingest-worker"}
+    values: 15592+188x2 16155+187x2 16715+187x1 17088+185x1 17460+186x1 17831+186x1 18202+185x6 19496+185x1 19865+185x1 20233+184x3 20968+183x2 21516+182x1 21881+182x1 22246+182x1 22611+181x1 22975+181x1 23336+181x1 23699+181x1 24062+180x5 25143+180x2 25682+179x2 26218+180x1 26577
+  - series: http_request_duration_seconds_count{instance="10.220.201.2:8080",namespace="staging",pod="ingest-worker-l8t6j",service="ingest-worker"}
+    values: 15592+188x2 16155+187x2 16715+187x1 17088+185x1 17460+186x1 17831+186x1 18202+185x6 19496+185x1 19865+185x1 20233+184x3 20968+183x2 21516+182x1 21881+182x1 22246+182x1 22611+181x1 22975+181x1 23336+181x1 23699+181x1 24062+180x5 25143+180x2 25682+179x2 26218+180x1 26577
+  - series: http_request_duration_seconds_bucket{instance="10.137.195.3:8080",le="0.05",namespace="staging",pod="ingest-worker-xpv87",service="ingest-worker"}
+    values: 72161+108x3 72592+108x1 72806+107x2 73126+107x2 73446+107x1 73659+106x3 74084+106x1 74297+106x4 74826+106x4 75355+105x2 75669+105x3 76088+105x1 76297+105x1 76506+104x5 77129+104x3 77544+104x1 77751+104x1 77958+102x1 78163+103x3
+  - series: http_request_duration_seconds_bucket{instance="10.137.195.3:8080",le="0.1",namespace="staging",pod="ingest-worker-xpv87",service="ingest-worker"}
+    values: 72197+183x3 72927+183x1 73290+181x2 73832+181x2 74374+181x1 74735+179x1 75094+179x1 75454+179x1 75814+179x4 76708+179x4 77602+178x2 78134+178x3 78844+178x1 79198+178x1 79552+176x5 80606+176x3 81308+176x1 81658+176x1 82008+173x1 82355+174x3
+  - series: http_request_duration_seconds_bucket{instance="10.137.195.3:8080",le="0.25",namespace="staging",pod="ingest-worker-xpv87",service="ingest-worker"}
+    values: 72212+275x2 73036+273x1 73584+271x1 74128+273x1 74672+273x1 75217+271x1 75760+271x1 76301+271x1 76842+272x1 77384+272x1 77926+270x1 78465+270x1 79003+270x1 79542+269x2 80348+267x2 81147+267x3 82214+267x1 82746+267x1 83279+265x1 83810+266x1 84340+266x1 84869+264x1 85398+264x1 85925+265x1 86453+265x1 86981+261x1 87504+262x1 88029+262x1
+  - series: http_request_duration_seconds_bucket{instance="10.137.195.3:8080",le="0.5",namespace="staging",pod="ingest-worker-xpv87",service="ingest-worker"}
+    values: 72215+275x2 73039+273x1 73587+271x1 74131+273x1 74675+273x1 75220+271x1 75763+271x1 76304+271x1 76845+272x1 77387+272x1 77929+270x1 78468+270x1 79006+270x1 79545+269x2 80351+267x2 81150+267x3 82217+267x1 82749+267x1 83282+265x1 83813+266x1 84343+266x1 84872+264x1 85401+264x1 85928+265x1 86456+265x1 86984+261x1 87507+262x1 88032+262x1
+  - series: http_request_duration_seconds_bucket{instance="10.137.195.3:8080",le="1",namespace="staging",pod="ingest-worker-xpv87",service="ingest-worker"}
+    values: 72255+275x2 73079+273x1 73627+271x1 74171+273x1 74715+273x1 75260+271x1 75803+271x1 76344+271x1 76885+272x1 77427+272x1 77969+270x1 78508+270x1 79046+270x1 79585+269x2 80391+267x2 81190+267x3 82257+267x1 82789+267x1 83322+265x1 83853+266x1 84383+266x1 84912+264x1 85441+264x1 85968+265x1 86496+265x1 87024+261x1 87547+262x1 88072+262x1
+  - series: http_request_duration_seconds_bucket{instance="10.137.195.3:8080",le="2.5",namespace="staging",pod="ingest-worker-xpv87",service="ingest-worker"}
+    values: 72282+275x2 73106+273x1 73654+271x1 74198+273x1 74742+273x1 75287+271x1 75830+271x1 76371+271x1 76912+272x1 77454+272x1 77996+270x1 78535+270x1 79073+270x1 79612+269x2 80418+267x2 81217+267x3 82284+267x1 82816+267x1 83349+265x1 83880+266x1 84410+266x1 84939+264x1 85468+264x1 85995+265x1 86523+265x1 87051+261x1 87574+262x1 88099+262x1
+  - series: http_request_duration_seconds_bucket{instance="10.137.195.3:8080",le="+Inf",namespace="staging",pod="ingest-worker-xpv87",service="ingest-worker"}
+    values: 72291+275x2 73115+273x1 73663+272x1 74208+273x1 74752+273x2 75569+272x1 76112+270x1 76653+271x1 77196+270x1 77738+270x1 78279+269x1 78818+268x1 79356+269x1 79895+269x1 80432+267x2 81232+267x3 82299+267x1 82832+267x1 83365+265x1 83896+266x1 84427+266x1 84956+264x1 85485+265x1 86013+265x1 86541+265x1 87069+262x3 88118+262x1
+  - series: http_request_duration_seconds_count{instance="10.137.195.3:8080",namespace="staging",pod="ingest-worker-xpv87",service="ingest-worker"}
+    values: 72291+275x2 73115+273x1 73663+272x1 74208+273x1 74752+273x2 75569+272x1 76112+270x1 76653+271x1 77196+270x1 77738+270x1 78279+269x1 78818+268x1 79356+269x1 79895+269x1 80432+267x2 81232+267x3 82299+267x1 82832+267x1 83365+265x1 83896+266x1 84427+266x1 84956+264x1 85485+265x1 86013+265x1 86541+265x1 87069+262x3 88118+262x1
+  - series: http_request_duration_seconds_bucket{instance="10.225.22.2:8080",le="0.05",namespace="staging",pod="feed-gw-rtkld",service="feed-gw"}
+    values: 51205+408x2 52428+409x2 53653+407x1 54469+408x2 55694+408x1 56512+410x1 57331+410x1 58150+409x2 59378+410x1 60199+411x2 61431+412x1 62254+411x1 63075+412x1 63898+411x1 64722+411x1 65545+411x1 66369+412x2 67606+413x2 68844+414x2 70085+413x1 70913+415x1 71742+415x1 72571+414x1 73401+415x1 74230+414x1 75059+417x1 75891
+  - series: http_request_duration_seconds_bucket{instance="10.225.22.2:8080",le="0.1",namespace="staging",pod="feed-gw-rtkld",service="feed-gw"}
+    values: 51229+627x2 53108+628x2 54989+625x1 56242+627x2 58124+627x1 59381+630x1 60639+630x1 61897+628x2 63783+630x1 65044+631x2 66936+633x1 68200+631x1 69461+633x1 70725+631x1 71990+631x1 73254+631x1 74519+633x2 76419+634x2 78320+636x2 80226+634x1 81497+637x1 82770+638x1 84044+636x1 85319+637x1 86592+636x1 87866+640x1 89143
+  - series: http_request_duration_seconds_bucket{instance="10.225.22.2:8080",le="0.25",namespace="staging",pod="feed-gw-rtkld",service="feed-gw"}
+    values: 51241+871x2 53851+872x2 56464+869x1 58206+870x2 60819+870x1 62563+874x1 64310+874x1 66057+872x2 68676+874x1 70427+876x1 72180+875x1 73933+877x1 75686+874x1 77438+876x1 79191+880x1 80948+878x1 82703+881x1 84463+878x1 86221+881x1 87982+879x1 89744+884x1 91508+881x1 93274+885x1 95042+886x1 96812+884x1 98583+885x1 100352+884x1 102122+889x1 103896
+  - series: http_request_duration_seconds_bucket{instance="10.225.22.2:8080",le="0.5",namespace="staging",pod="feed-gw-rtkld",service="feed-gw"}
+    values: 51252+871x2 53862+872x2 56475+869x1 58217+870x2 60830+870x1 62574+874x1 64321+874x1 66068+872x2 68687+874x1 70438+876x1 72191+875x1 73944+877x1 75697+874x1 77449+876x1 79202+880x1 80959+878x1 82714+881x1 84474+878x1 86232+881x1 87993+879x1 89755+884x1 91519+881x1 93285+885x1 95053+886x1 96823+884x1 98594+885x1 100363+884x1 102133+889x1 103907
+  - series: http_request_duration_seconds_bucket{instance="10.225.22.2:8080",le="1",namespace="staging",pod="feed-gw-rtkld",service="feed-gw"}
+    values: 51294+871x2 53904+872x2 56517+869x1 58259+870x2 60872+870x1 62616+874x1 64363+874x1 66110+872x2 68729+874x1 70480+876x1 72233+875x1 73986+877x1 75739+874x1 77491+876x1 79244+880x1 81001+878x1 82756+881x1 84516+878x1 86274+881x1 88035+879x1 89797+884x1 91561+881x1 93327+885x1 95095+886x1 96865+884x1 98636+885x1 100405+884x1 102175+889x1 103949
+  - series: http_request_duration_seconds_bucket{instance="10.225.22.2:8080",le="2.5",namespace="staging",pod="feed-gw-rtkld",service="feed-gw"}
+    values: 51330+871x2 53940+872x2 56553+869x1 58295+870x2 60908+870x1 62652+874x1 64399+874x1 66146+872x2 68765+874x1 70516+876x1 72269+875x1 74022+877x1 75775+874x1 77527+876x1 79280+880x1 81037+878x1 82792+881x1 84552+878x1 86310+881x1 88071+879x1 89833+884x1 91597+881x1 93363+885x1 95131+886x1 96901+884x1 98672+885x1 100441+884x1 102211+889x1 103985
+  - series: http_request_duration_seconds_bucket{instance="10.225.22.2:8080",le="+Inf",namespace="staging",pod="feed-gw-rtkld",service="feed-gw"}
+    values: 51335+871x2 53945+872x2 56559+869x1 58301+870x2 60914+871x1 62659+874x1 64406+874x1 66153+873x1 67898+875x1 69647+877x3 73153+878x1 74908+876x1 76659+878x1 78413+877x1 80170+877x1 81926+877x1 83684+879x1 85441+880x1 87203+880x1 88962+883x1 90729+881x2 93376+885x1 95144+886x1 96915+884x1 98686+885x1 100455+885x1 102226+889x1 104000
+  - series: http_request_duration_seconds_count{instance="10.225.22.2:8080",namespace="staging",pod="feed-gw-rtkld",service="feed-gw"}
+    values: 51335+871x2 53945+872x2 56559+869x1 58301+870x2 60914+871x1 62659+874x1 64406+874x1 66153+873x1 67898+875x1 69647+877x3 73153+878x1 74908+876x1 76659+878x1 78413+877x1 80170+877x1 81926+877x1 83684+879x1 85441+880x1 87203+880x1 88962+883x1 90729+881x2 93376+885x1 95144+886x1 96915+884x1 98686+885x1 100455+885x1 102226+889x1 104000
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="IngestWorkerErrorBudgetBurnSlow",alertstate="firing",service="ingest-worker"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+  - expr: count(ALERTS{alertname="IngestWorkerErrorBudgetBurnSlow",alertstate="firing",service="ingest-worker"}) or vector(0)
+    eval_time: 60m
+    exp_samples:
+    - labels: '{}'
+      value: 0

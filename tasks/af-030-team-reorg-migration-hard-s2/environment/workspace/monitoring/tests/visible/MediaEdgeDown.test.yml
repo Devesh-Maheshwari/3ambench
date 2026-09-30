@@ -1,0 +1,24 @@
+rule_files:
+- ../../rules/*.yml
+- ../../rules/*.yaml
+evaluation_interval: 1m
+tests:
+- name: MediaEdgeDown all_down
+  interval: 1m
+  input_series:
+  - series: up{instance="10.203.76.2:8080",job="media-edge",namespace="staging",service="media-edge"}
+    values: 1+0x9 0+0x15
+  - series: up{instance="10.140.231.3:8080",job="media-edge",namespace="staging",service="media-edge"}
+    values: 1+0x9 0+0x15
+  - series: up{instance="10.217.46.4:8080",job="media-edge",namespace="staging",service="media-edge"}
+    values: 1+0x9 0+0x15
+  - series: up{instance="10.190.81.2:8080",job="ledger-edge",namespace="staging",service="ledger-edge"}
+    values: 1+0x25
+  - series: up{instance="10.152.212.3:8080",job="ledger-edge",namespace="staging",service="ledger-edge"}
+    values: 1+0x25
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="MediaEdgeDown",alertstate="firing",service="media-edge"}) or vector(0)
+    eval_time: 25m
+    exp_samples:
+    - labels: '{}'
+      value: 1

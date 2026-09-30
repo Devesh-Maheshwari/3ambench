@@ -1,0 +1,29 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: service-health
+  namespace: monitoring
+  labels:
+    role: alert-rules
+spec:
+  groups:
+  - name: service-health
+    rules:
+    - alert: InvoiceApiDown
+      expr: sum by (service) (up{service="invoice-api"}) == 0 or absent(up{service="invoice-api"})
+      for: 3m
+      labels:
+        severity: page
+        team: data-ingest
+      annotations:
+        summary: '{{ $labels.service }} has no healthy scrape targets'
+        runbook_url: https://runbooks.larkspur.dev/alerts/InvoiceApiDown
+    - alert: NotifyWorkerDown
+      expr: sum by (service) (up{service="notify-worker"}) == 0 or absent(up{service="notify-worker"})
+      for: 3m
+      labels:
+        severity: page
+        team: commerce-core
+      annotations:
+        summary: '{{ $labels.service }} has no healthy scrape targets'
+        runbook_url: https://runbooks.larkspur.dev/alerts/NotifyWorkerDown

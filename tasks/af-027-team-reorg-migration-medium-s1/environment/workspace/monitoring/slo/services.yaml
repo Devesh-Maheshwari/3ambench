@@ -1,0 +1,13 @@
+services:
+- name: pricing-worker
+  team: data-ingest-core
+  slo_target: 0.99
+  sli_family: http
+  metrics:
+  - http_requests_total
+- name: inventory-worker
+  team: data-ingest-edge
+  slo_target: 0.9995
+  sli_family: http
+  metrics:
+  - http_requests_total

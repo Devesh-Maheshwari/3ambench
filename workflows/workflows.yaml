@@ -1,0 +1,106 @@
+# Planner output for skill/prometheus-alerting (same keys as Skill2Env workflows.json, plus generator keys).
+# Generator keys: rec_family (F0 policy), mix.<tier>.{new, repair, rec, route, inhibit}.
+#   new:     "<alert kind>:<service index>"
+#   repair:  number of rule repairs, drawn from defect_pool (host alerts picked by the generator)
+#   rec:     "<new|RB1|RB2>:<windows>"   RB1 = aggregation drops `by (service)`, RB2 = wrong error selector
+#   route:   "<add|R01|R02|R03|R04>:<service index>"
+#   inhibit: "<add|R05|R06>:<service index>"
+workflows:
+  - id: slo-onboarding
+    summary: Add SLI recording rules, page and ticket burn-rate alerts, and routing for a newly launched service.
+    plan:
+      scenario: "{company} launches {service}; its SLO was signed off at {target} over 30 days."
+      initial_world: A monitoring repo with SLOs for older services, fleet alerts, and routing for existing teams.
+      planted_defects: Unrelated rule defects found in review, a team that is not routed yet, a missing inhibition.
+      difficulty_source: Burn-rate math, window pairing, label propagation through aggregation, conventions lookup.
+      solution_sketch: Record the SLI ratios, add the two burn tiers per the README, route the team, add the inhibition.
+      verifier_strategy: Behavioral replay of hidden outages with promtool; amtool route resolution; inhibition simulator.
+    asset_recommendations: [prometheus/prometheus promtool, prometheus/alertmanager amtool, Google SRE Workbook ch. 5]
+    axis_pool:
+      - {archetype: author_to_constraints, primary_verifier_pattern: behavioral_simulation, persona: site_reliability_engineer}
+      - {archetype: operate_configure, primary_verifier_pattern: regression_suite, persona: platform_engineer}
+    defect_pool: [B02, B03, B04, B09, B10, B12, B13, B16]
+    rec_family: other
+    mix:
+      easy:   {new: ["burn_page:0"], repair: 1, rec: ["new:5m,1h"], route: ["add:0"], inhibit: ["add:0"]}
+      medium: {new: ["burn_page:0", "burn_ticket:0"], repair: 3, rec: ["new:5m,30m,1h,6h"], route: ["add:0", "R03:1"], inhibit: ["add:0"]}
+      hard:   {new: ["burn_page:0", "burn_ticket:0", "target_down:0"], repair: 5, rec: ["new:5m,1h", "new:30m,6h"], route: ["add:0", "R01:1"], inhibit: ["add:0", "R05:1"]}
+
+  - id: alert-storm-cleanup
+    summary: Repair flapping and noisy alerts after an incident review, turn slow burns into tickets, and add inhibition.
+    plan:
+      scenario: "Last Tuesday {company} sent 212 pages in 40 minutes during a database failover."
+      initial_world: Alerts that flap, page on blips, page on healthy traffic, or page people for ticket-grade burns.
+      planted_defects: Missing `for`, short-window-only burn alerts, inverted comparisons, missing traffic guards, tickets that page.
+      difficulty_source: Diagnosing why an alert is noisy from its expression and a symptom description alone.
+      solution_sketch: Restore persistence and window pairing, fix comparisons and guards, route tickets correctly, inhibit.
+      verifier_strategy: Hidden short-spike, recovery, low-traffic and bracketing scenarios; negative route cases.
+    asset_recommendations: [Google SRE Workbook ch. 5 "Alerting on SLOs", samber/awesome-prometheus-alerts]
+    axis_pool:
+      - {archetype: repair_debug, primary_verifier_pattern: regression_suite, persona: site_reliability_engineer}
+      - {archetype: harden_secure, primary_verifier_pattern: adversarial_corpus, persona: on_call_engineer}
+    defect_pool: [B02, B05, B10, B11, B16, B06, B04, B13]
+    rec_family: same
+    mix:
+      easy:   {new: ["burn_ticket:0"], repair: 1, rec: ["new:30m,6h"], route: ["R04:0"], inhibit: ["add:0"]}
+      medium: {new: ["burn_ticket:0", "target_down:1"], repair: 4, rec: ["new:30m,6h"], route: ["R04:0", "R03:1"], inhibit: ["add:0"]}
+      hard:   {new: ["burn_ticket:0", "target_down:1"], repair: 6, rec: ["new:30m,6h", "RB1:5m,1h"], route: ["R04:0", "R03:1"], inhibit: ["add:0", "R06:1"]}
+
+  - id: missed-page-postmortem
+    summary: Fix the rules and routes that caused a missed page, including total outages that produce no data.
+    plan:
+      scenario: "{service} was down for 47 minutes and nobody was paged."
+      initial_world: Alerts that cannot fire, labels lost in aggregation, a route with a matcher typo or a shadowing route.
+      planted_defects: Aggregation dropping labels, selector typos, misspelled recording names, no absent() guard, wrong severity.
+      difficulty_source: Tracing a page end to end, from series to rule to labels to route.
+      solution_sketch: Make the alerts fire with the right labels, add a no-data guard, fix the route.
+      verifier_strategy: Hidden outage replays including a no-data outage; amtool route resolution including the chain case.
+    asset_recommendations: [prometheus docs "absent()", alertmanager routing tree editor]
+    axis_pool:
+      - {archetype: repair_debug, primary_verifier_pattern: behavioral_simulation, persona: incident_commander}
+      - {archetype: data_query, primary_verifier_pattern: exact_state, persona: site_reliability_engineer}
+    defect_pool: [B03, B08, B09, B12, B15, B07, B01]
+    rec_family: same
+    mix:
+      easy:   {new: ["target_down:0"], repair: 1, rec: ["RB2:5m,1h"], route: ["R01:0"], inhibit: ["add:0"]}
+      medium: {new: ["target_down:0", "burn_ticket:1"], repair: 3, rec: ["RB2:5m,1h", "new:30m,6h"], route: ["R01:0", "R02:1"], inhibit: ["add:0"]}
+      hard:   {new: ["target_down:0", "burn_ticket:1"], repair: 5, rec: ["RB2:5m,1h", "new:30m,6h"], route: ["R01:0", "R02:1", "R03:2"], inhibit: ["add:0", "R06:1"]}
+
+  - id: latency-slo
+    summary: Adopt a latency SLO from histograms (fraction of requests slower than the threshold) with burn-rate alerts.
+    plan:
+      scenario: "Search p99 regressions went unnoticed at {company}; adopt a latency SLO at {le}s."
+      initial_world: Availability SLOs on other services, a p99 alert, routing for existing teams.
+      planted_defects: histogram_quantile without `le`, missing persistence, wrong severity, templates using dropped labels.
+      difficulty_source: Histogram semantics (cumulative buckets, le), latency SLI as 1 - fast/total.
+      solution_sketch: Record the latency SLI from buckets, add burn tiers, fix the p99 alert, route and inhibit.
+      verifier_strategy: Hidden histogram scenarios with controlled tails; recording values checked numerically.
+    asset_recommendations: [prometheus docs "Histograms and summaries"]
+    axis_pool:
+      - {archetype: author_to_constraints, primary_verifier_pattern: differential_equivalence, persona: performance_engineer}
+    defect_pool: [B14, B02, B12, B13, B16, B10]
+    rec_family: latency
+    mix:
+      easy:   {new: ["burn_page:0"], repair: 1, rec: ["new:5m,1h"], route: ["add:0"], inhibit: ["add:0"]}
+      medium: {new: ["burn_page:0", "burn_ticket:0"], repair: 3, rec: ["new:5m,30m,1h,6h"], route: ["add:0", "R03:1"], inhibit: ["add:0"]}
+      hard:   {new: ["burn_page:0", "burn_ticket:0", "target_down:0"], repair: 5, rec: ["new:5m,1h", "new:30m,6h"], route: ["add:0", "R04:1"], inhibit: ["add:0", "R05:1"]}
+
+  - id: team-reorg-migration
+    summary: Re-home alerts and routes after a team split, without changing anything else.
+    plan:
+      scenario: "The {old_team} team splits into {new_teams}."
+      initial_world: Alerts carrying the old team label, routes only for the old team, one legacy route to keep.
+      planted_defects: Stale team labels, missing routes for the new teams, plus unrelated defects.
+      difficulty_source: Minimal, behavior-preserving change across many files.
+      solution_sketch: Relabel the moved services' alerts, add routes for the new teams, keep the legacy route.
+      verifier_strategy: Label checks via ALERTS, amtool positive/negative/preserved cases, preservation hashes.
+    asset_recommendations: [alertmanager routing docs]
+    axis_pool:
+      - {archetype: operate_configure, primary_verifier_pattern: regression_suite, persona: platform_engineer}
+      - {archetype: transform_convert, primary_verifier_pattern: exact_state, persona: site_reliability_engineer}
+    defect_pool: [B02, B03, B13, B16, B05]
+    rec_family: same
+    mix:
+      easy:   {new: ["target_down:0"], repair: 1, rec: ["new:30m,6h"], route: ["add:0"], inhibit: ["add:0"]}
+      medium: {new: ["target_down:0", "burn_ticket:1"], repair: 3, rec: ["new:30m,6h"], route: ["add:0", "add:1"], inhibit: ["add:0"]}
+      hard:   {new: ["target_down:0", "burn_ticket:1", "burn_ticket:0"], repair: 5, rec: ["new:30m,6h", "RB1:5m,1h"], route: ["add:0", "add:1"], inhibit: ["add:0", "R05:1"]}

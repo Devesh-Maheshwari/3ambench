@@ -1,0 +1,94 @@
+rule_files:
+- ../../rules/*.yml
+- ../../rules/*.yaml
+evaluation_interval: 1m
+tests:
+- name: InventoryWorkerErrorBudgetBurnSlow sustained
+  interval: 1m
+  input_series:
+  - series: http_requests_total{code="200",instance="10.151.172.2:8080",method="GET",namespace="staging",pod="inventory-worker-dhbxd",service="inventory-worker"}
+    values: 415041+273x4 416405+272x1 416950+273x4 418316+273x1 418863+272x1 419408+273x1 419955+273x1 420500+274x1 421047+274x1 421594+272x1 422139+274x2 422960+273x1 423507+274x1 424056+274x3 425153+274x2 425976
+  - series: http_requests_total{code="404",instance="10.151.172.2:8080",method="GET",namespace="staging",pod="inventory-worker-dhbxd",service="inventory-worker"}
+    values: 1158+11x40
+  - series: http_requests_total{code="500",instance="10.151.172.2:8080",method="GET",namespace="staging",pod="inventory-worker-dhbxd",service="inventory-worker"}
+    values: 2108+2x22 2153+2x17
+  - series: http_requests_total{code="503",instance="10.151.172.2:8080",method="GET",namespace="staging",pod="inventory-worker-dhbxd",service="inventory-worker"}
+    values: 1531+0x4 1532+0x9 1533+0x1 1534+0x2 1535+0x3 1536+1x2 1538+0x13
+  - series: http_requests_total{code="200",instance="10.64.140.3:8080",method="GET",namespace="staging",pod="inventory-worker-znn8q",service="inventory-worker"}
+    values: 874641+438x4 876830+437x1 877705+439x1 878582+439x1 879459+439x2 880777+438x2 882092+439x1 882969+438x1 883846+439x3 885601+438x1 886479+440x1 887358+439x1 888237+439x1 889117+440x1 889998+440x1 890880+440x1 891761+442x1
+  - series: http_requests_total{code="404",instance="10.64.140.3:8080",method="GET",namespace="staging",pod="inventory-worker-znn8q",service="inventory-worker"}
+    values: 3616+18x40
+  - series: http_requests_total{code="500",instance="10.64.140.3:8080",method="GET",namespace="staging",pod="inventory-worker-znn8q",service="inventory-worker"}
+    values: 2006+1x4 2012+1x9 2023+1x1 2026+1x2 2030+1x3 2035+2x2 2040+1x13
+  - series: http_requests_total{code="503",instance="10.64.140.3:8080",method="GET",namespace="staging",pod="inventory-worker-znn8q",service="inventory-worker"}
+    values: 967+0x40
+  - series: http_requests_total{code="200",instance="10.173.202.4:8080",method="GET",namespace="staging",pod="inventory-worker-zvbfn",service="inventory-worker"}
+    values: 594319+304x1 594926+302x2 595834+303x2 596744+303x1 597351+303x1 597958+305x1 598567+305x1 599175+305x2 600088+305x2 601001+304x1 601611+305x3 602830+305x1 603439+304x1 604048+305x4 605574+304x1 606184+305x1
+  - series: http_requests_total{code="404",instance="10.173.202.4:8080",method="GET",namespace="staging",pod="inventory-worker-zvbfn",service="inventory-worker"}
+    values: 2692+12x40
+  - series: http_requests_total{code="500",instance="10.173.202.4:8080",method="GET",namespace="staging",pod="inventory-worker-zvbfn",service="inventory-worker"}
+    values: 2698+2x1 2703+3x2 2711+3x1 2716+3x2 2724+3x2 2732+3x1 2737+3x1 2742+2x1 2747+2x2 2754+2x4 2765+3x1 2770+3x2 2778+3x4 2792+3x1 2797+3x1
+  - series: http_requests_total{code="503",instance="10.173.202.4:8080",method="GET",namespace="staging",pod="inventory-worker-zvbfn",service="inventory-worker"}
+    values: 1196+1x40
+  - series: http_requests_total{code="200",instance="10.14.147.2:8080",method="GET",namespace="staging",pod="tax-svc-rf2q6",service="tax-svc"}
+    values: 543061+634x1 544328+633x1 545598+637x1 546873+635x1 548147+636x1 549421+637x1 550696+638x1 551977+642x1 553259+640x1 554541+643x1 555828+645x1 557119+645x1 558408+644x1 559700+647x1 560996+648x1 562293+649x1 563593+648x2 565540+651x2 567494+650x1 568796
+  - series: http_requests_total{code="404",instance="10.14.147.2:8080",method="GET",namespace="staging",pod="tax-svc-rf2q6",service="tax-svc"}
+    values: 4150+26x27 4879+26x1 4932+27x10
+  - series: http_requests_total{code="500",instance="10.14.147.2:8080",method="GET",namespace="staging",pod="tax-svc-rf2q6",service="tax-svc"}
+    values: 2273+0x4 2274+0x3 2275+0x3 2276+0x4 2277+0x3 2278+0x3 2279+0x3 2280+0x4 2281+0x3 2282+0x1
+  - series: http_requests_total{code="503",instance="10.14.147.2:8080",method="GET",namespace="staging",pod="tax-svc-rf2q6",service="tax-svc"}
+    values: 1208+0x40
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="InventoryWorkerErrorBudgetBurnSlow",alertstate="firing",service="inventory-worker"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="InventoryWorkerErrorBudgetBurnSlow",alertstate="firing",service="inventory-worker"}) or vector(0)
+    eval_time: 37m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="InventoryWorkerErrorBudgetBurnSlow",alertstate="firing",service="tax-svc"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+- name: InventoryWorkerErrorBudgetBurnSlow normal
+  interval: 1m
+  input_series:
+  - series: http_requests_total{code="200",instance="10.220.211.2:8080",method="GET",namespace="staging",pod="inventory-worker-2scrj",service="inventory-worker"}
+    values: 443312+432x5 445903+432x2 447198+431x1 448061+430x1 448922+430x1 449784+431x1 450645+429x1 451504+430x1 452363+430x1 453222+428x1 454079+430x1 454936+429x2 456222+429x1 457078+428x1 457932+427x1 458785+426x1 459638+427x4 461771+425x3 463472+424x4 465593+423x3 467286+422x1 468131+423x1 468975
+  - series: http_requests_total{code="404",instance="10.220.211.2:8080",method="GET",namespace="staging",pod="inventory-worker-2scrj",service="inventory-worker"}
+    values: 2776+17x1 2811+17x4 2897+17x53
+  - series: http_requests_total{code="500",instance="10.220.211.2:8080",method="GET",namespace="staging",pod="inventory-worker-2scrj",service="inventory-worker"}
+    values: 2023+0x60
+  - series: http_requests_total{code="503",instance="10.220.211.2:8080",method="GET",namespace="staging",pod="inventory-worker-2scrj",service="inventory-worker"}
+    values: 2665+0x60
+  - series: http_requests_total{code="200",instance="10.70.126.3:8080",method="GET",namespace="staging",pod="inventory-worker-m4drq",service="inventory-worker"}
+    values: 943772+531x1 944835+532x2 946430+530x1 947492+531x1 948552+529x1 949611+529x1 950670+529x1 951729+530x1 952788+528x9 958067+528x3 960178+526x1 961232+525x1 962283+525x1 963332+526x2 964909+525x2 966483+523x1 967530+523x1 968577+522x4 971188+522x1 972230+521x1 973273+520x1 974315+522x1 975356
+  - series: http_requests_total{code="404",instance="10.70.126.3:8080",method="GET",namespace="staging",pod="inventory-worker-m4drq",service="inventory-worker"}
+    values: 723+22x19 1162+21x1 1205+22x1 1248+22x2 1313+21x1 1356+21x31
+  - series: http_requests_total{code="500",instance="10.70.126.3:8080",method="GET",namespace="staging",pod="inventory-worker-m4drq",service="inventory-worker"}
+    values: 4631+0x9 4632+0x9 4633+0x10 4634+0x9 4635+0x9 4636+0x9
+  - series: http_requests_total{code="503",instance="10.70.126.3:8080",method="GET",namespace="staging",pod="inventory-worker-m4drq",service="inventory-worker"}
+    values: 2853+0x60
+  - series: http_requests_total{code="200",instance="10.71.35.2:8080",method="GET",namespace="staging",pod="tax-svc-tsxfz",service="tax-svc"}
+    values: 804609+953x1 806511+952x1 808412+952x1 810315+948x1 812215+950x1 814117+949x1 816018+949x1 817918+949x2 820768+952x1 822671+949x1 824568+951x1 826471+952x1 828372+950x1 830273+949x1 832173+950x1 834074+954x1 835980+952x1 837883+949x1 839782+954x2 842643+952x1 844550+954x1 846459+955x1 848365+952x1 850272+956x2 853137+956x1 855046+955x1 856955+954x1 858865+959x1 860781+959x1
+  - series: http_requests_total{code="404",instance="10.71.35.2:8080",method="GET",namespace="staging",pod="tax-svc-tsxfz",service="tax-svc"}
+    values: 762+39x60
+  - series: http_requests_total{code="500",instance="10.71.35.2:8080",method="GET",namespace="staging",pod="tax-svc-tsxfz",service="tax-svc"}
+    values: 2898+0x5 2899+0x4 2900+0x4 2901+0x4 2902+0x4 2903+0x4 2904+0x4 2905+0x4 2906+0x4 2907+0x4 2908+0x4 2909+0x4
+  - series: http_requests_total{code="503",instance="10.71.35.2:8080",method="GET",namespace="staging",pod="tax-svc-tsxfz",service="tax-svc"}
+    values: 1778+0x60
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="InventoryWorkerErrorBudgetBurnSlow",alertstate="firing",service="inventory-worker"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+  - expr: count(ALERTS{alertname="InventoryWorkerErrorBudgetBurnSlow",alertstate="firing",service="inventory-worker"}) or vector(0)
+    eval_time: 60m
+    exp_samples:
+    - labels: '{}'
+      value: 0

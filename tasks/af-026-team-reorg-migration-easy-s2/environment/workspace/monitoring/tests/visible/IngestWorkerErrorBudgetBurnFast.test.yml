@@ -1,0 +1,94 @@
+rule_files:
+- ../../rules/*.yml
+- ../../rules/*.yaml
+evaluation_interval: 1m
+tests:
+- name: IngestWorkerErrorBudgetBurnFast sustained
+  interval: 1m
+  input_series:
+  - series: http_requests_total{code="200",instance="10.136.39.2:8080",method="GET",namespace="staging",pod="ingest-worker-vnvcw",service="ingest-worker"}
+    values: 897646+287x2 898506+286x1 899079+286x1 899650+286x2 900509+286x1 901080+286x1 901651+287x1 902223+286x1 902794+286x1 903364+285x1 903935+286x1 904506+283x1 905074+286x2 905931+285x1
+  - series: http_requests_total{code="404",instance="10.136.39.2:8080",method="GET",namespace="staging",pod="ingest-worker-vnvcw",service="ingest-worker"}
+    values: 3396+11x30
+  - series: http_requests_total{code="500",instance="10.136.39.2:8080",method="GET",namespace="staging",pod="ingest-worker-vnvcw",service="ingest-worker"}
+    values: 571+22x3 660+22x2 727+22x12 1014+22x4 1125+22x5
+  - series: http_requests_total{code="503",instance="10.136.39.2:8080",method="GET",namespace="staging",pod="ingest-worker-vnvcw",service="ingest-worker"}
+    values: 734+11x30
+  - series: http_requests_total{code="200",instance="10.157.111.3:8080",method="GET",namespace="staging",pod="ingest-worker-sm94d",service="ingest-worker"}
+    values: 652385+226x2 653062+225x3 653961+225x1 654410+226x1 654860+224x1 655310+224x1 655760+224x3 656657+224x2 657330+224x4 658451+225x2 659125
+  - series: http_requests_total{code="404",instance="10.157.111.3:8080",method="GET",namespace="staging",pod="ingest-worker-sm94d",service="ingest-worker"}
+    values: 4797+9x30
+  - series: http_requests_total{code="500",instance="10.157.111.3:8080",method="GET",namespace="staging",pod="ingest-worker-sm94d",service="ingest-worker"}
+    values: 3364+19x1 3403+20x3 3482+20x6 3621+20x1 3660+20x13 3939+20x1
+  - series: http_requests_total{code="503",instance="10.157.111.3:8080",method="GET",namespace="staging",pod="ingest-worker-sm94d",service="ingest-worker"}
+    values: 540+9x30
+  - series: http_requests_total{code="200",instance="10.2.87.4:8080",method="GET",namespace="staging",pod="ingest-worker-4786b",service="ingest-worker"}
+    values: 829987+266x1 830518+266x1 831049+266x1 831580+264x1 832110+264x1 832639+265x1 833168+265x1 833697+266x1 834227+265x1 834756+265x1 835285+265x1 835814+264x8
+  - series: http_requests_total{code="404",instance="10.2.87.4:8080",method="GET",namespace="staging",pod="ingest-worker-4786b",service="ingest-worker"}
+    values: 3767+11x23 4030+10x1 4051+11x4
+  - series: http_requests_total{code="500",instance="10.2.87.4:8080",method="GET",namespace="staging",pod="ingest-worker-4786b",service="ingest-worker"}
+    values: 1742+18x1 1779+18x1 1816+18x2 1871+18x1 1908+19x1 1945+19x1 1982+19x1 2019+19x1 2056+18x1 2093+19x1 2130+19x4 2224+19x2 2280+18x1
+  - series: http_requests_total{code="503",instance="10.2.87.4:8080",method="GET",namespace="staging",pod="ingest-worker-4786b",service="ingest-worker"}
+    values: 709+9x30
+  - series: http_requests_total{code="200",instance="10.228.206.2:8080",method="GET",namespace="staging",pod="geo-edge-jkkc6",service="geo-edge"}
+    values: 657622+322x1 658264+321x1 658905+320x4 660502+317x1 661138+317x1 661773+315x1 662402+318x1 663033+316x1 663666+316x1 664296+315x1 664924+314x1 665553+315x1 666181+314x1 666808+312x1
+  - series: http_requests_total{code="404",instance="10.228.206.2:8080",method="GET",namespace="staging",pod="geo-edge-jkkc6",service="geo-edge"}
+    values: 2955+13x30
+  - series: http_requests_total{code="500",instance="10.228.206.2:8080",method="GET",namespace="staging",pod="geo-edge-jkkc6",service="geo-edge"}
+    values: 506+0x1 507+0x1 508+0x1 509+0x1 510+0x2 511+0x1 512+0x1 513+0x1 514+0x1 515+0x1 516+0x1 517+0x1 518+0x1 519+0x1 520+0x1
+  - series: http_requests_total{code="503",instance="10.228.206.2:8080",method="GET",namespace="staging",pod="geo-edge-jkkc6",service="geo-edge"}
+    values: 1297+0x30
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="IngestWorkerErrorBudgetBurnFast",alertstate="firing",service="ingest-worker"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="IngestWorkerErrorBudgetBurnFast",alertstate="firing",service="ingest-worker"}) or vector(0)
+    eval_time: 27m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="IngestWorkerErrorBudgetBurnFast",alertstate="firing",service="geo-edge"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+- name: IngestWorkerErrorBudgetBurnFast normal
+  interval: 1m
+  input_series:
+  - series: http_requests_total{code="200",instance="10.2.254.2:8080",method="GET",namespace="staging",pod="ingest-worker-zf9tf",service="ingest-worker"}
+    values: 319688+384x3 321223+384x2 322374+383x1 323139+381x1 323903+382x4 325812+378x1 326569+379x1 327325+379x1 328082+379x1 328838+375x1 329590+375x1 330342+375x1 331090+375x1 331839+374x1 332586+375x1 333334+371x1 334077+371x1 334818+372x1 335560+369x1 336300+371x1 337040+369x2 338145+367x1 338881+369x1 339617+367x1 340350+367x1 341083+365x1 341812+366x1
+  - series: http_requests_total{code="404",instance="10.2.254.2:8080",method="GET",namespace="staging",pod="ingest-worker-zf9tf",service="ingest-worker"}
+    values: 3849+16x1 3880+15x2 3926+15x55
+  - series: http_requests_total{code="500",instance="10.2.254.2:8080",method="GET",namespace="staging",pod="ingest-worker-zf9tf",service="ingest-worker"}
+    values: 4613+0x8 4614+0x10 4615+0x12 4616+0x27
+  - series: http_requests_total{code="503",instance="10.2.254.2:8080",method="GET",namespace="staging",pod="ingest-worker-zf9tf",service="ingest-worker"}
+    values: 4562+0x60
+  - series: http_requests_total{code="200",instance="10.2.171.3:8080",method="GET",namespace="staging",pod="ingest-worker-z5cmp",service="ingest-worker"}
+    values: 945580+195x4 946556+195x2 947140+194x2 947723+194x5 948885+192x3 949654+192x8 951381+191x2 951955+191x2 952527+190x3 953286+190x1 953665+189x3 954420+188x2 954983+187x1 955358+188x1 955733+188x1 956108+188x1 956483+186x1 956854+186x1
+  - series: http_requests_total{code="404",instance="10.2.171.3:8080",method="GET",namespace="staging",pod="ingest-worker-z5cmp",service="ingest-worker"}
+    values: 3552+8x23 3743+7x36
+  - series: http_requests_total{code="500",instance="10.2.171.3:8080",method="GET",namespace="staging",pod="ingest-worker-z5cmp",service="ingest-worker"}
+    values: 4495+2x60
+  - series: http_requests_total{code="503",instance="10.2.171.3:8080",method="GET",namespace="staging",pod="ingest-worker-z5cmp",service="ingest-worker"}
+    values: 2370+0x60
+  - series: http_requests_total{code="200",instance="10.128.186.2:8080",method="GET",namespace="staging",pod="geo-edge-sj589",service="geo-edge"}
+    values: 560865+547x1 561960+550x1 563059+547x1 564152+548x1 565247+548x1 566342+549x1 567436+545x1 568527+544x3 570705+544x1 571796+548x2 573437+547x1 574530+548x1 575625+548x1 576718+544x1 577809+544x1 578900+545x2 580536+545x1 581625+545x2 583261+546x1 584351+543x1 585439+546x1 586528+545x2 588161+543x1 589248+545x1 590337+547x1 591426+542x1 592514+546x1 593604
+  - series: http_requests_total{code="404",instance="10.128.186.2:8080",method="GET",namespace="staging",pod="geo-edge-sj589",service="geo-edge"}
+    values: 4059+22x60
+  - series: http_requests_total{code="500",instance="10.128.186.2:8080",method="GET",namespace="staging",pod="geo-edge-sj589",service="geo-edge"}
+    values: 2663+0x1 2664+1x4 2668+1x6 2674+1x6 2680+1x6 2686+1x6 2692+1x5 2697+1x6 2703+1x6 2709+1x5
+  - series: http_requests_total{code="503",instance="10.128.186.2:8080",method="GET",namespace="staging",pod="geo-edge-sj589",service="geo-edge"}
+    values: 4386+0x60
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="IngestWorkerErrorBudgetBurnFast",alertstate="firing",service="ingest-worker"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+  - expr: count(ALERTS{alertname="IngestWorkerErrorBudgetBurnFast",alertstate="firing",service="ingest-worker"}) or vector(0)
+    eval_time: 60m
+    exp_samples:
+    - labels: '{}'
+      value: 0

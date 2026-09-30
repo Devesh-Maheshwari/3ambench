@@ -1,0 +1,19 @@
+services:
+- name: media-edge
+  team: messaging-core
+  slo_target: 0.99
+  sli_family: grpc
+  metrics:
+  - grpc_server_handled_total
+- name: identity-svc
+  team: messaging-edge
+  slo_target: 0.995
+  sli_family: grpc
+  metrics:
+  - grpc_server_handled_total
+- name: payments-api
+  team: storefront
+  slo_target: 0.995
+  sli_family: grpc
+  metrics:
+  - grpc_server_handled_total

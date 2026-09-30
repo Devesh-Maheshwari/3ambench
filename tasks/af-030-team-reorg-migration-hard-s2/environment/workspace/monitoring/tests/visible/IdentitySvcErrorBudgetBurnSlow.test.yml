@@ -1,0 +1,94 @@
+rule_files:
+- ../../rules/*.yml
+- ../../rules/*.yaml
+evaluation_interval: 1m
+tests:
+- name: IdentitySvcErrorBudgetBurnSlow sustained
+  interval: 1m
+  input_series:
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.105.31.2:8080",namespace="staging",pod="identity-svc-9hwrz",service="identity-svc"}
+    values: 562851+279x3 563968+279x2 564808+280x1 565370+280x2 566211+281x3 567334+282x2 568179+282x1 568744+282x3 569873+282x3 571002+283x1 571569+283x1 572136+283x1 572703+284x1 573270+283x1 573837+284x1
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.105.31.2:8080",namespace="staging",pod="identity-svc-9hwrz",service="identity-svc"}
+    values: 744526+9x40
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.105.31.2:8080",namespace="staging",pod="identity-svc-9hwrz",service="identity-svc"}
+    values: 888084+11x6 888160+11x1 888181+11x3 888224+11x3 888267+11x3 888310+11x3 888353+11x11 888486+11x3
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.105.31.2:8080",namespace="staging",pod="identity-svc-9hwrz",service="identity-svc"}
+    values: 572430+3x40
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.157.82.3:8080",namespace="staging",pod="identity-svc-4xhlz",service="identity-svc"}
+    values: 703911+348x3 705304+348x2 706350+348x1 707048+348x2 708093+349x2 709141+348x1 709839+351x1 710540+350x1 711242+350x1 711943+352x1 712646+352x1 713348+351x1 714052+352x1 714757+351x1 715461+352x1 716166+353x2 717224+354x1 717931
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.157.82.3:8080",namespace="staging",pod="identity-svc-4xhlz",service="identity-svc"}
+    values: 549582+11x2 549616+12x1 549639+11x1 549662+12x33
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.157.82.3:8080",namespace="staging",pod="identity-svc-4xhlz",service="identity-svc"}
+    values: 983965+12x40
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.157.82.3:8080",namespace="staging",pod="identity-svc-4xhlz",service="identity-svc"}
+    values: 264692+3x4 264708+4x1 264715+4x1 264722+4x3 264737+4x1 264744+4x1 264751+3x2 264761+3x1 264768+4x1 264775+3x2 264785+4x1 264792+3x1 264799+4x7 264830+4x1
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.18.92.4:8080",namespace="staging",pod="identity-svc-k6dk8",service="identity-svc"}
+    values: 629184+284x2 630037+284x1 630606+285x2 631460+285x1 632028+285x1 632599+286x3 633742+285x1 634314+287x3 635461+288x2 636324+288x1 636898+287x1 637473+288x4 638914+290x2 639782+289x1 640359+288x1
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.18.92.4:8080",namespace="staging",pod="identity-svc-k6dk8",service="identity-svc"}
+    values: 824103+9x40
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.18.92.4:8080",namespace="staging",pod="identity-svc-k6dk8",service="identity-svc"}
+    values: 263407+12x40
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.18.92.4:8080",namespace="staging",pod="identity-svc-k6dk8",service="identity-svc"}
+    values: 168895+3x7 168920+3x1 168927+3x1 168934+3x3 168947+3x10 168981+4x1 168988+3x7 169013+3x3
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.39.131.2:8080",namespace="staging",pod="ledger-edge-7zjvz",service="ledger-edge"}
+    values: 695406+385x1 696175+381x1 696939+379x1 697700+380x1 698458+382x1 699221+378x1 699978+379x2 701113+380x1 701870+376x1 702624+377x2 703754+375x1 704506+376x1 705256+375x1 706008+373x3 707499+374x2 708620+376x1 709367+371x1 710113+374x1
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.39.131.2:8080",namespace="staging",pod="ledger-edge-7zjvz",service="ledger-edge"}
+    values: 970404+13x14 970598+13x1 970623+12x1 970648+13x2 970686+12x1 970711+12x16
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.39.131.2:8080",namespace="staging",pod="ledger-edge-7zjvz",service="ledger-edge"}
+    values: 104853+0x1 104854+1x38
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.39.131.2:8080",namespace="staging",pod="ledger-edge-7zjvz",service="ledger-edge"}
+    values: 255074+0x40
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="IdentitySvcErrorBudgetBurnSlow",alertstate="firing",service="identity-svc"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="IdentitySvcErrorBudgetBurnSlow",alertstate="firing",service="identity-svc"}) or vector(0)
+    eval_time: 37m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="IdentitySvcErrorBudgetBurnSlow",alertstate="firing",service="ledger-edge"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+- name: IdentitySvcErrorBudgetBurnSlow normal
+  interval: 1m
+  input_series:
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.123.132.2:8080",namespace="staging",pod="identity-svc-j4t8x",service="identity-svc"}
+    values: 217663+365x1 218391+364x3 219846+364x1 220572+364x2 221663+364x2 222754+363x2 223842+362x1 224567+361x2 225651+362x2 226736+362x1 227459+361x1 228180+360x1 228901+363x1 229624+360x4 231425+361x2 232507+361x1 233228+360x1 233947+360x1 234666+359x4 236460+358x1 237177+358x1 237894+358x3 239327
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.123.132.2:8080",namespace="staging",pod="identity-svc-j4t8x",service="identity-svc"}
+    values: 927818+12x60
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.123.132.2:8080",namespace="staging",pod="identity-svc-j4t8x",service="identity-svc"}
+    values: 345848+0x1 345849+1x9 345858+1x9 345867+1x9 345876+1x9 345885+1x8 345893+1x8 345901
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.123.132.2:8080",namespace="staging",pod="identity-svc-j4t8x",service="identity-svc"}
+    values: 443861+0x60
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.182.102.3:8080",namespace="staging",pod="identity-svc-nwzc2",service="identity-svc"}
+    values: 520157+559x1 521274+560x1 522395+559x3 524630+559x3 526865+559x1 527982+558x2 529655+556x1 530770+556x3 532996+558x1 534110+557x1 535222+555x4 537998+554x2 539661+553x2 541322+556x1 542433+555x1 543542+554x2 545203+555x1 546310+553x1 547414+552x1 548517+551x2 550171+551x1 551274+551x4
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.182.102.3:8080",namespace="staging",pod="identity-svc-nwzc2",service="identity-svc"}
+    values: 973896+19x54 974940+19x2 974996+19x1 975033
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.182.102.3:8080",namespace="staging",pod="identity-svc-nwzc2",service="identity-svc"}
+    values: 947477+1x60
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.182.102.3:8080",namespace="staging",pod="identity-svc-nwzc2",service="identity-svc"}
+    values: 656958+0x60
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.251.149.2:8080",namespace="staging",pod="ledger-edge-v4bjt",service="ledger-edge"}
+    values: 69433+1096x1 71623+1094x1 73813+1098x1 76010+1102x1 78212+1100x1 80417+1104x1 82628+1105x1 84841+1111x1 87060+1111x1 89283+1116x1 91513+1117x1 93748+1118x1 95987+1123x1 98235+1121x1 100478+1128x1 102732+1129x2 106121+1130x1 108382+1134x1 110651+1138x1 112928+1137x1 115205+1138x1 117484+1142x1 119771+1146x1 122065+1151x1 124365+1150x1 126668+1152x1 128974+1155x1 131288+1156x1 133604+1161x1 135925+1160x1
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.251.149.2:8080",namespace="staging",pod="ledger-edge-v4bjt",service="ledger-edge"}
+    values: 634342+37x9 634713+38x22 635588+38x1 635665+39x21 636524+40x3
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.251.149.2:8080",namespace="staging",pod="ledger-edge-v4bjt",service="ledger-edge"}
+    values: 324899+0x1 324900+0x1 324901+0x1 324902+0x1 324903+1x1 324904+1x1 324905+1x1 324906+1x2 324908+1x1 324909+1x1 324910+1x2 324912+1x1 324913+1x2 324915+1x1 324916+1x1 324917+1x2 324919+1x1 324920+1x2 324922+1x1 324923+1x2 324925+1x1 324926+1x2 324928+1x1 324929+1x1 324930+1x2 324932+1x1 324933
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.251.149.2:8080",namespace="staging",pod="ledger-edge-v4bjt",service="ledger-edge"}
+    values: 652969+0x60
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="IdentitySvcErrorBudgetBurnSlow",alertstate="firing",service="identity-svc"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+  - expr: count(ALERTS{alertname="IdentitySvcErrorBudgetBurnSlow",alertstate="firing",service="identity-svc"}) or vector(0)
+    eval_time: 60m
+    exp_samples:
+    - labels: '{}'
+      value: 0

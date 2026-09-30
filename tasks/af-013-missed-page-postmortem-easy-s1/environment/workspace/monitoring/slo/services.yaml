@@ -1,0 +1,13 @@
+services:
+- name: pricing-gw
+  team: discovery
+  slo_target: 0.999
+  sli_family: http
+  metrics:
+  - http_requests_total
+- name: chat-gw
+  team: trust-safety
+  slo_target: 0.9995
+  sli_family: http
+  metrics:
+  - http_requests_total

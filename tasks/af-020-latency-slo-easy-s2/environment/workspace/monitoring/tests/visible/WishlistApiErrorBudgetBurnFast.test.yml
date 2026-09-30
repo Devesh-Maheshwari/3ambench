@@ -1,0 +1,150 @@
+rule_files:
+- ../../rules/*.yml
+- ../../rules/*.yaml
+evaluation_interval: 1m
+tests:
+- name: WishlistApiErrorBudgetBurnFast sustained
+  interval: 1m
+  input_series:
+  - series: http_request_duration_seconds_bucket{instance="10.134.140.2:8080",le="0.05",namespace="staging",pod="wishlist-api-j5k66",service="wishlist-api"}
+    values: 91101+109x3 91536+109x9 92627+109x5 93282+110x10
+  - series: http_request_duration_seconds_bucket{instance="10.134.140.2:8080",le="0.1",namespace="staging",pod="wishlist-api-j5k66",service="wishlist-api"}
+    values: 91133+263x3 92183+262x1 92708+263x2 93496+262x1 94021+263x2 94812+263x5 96392+265x10
+  - series: http_request_duration_seconds_bucket{instance="10.134.140.2:8080",le="0.25",namespace="staging",pod="wishlist-api-j5k66",service="wishlist-api"}
+    values: 91160+431x3 92882+430x1 93744+431x1 94607+430x2 95898+432x2 97196+432x2 98493+433x2 99793+435x1 100662+435x2 101966+434x1 102836+435x1 103705+436x1
+  - series: http_request_duration_seconds_bucket{instance="10.134.140.2:8080",le="0.5",namespace="staging",pod="wishlist-api-j5k66",service="wishlist-api"}
+    values: 91205+432x3 92931+431x1 93795+432x1 94660+431x2 95954+433x2 97255+433x2 98555+434x2 99858+436x1 100729+436x2 102036+435x1 102908+436x1 103779+437x1
+  - series: http_request_duration_seconds_bucket{instance="10.134.140.2:8080",le="1",namespace="staging",pod="wishlist-api-j5k66",service="wishlist-api"}
+    values: 91241+433x3 92971+432x1 93837+433x1 94704+432x2 96001+434x2 97305+434x2 98608+435x2 99914+437x1 100787+437x2 102097+436x1 102971+437x1 103844+438x1
+  - series: http_request_duration_seconds_bucket{instance="10.134.140.2:8080",le="2.5",namespace="staging",pod="wishlist-api-j5k66",service="wishlist-api"}
+    values: 91257+433x3 92987+432x1 93853+433x1 94720+432x2 96017+434x2 97321+434x2 98624+435x2 99930+437x1 100803+437x2 102113+436x1 102987+437x1 103860+438x1
+  - series: http_request_duration_seconds_bucket{instance="10.134.140.2:8080",le="+Inf",namespace="staging",pod="wishlist-api-j5k66",service="wishlist-api"}
+    values: 91273+435x3 93012+435x1 93883+435x1 94754+435x2 96060+437x1 96933+438x1 97808+437x1 98683+438x2 99998+439x3 101755+439x2 103073+440x1 103952+440x1
+  - series: http_request_duration_seconds_count{instance="10.134.140.2:8080",namespace="staging",pod="wishlist-api-j5k66",service="wishlist-api"}
+    values: 91273+435x3 93012+435x1 93883+435x1 94754+435x2 96060+437x1 96933+438x1 97808+437x1 98683+438x2 99998+439x3 101755+439x2 103073+440x1 103952+440x1
+  - series: http_request_duration_seconds_bucket{instance="10.91.65.3:8080",le="0.05",namespace="staging",pod="wishlist-api-2d7vw",service="wishlist-api"}
+    values: 54503+114x13 56100+114x1 56329+115x14
+  - series: http_request_duration_seconds_bucket{instance="10.91.65.3:8080",le="0.1",namespace="staging",pod="wishlist-api-2d7vw",service="wishlist-api"}
+    values: 54544+249x13 58032+249x1 58532+251x10 61294+252x1 61797+252x1
+  - series: http_request_duration_seconds_bucket{instance="10.91.65.3:8080",le="0.25",namespace="staging",pod="wishlist-api-2d7vw",service="wishlist-api"}
+    values: 54550+345x3 55929+345x4 57653+345x1 58344+346x1 59035+347x1 59728+347x3 61117+347x1 61812+347x1 62507+348x3 63900+349x1 64596+349x1
+  - series: http_request_duration_seconds_bucket{instance="10.91.65.3:8080",le="0.5",namespace="staging",pod="wishlist-api-2d7vw",service="wishlist-api"}
+    values: 54568+346x3 55951+346x4 57680+346x1 58373+347x1 59066+348x1 59761+348x3 61154+348x1 61851+348x1 62548+349x3 63945+350x1 64643+350x1
+  - series: http_request_duration_seconds_bucket{instance="10.91.65.3:8080",le="1",namespace="staging",pod="wishlist-api-2d7vw",service="wishlist-api"}
+    values: 54573+347x3 55960+347x4 57694+347x1 58389+348x1 59084+349x1 59781+349x3 61178+349x1 61877+349x1 62576+350x3 63977+351x1 64677+351x1
+  - series: http_request_duration_seconds_bucket{instance="10.91.65.3:8080",le="2.5",namespace="staging",pod="wishlist-api-2d7vw",service="wishlist-api"}
+    values: 54612+348x3 56003+348x4 57742+348x1 58439+349x1 59136+350x1 59835+350x3 61236+350x1 61937+350x1 62638+351x3 64043+352x1 64745+352x1
+  - series: http_request_duration_seconds_bucket{instance="10.91.65.3:8080",le="+Inf",namespace="staging",pod="wishlist-api-2d7vw",service="wishlist-api"}
+    values: 54661+350x3 56060+350x6 58511+351x1 59212+352x5 61325+353x4 63091+353x2 64151+354x1 64858+354x1
+  - series: http_request_duration_seconds_count{instance="10.91.65.3:8080",namespace="staging",pod="wishlist-api-2d7vw",service="wishlist-api"}
+    values: 54661+350x3 56060+350x6 58511+351x1 59212+352x5 61325+353x4 63091+353x2 64151+354x1 64858+354x1
+  - series: http_request_duration_seconds_bucket{instance="10.13.89.4:8080",le="0.05",namespace="staging",pod="wishlist-api-45bkl",service="wishlist-api"}
+    values: 18551+89x13 19798+90x15 21239
+  - series: http_request_duration_seconds_bucket{instance="10.13.89.4:8080",le="0.1",namespace="staging",pod="wishlist-api-45bkl",service="wishlist-api"}
+    values: 18584+252x5 20097+252x1 20602+252x1 21107+253x3 22120+254x5 23645+254x1 24154+255x7 26196
+  - series: http_request_duration_seconds_bucket{instance="10.13.89.4:8080",le="0.25",namespace="staging",pod="wishlist-api-45bkl",service="wishlist-api"}
+    values: 18621+426x2 19900+427x1 20753+428x1 21608+428x1 22463+428x4 24604+429x2 25892+429x1 26751+431x1 27612+432x1 28475+431x2 29769+432x3 31498
+  - series: http_request_duration_seconds_bucket{instance="10.13.89.4:8080",le="0.5",namespace="staging",pod="wishlist-api-45bkl",service="wishlist-api"}
+    values: 18635+427x2 19917+428x1 20772+429x1 21629+429x1 22486+429x4 24632+430x2 25923+430x1 26784+432x1 27647+433x1 28512+432x2 29809+433x3 31542
+  - series: http_request_duration_seconds_bucket{instance="10.13.89.4:8080",le="1",namespace="staging",pod="wishlist-api-45bkl",service="wishlist-api"}
+    values: 18654+428x2 19939+429x1 20796+430x1 21655+430x1 22514+430x4 24665+431x2 25959+431x1 26822+433x1 27687+434x1 28554+433x2 29854+434x3 31591
+  - series: http_request_duration_seconds_bucket{instance="10.13.89.4:8080",le="2.5",namespace="staging",pod="wishlist-api-45bkl",service="wishlist-api"}
+    values: 18662+429x2 19950+430x1 20809+431x1 21670+431x1 22531+431x4 24687+432x2 25984+432x1 26849+434x1 27716+435x1 28585+434x2 29888+435x3 31629
+  - series: http_request_duration_seconds_bucket{instance="10.13.89.4:8080",le="+Inf",namespace="staging",pod="wishlist-api-45bkl",service="wishlist-api"}
+    values: 18663+432x2 19960+433x1 20825+434x1 21692+434x1 22559+434x4 24730+435x2 26036+435x1 26907+437x1 27780+438x1 28655+437x2 29967+438x3 31720
+  - series: http_request_duration_seconds_count{instance="10.13.89.4:8080",namespace="staging",pod="wishlist-api-45bkl",service="wishlist-api"}
+    values: 18663+432x2 19960+433x1 20825+434x1 21692+434x1 22559+434x4 24730+435x2 26036+435x1 26907+437x1 27780+438x1 28655+437x2 29967+438x3 31720
+  - series: http_request_duration_seconds_bucket{instance="10.69.79.2:8080",le="0.05",namespace="staging",pod="identity-worker-2z24l",service="identity-worker"}
+    values: 30857+348x1 31552+347x1 32245+347x2 33285+347x1 33978+346x1 34669+346x2 35706+345x3 37085+343x1 37772+343x1 38459+344x1 39145+342x1 39830+343x1 40515+342x1 41198
+  - series: http_request_duration_seconds_bucket{instance="10.69.79.2:8080",le="0.1",namespace="staging",pod="identity-worker-2z24l",service="identity-worker"}
+    values: 30866+715x1 32294+713x1 33718+713x2 35855+713x1 37279+711x1 38699+711x2 40831+709x3 43665+705x1 45077+705x1 46489+707x1 47899+703x1 49307+705x1 50715+703x1 52119
+  - series: http_request_duration_seconds_bucket{instance="10.69.79.2:8080",le="0.25",namespace="staging",pod="identity-worker-2z24l",service="identity-worker"}
+    values: 30908+1123x1 33152+1121x1 35391+1121x1 37632+1117x1 39869+1118x1 42104+1115x1 44337+1117x1 46570+1114x3 51022+1109x1 53241+1109x1 55460+1110x1 57676+1105x1 59888+1107x1 62099+1105x1 64307
+  - series: http_request_duration_seconds_bucket{instance="10.69.79.2:8080",le="0.5",namespace="staging",pod="identity-worker-2z24l",service="identity-worker"}
+    values: 30940+1123x1 33184+1121x1 35423+1121x1 37664+1117x1 39901+1118x1 42136+1115x1 44369+1117x1 46602+1114x3 51054+1109x1 53273+1109x1 55492+1110x1 57708+1105x1 59920+1107x1 62131+1105x1 64339
+  - series: http_request_duration_seconds_bucket{instance="10.69.79.2:8080",le="1",namespace="staging",pod="identity-worker-2z24l",service="identity-worker"}
+    values: 30981+1123x1 33225+1121x1 35464+1121x1 37705+1117x1 39942+1118x1 42177+1115x1 44410+1117x1 46643+1114x3 51095+1109x1 53314+1109x1 55533+1110x1 57749+1105x1 59961+1107x1 62172+1105x1 64380
+  - series: http_request_duration_seconds_bucket{instance="10.69.79.2:8080",le="2.5",namespace="staging",pod="identity-worker-2z24l",service="identity-worker"}
+    values: 31018+1123x1 33262+1121x1 35501+1121x1 37742+1117x1 39979+1118x1 42214+1115x1 44447+1117x1 46680+1114x3 51132+1109x1 53351+1109x1 55570+1110x1 57786+1105x1 59998+1107x1 62209+1105x1 64417
+  - series: http_request_duration_seconds_bucket{instance="10.69.79.2:8080",le="+Inf",namespace="staging",pod="identity-worker-2z24l",service="identity-worker"}
+    values: 31037+1123x1 33281+1121x1 35520+1121x1 37761+1117x1 39998+1119x1 42234+1115x1 44467+1117x1 46700+1114x3 51153+1109x1 53372+1109x1 55591+1110x1 57807+1105x1 60019+1108x1 62231+1105x1 64439
+  - series: http_request_duration_seconds_count{instance="10.69.79.2:8080",namespace="staging",pod="identity-worker-2z24l",service="identity-worker"}
+    values: 31037+1123x1 33281+1121x1 35520+1121x1 37761+1117x1 39998+1119x1 42234+1115x1 44467+1117x1 46700+1114x3 51153+1109x1 53372+1109x1 55591+1110x1 57807+1105x1 60019+1108x1 62231+1105x1 64439
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="WishlistApiErrorBudgetBurnFast",alertstate="firing",service="wishlist-api"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="WishlistApiErrorBudgetBurnFast",alertstate="firing",service="wishlist-api"}) or vector(0)
+    eval_time: 27m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="WishlistApiErrorBudgetBurnFast",alertstate="firing",service="identity-worker"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+- name: WishlistApiErrorBudgetBurnFast normal
+  interval: 1m
+  input_series:
+  - series: http_request_duration_seconds_bucket{instance="10.155.90.2:8080",le="0.05",namespace="staging",pod="wishlist-api-88wkt",service="wishlist-api"}
+    values: 51656+115x8 52692+116x1 52923+116x8 53968+117x5 54671+118x1 54906+118x4 55497+118x1 55734+118x2 56089+119x3 56566+119x4 57162+120x4 57763+121x6 58611+122x1
+  - series: http_request_duration_seconds_bucket{instance="10.155.90.2:8080",le="0.1",namespace="staging",pod="wishlist-api-88wkt",service="wishlist-api"}
+    values: 51695+271x6 53593+272x1 54138+273x1 54683+273x3 55776+273x1 56323+274x2 57147+276x2 57974+276x2 58804+278x1 59358+278x4 60750+278x1 61308+279x2 62146+280x2 62987+282x1 63550+281x3 64676+283x4 66093+285x5 67804+287x2
+  - series: http_request_duration_seconds_bucket{instance="10.155.90.2:8080",le="0.25",namespace="staging",pod="wishlist-api-88wkt",service="wishlist-api"}
+    values: 51713+462x3 53563+463x2 54954+465x1 55885+466x1 56816+466x1 57749+467x1 58685+467x1 59621+468x1 60558+471x3 62441+473x1 63386+474x2 64806+475x1 65755+475x2 67183+476x1 68137+477x2 69570+479x2 71008+482x1 71971+481x3 73898+485x2 75352+485x1 76324+486x2 77784+487x1 78759+489x1 79738+490x1
+  - series: http_request_duration_seconds_bucket{instance="10.155.90.2:8080",le="0.5",namespace="staging",pod="wishlist-api-88wkt",service="wishlist-api"}
+    values: 51743+462x3 53593+463x2 54984+465x1 55915+466x1 56846+466x1 57779+467x1 58715+467x1 59651+468x1 60588+471x3 62471+473x1 63416+474x2 64836+475x1 65785+475x2 67213+476x1 68167+477x2 69600+479x2 71038+482x1 72001+481x3 73928+485x2 75382+485x1 76354+486x2 77814+487x1 78789+489x1 79768+490x1
+  - series: http_request_duration_seconds_bucket{instance="10.155.90.2:8080",le="1",namespace="staging",pod="wishlist-api-88wkt",service="wishlist-api"}
+    values: 51759+462x3 53609+463x2 55000+465x1 55931+466x1 56862+466x1 57795+467x1 58731+467x1 59667+468x1 60604+471x3 62487+473x1 63432+474x2 64852+475x1 65801+475x2 67229+476x1 68183+477x2 69616+479x2 71054+482x1 72017+481x3 73944+485x2 75398+485x1 76370+486x2 77830+487x1 78805+489x1 79784+490x1
+  - series: http_request_duration_seconds_bucket{instance="10.155.90.2:8080",le="2.5",namespace="staging",pod="wishlist-api-88wkt",service="wishlist-api"}
+    values: 51778+462x3 53628+463x2 55019+465x1 55950+466x1 56881+466x1 57814+467x1 58750+467x1 59686+468x1 60623+471x3 62506+473x1 63451+474x2 64871+475x1 65820+475x2 67248+476x1 68202+477x2 69635+479x2 71073+482x1 72036+481x3 73963+485x2 75417+485x1 76389+486x2 77849+487x1 78824+489x1 79803+490x1
+  - series: http_request_duration_seconds_bucket{instance="10.155.90.2:8080",le="+Inf",namespace="staging",pod="wishlist-api-88wkt",service="wishlist-api"}
+    values: 51811+462x3 53661+463x2 55052+465x1 55983+466x1 56914+466x1 57847+467x1 58783+467x1 59719+468x1 60656+471x3 62539+473x1 63484+474x2 64904+475x1 65853+475x2 67281+476x1 68235+477x2 69668+479x2 71106+482x1 72069+481x3 73996+485x2 75450+485x1 76422+486x2 77882+487x1 78857+489x1 79836+490x1
+  - series: http_request_duration_seconds_count{instance="10.155.90.2:8080",namespace="staging",pod="wishlist-api-88wkt",service="wishlist-api"}
+    values: 51811+462x3 53661+463x2 55052+465x1 55983+466x1 56914+466x1 57847+467x1 58783+467x1 59719+468x1 60656+471x3 62539+473x1 63484+474x2 64904+475x1 65853+475x2 67281+476x1 68235+477x2 69668+479x2 71106+482x1 72069+481x3 73996+485x2 75450+485x1 76422+486x2 77882+487x1 78857+489x1 79836+490x1
+  - series: http_request_duration_seconds_bucket{instance="10.39.86.3:8080",le="0.05",namespace="staging",pod="wishlist-api-6gdz7",service="wishlist-api"}
+    values: 71764+167x3 72433+168x4 73274+169x1 73611+168x1 73948+169x3 74625+169x2 75134+170x3 75815+171x4 76671+171x1 77014+171x1 77357+172x1 77702+172x2 78219+173x3 78912+174x4 79783+175x3 80484+176x2 81011+177x1 81364+177x4
+  - series: http_request_duration_seconds_bucket{instance="10.39.86.3:8080",le="0.1",namespace="staging",pod="wishlist-api-6gdz7",service="wishlist-api"}
+    values: 71764+293x3 72937+294x4 74409+296x1 75000+295x1 75591+296x3 76777+296x2 77668+298x3 78862+299x1 79461+300x2 80362+300x1 80963+300x1 81565+301x1 82169+301x1 82772+303x4 84289+305x4 85816+307x3 87045+309x1 87662+307x1 88279+309x1 88898+310x3
+  - series: http_request_duration_seconds_bucket{instance="10.39.86.3:8080",le="0.25",namespace="staging",pod="wishlist-api-6gdz7",service="wishlist-api"}
+    values: 71814+361x2 72896+362x5 75070+364x1 75797+363x1 76524+365x3 77985+365x1 78714+368x1 79449+367x2 80552+368x1 81290+370x1 82029+371x1 82769+371x1 83510+372x1 84253+373x1 84997+372x1 85742+373x1 86489+374x1 87238+376x2 88365+376x1 89118+377x1 89873+377x1 90629+380x1 91388+378x1 92147+380x1 92908+382x3
+  - series: http_request_duration_seconds_bucket{instance="10.39.86.3:8080",le="0.5",namespace="staging",pod="wishlist-api-6gdz7",service="wishlist-api"}
+    values: 71843+361x2 72925+362x5 75099+364x1 75826+363x1 76553+365x3 78014+365x1 78743+368x1 79478+367x2 80581+368x1 81319+370x1 82058+371x1 82798+371x1 83539+372x1 84282+373x1 85026+372x1 85771+373x1 86518+374x1 87267+376x2 88394+376x1 89147+377x1 89902+377x1 90658+380x1 91417+378x1 92176+380x1 92937+382x3
+  - series: http_request_duration_seconds_bucket{instance="10.39.86.3:8080",le="1",namespace="staging",pod="wishlist-api-6gdz7",service="wishlist-api"}
+    values: 71864+361x2 72946+362x5 75120+364x1 75847+363x1 76574+365x3 78035+365x1 78764+368x1 79499+367x2 80602+368x1 81340+370x1 82079+371x1 82819+371x1 83560+372x1 84303+373x1 85047+372x1 85792+373x1 86539+374x1 87288+376x2 88415+376x1 89168+377x1 89923+377x1 90679+380x1 91438+378x1 92197+380x1 92958+382x3
+  - series: http_request_duration_seconds_bucket{instance="10.39.86.3:8080",le="2.5",namespace="staging",pod="wishlist-api-6gdz7",service="wishlist-api"}
+    values: 71868+361x2 72950+362x5 75124+364x1 75851+363x1 76578+365x3 78039+365x1 78768+368x1 79503+367x2 80606+368x1 81344+370x1 82083+371x1 82823+371x1 83564+372x1 84307+373x1 85051+372x1 85796+373x1 86543+374x1 87292+376x2 88419+376x1 89172+377x1 89927+377x1 90683+380x1 91442+378x1 92201+380x1 92962+382x3
+  - series: http_request_duration_seconds_bucket{instance="10.39.86.3:8080",le="+Inf",namespace="staging",pod="wishlist-api-6gdz7",service="wishlist-api"}
+    values: 71887+361x2 72969+362x3 74418+362x1 75144+364x1 75871+363x1 76599+365x3 78060+365x2 79158+367x3 80628+369x1 81367+370x1 82106+371x1 82847+371x1 83588+372x1 84331+373x1 85076+372x1 85821+373x1 86568+374x1 87318+376x2 88445+376x1 89198+378x2 90331+379x1 91090+379x2 92229+380x1 92990+382x2 94137
+  - series: http_request_duration_seconds_count{instance="10.39.86.3:8080",namespace="staging",pod="wishlist-api-6gdz7",service="wishlist-api"}
+    values: 71887+361x2 72969+362x3 74418+362x1 75144+364x1 75871+363x1 76599+365x3 78060+365x2 79158+367x3 80628+369x1 81367+370x1 82106+371x1 82847+371x1 83588+372x1 84331+373x1 85076+372x1 85821+373x1 86568+374x1 87318+376x2 88445+376x1 89198+378x2 90331+379x1 91090+379x2 92229+380x1 92990+382x2 94137
+  - series: http_request_duration_seconds_bucket{instance="10.154.183.2:8080",le="0.05",namespace="staging",pod="identity-worker-gt494",service="identity-worker"}
+    values: 24377+600x1 25579+602x2 27384+603x1 28591+603x1 29798+605x1 31009+606x2 32828+608x2 34651+609x1 35868+608x1 37087+609x1 38306+610x1 39528+612x4 42591+614x1 43820+615x1 45051+616x3 47517+618x1 48755+619x3 51233+622x1 52476+621x2 54341+624x6 58712+625x1 59964+626x1 61218
+  - series: http_request_duration_seconds_bucket{instance="10.154.183.2:8080",le="0.1",namespace="staging",pod="identity-worker-gt494",service="identity-worker"}
+    values: 24421+937x1 26298+940x2 29117+942x1 31003+942x1 32888+945x1 34780+947x2 37622+950x2 40470+951x1 42371+950x1 44276+951x1 46180+953x1 48089+956x4 52874+959x1 54794+961x1 56717+962x3 60568+966x1 62502+967x3 66373+972x1 68315+970x2 71228+975x6 78057+976x1 80013+978x1 81972
+  - series: http_request_duration_seconds_bucket{instance="10.154.183.2:8080",le="0.25",namespace="staging",pod="identity-worker-gt494",service="identity-worker"}
+    values: 24438+1184x1 26810+1188x2 30372+1191x1 32756+1191x1 35139+1194x1 37529+1197x2 41121+1200x1 43522+1198x1 45922+1201x2 49531+1202x1 51938+1204x1 54351+1208x1 56768+1209x2 60400+1212x1 62827+1214x1 65258+1217x1 67691+1217x1 70128+1221x1 72573+1223x3 77469+1228x1 79923+1226x2 83606+1232x1 86071+1232x2 89768+1233x1 92239+1234x1 94712+1237x1 97189
+  - series: http_request_duration_seconds_bucket{instance="10.154.183.2:8080",le="0.5",namespace="staging",pod="identity-worker-gt494",service="identity-worker"}
+    values: 24445+1184x1 26817+1188x2 30379+1191x1 32763+1191x1 35146+1194x1 37536+1197x2 41128+1200x1 43529+1198x1 45929+1201x2 49538+1202x1 51945+1204x1 54358+1208x1 56775+1209x2 60407+1212x1 62834+1214x1 65265+1217x1 67698+1217x1 70135+1221x1 72580+1223x3 77476+1228x1 79930+1226x2 83613+1232x1 86078+1232x2 89775+1233x1 92246+1234x1 94719+1237x1 97196
+  - series: http_request_duration_seconds_bucket{instance="10.154.183.2:8080",le="1",namespace="staging",pod="identity-worker-gt494",service="identity-worker"}
+    values: 24488+1184x1 26860+1188x2 30422+1191x1 32806+1191x1 35189+1194x1 37579+1197x2 41171+1200x1 43572+1198x1 45972+1201x2 49581+1202x1 51988+1204x1 54401+1208x1 56818+1209x2 60450+1212x1 62877+1214x1 65308+1217x1 67741+1217x1 70178+1221x1 72623+1223x3 77519+1228x1 79973+1226x2 83656+1232x1 86121+1232x2 89818+1233x1 92289+1234x1 94762+1237x1 97239
+  - series: http_request_duration_seconds_bucket{instance="10.154.183.2:8080",le="2.5",namespace="staging",pod="identity-worker-gt494",service="identity-worker"}
+    values: 24517+1184x1 26889+1188x2 30451+1191x1 32835+1191x1 35218+1194x1 37608+1197x2 41200+1200x1 43601+1198x1 46001+1201x2 49610+1202x1 52017+1204x1 54430+1208x1 56847+1209x2 60479+1212x1 62906+1214x1 65337+1217x1 67770+1217x1 70207+1221x1 72652+1223x3 77548+1228x1 80002+1226x2 83685+1232x1 86150+1232x2 89847+1233x1 92318+1234x1 94791+1237x1 97268
+  - series: http_request_duration_seconds_bucket{instance="10.154.183.2:8080",le="+Inf",namespace="staging",pod="identity-worker-gt494",service="identity-worker"}
+    values: 24564+1184x1 26936+1189x1 29313+1187x1 31691+1193x1 34076+1192x1 36463+1196x1 38857+1197x1 41252+1201x2 44853+1202x1 47256+1202x1 49665+1203x1 52073+1205x1 54487+1208x1 56905+1209x1 59324+1214x1 61751+1215x1 64180+1218x1 66615+1217x2 70269+1222x1 72715+1224x1 75162+1224x1 77613+1228x1 80068+1226x1 82521+1231x1 84985+1233x2 88683+1233x1 91150+1238x1 93623+1239x1 96100+1240x1
+  - series: http_request_duration_seconds_count{instance="10.154.183.2:8080",namespace="staging",pod="identity-worker-gt494",service="identity-worker"}
+    values: 24564+1184x1 26936+1189x1 29313+1187x1 31691+1193x1 34076+1192x1 36463+1196x1 38857+1197x1 41252+1201x2 44853+1202x1 47256+1202x1 49665+1203x1 52073+1205x1 54487+1208x1 56905+1209x1 59324+1214x1 61751+1215x1 64180+1218x1 66615+1217x2 70269+1222x1 72715+1224x1 75162+1224x1 77613+1228x1 80068+1226x1 82521+1231x1 84985+1233x2 88683+1233x1 91150+1238x1 93623+1239x1 96100+1240x1
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="WishlistApiErrorBudgetBurnFast",alertstate="firing",service="wishlist-api"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+  - expr: count(ALERTS{alertname="WishlistApiErrorBudgetBurnFast",alertstate="firing",service="wishlist-api"}) or vector(0)
+    eval_time: 60m
+    exp_samples:
+    - labels: '{}'
+      value: 0

@@ -1,0 +1,24 @@
+rule_files:
+- ../../rules/*.yml
+- ../../rules/*.yaml
+evaluation_interval: 1m
+tests:
+- name: IngestWorkerDown all_down
+  interval: 1m
+  input_series:
+  - series: up{instance="10.194.141.2:8080",job="ingest-worker",namespace="staging",service="ingest-worker"}
+    values: 1+0x9 0+0x15
+  - series: up{instance="10.165.59.3:8080",job="ingest-worker",namespace="staging",service="ingest-worker"}
+    values: 1+0x9 0+0x15
+  - series: up{instance="10.28.54.4:8080",job="ingest-worker",namespace="staging",service="ingest-worker"}
+    values: 1+0x9 0+0x15
+  - series: up{instance="10.180.176.2:8080",job="geo-edge",namespace="staging",service="geo-edge"}
+    values: 1+0x25
+  - series: up{instance="10.193.229.3:8080",job="geo-edge",namespace="staging",service="geo-edge"}
+    values: 1+0x25
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="IngestWorkerDown",alertstate="firing",service="ingest-worker"}) or vector(0)
+    eval_time: 25m
+    exp_samples:
+    - labels: '{}'
+      value: 1

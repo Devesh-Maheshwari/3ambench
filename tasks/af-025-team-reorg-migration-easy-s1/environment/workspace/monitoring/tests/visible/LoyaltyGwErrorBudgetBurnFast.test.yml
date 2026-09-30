@@ -1,0 +1,94 @@
+rule_files:
+- ../../rules/*.yml
+- ../../rules/*.yaml
+evaluation_interval: 1m
+tests:
+- name: LoyaltyGwErrorBudgetBurnFast sustained
+  interval: 1m
+  input_series:
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.78.116.2:8080",namespace="staging",pod="loyalty-gw-kh48l",service="loyalty-gw"}
+    values: 962291+447x1 963184+447x1 964077+446x4 966304+445x2 967638+443x4 969852+441x1 970735+441x2 972057+441x1 972937+440x1 973816+440x1 974695+438x1 975570
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.78.116.2:8080",namespace="staging",pod="loyalty-gw-kh48l",service="loyalty-gw"}
+    values: 295383+15x30
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.78.116.2:8080",namespace="staging",pod="loyalty-gw-kh48l",service="loyalty-gw"}
+    values: 436785+7x8 436849+7x10 436927+7x3 436956+7x1 436971+7x3 437000
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.78.116.2:8080",namespace="staging",pod="loyalty-gw-kh48l",service="loyalty-gw"}
+    values: 213995+2x30
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.129.154.3:8080",namespace="staging",pod="loyalty-gw-dm2r6",service="loyalty-gw"}
+    values: 52335+508x1 53350+508x1 54364+505x1 55375+506x2 56891+505x1 57900+504x1 58906+503x1 59911+502x1 60914+501x4 63417+501x1 64417+500x1 65415+500x1 66413+497x1 67406
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.129.154.3:8080",namespace="staging",pod="loyalty-gw-dm2r6",service="loyalty-gw"}
+    values: 928556+17x30
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.129.154.3:8080",namespace="staging",pod="loyalty-gw-dm2r6",service="loyalty-gw"}
+    values: 458791+9x30
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.129.154.3:8080",namespace="staging",pod="loyalty-gw-dm2r6",service="loyalty-gw"}
+    values: 174846+2x4 174857+2x3 174866+2x1 174871+3x2 174879+3x3 174890+3x2 174898+3x1 174903+3x1 174908+3x1 174913+3x3
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.128.54.4:8080",namespace="staging",pod="loyalty-gw-xcbgj",service="loyalty-gw"}
+    values: 800219+505x1 801227+504x1 802234+503x4 804748+502x3 806755+500x2 808254+498x1 809251+500x1 810249+497x1 811244+498x1 812239+496x2 813728+496x1 814718+494x1
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.128.54.4:8080",namespace="staging",pod="loyalty-gw-xcbgj",service="loyalty-gw"}
+    values: 80924+17x30
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.128.54.4:8080",namespace="staging",pod="loyalty-gw-xcbgj",service="loyalty-gw"}
+    values: 881444+6x1 881457+7x24 881631+7x3
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.128.54.4:8080",namespace="staging",pod="loyalty-gw-xcbgj",service="loyalty-gw"}
+    values: 247539+2x30
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.5.254.2:8080",namespace="staging",pod="chat-api-q7rcn",service="chat-api"}
+    values: 117247+1021x1 119292+1023x1 121337+1024x1 123389+1024x1 125439+1029x2 128525+1032x1 130586+1034x1 132655+1033x1 134723+1035x1 136792+1035x1 138866+1038x1 140945+1039x2 144063+1041x1 146149+1044x2
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.5.254.2:8080",namespace="staging",pod="chat-api-q7rcn",service="chat-api"}
+    values: 663884+35x27 664865+36x1 664936
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.5.254.2:8080",namespace="staging",pod="chat-api-q7rcn",service="chat-api"}
+    values: 521639+0x3 521640+0x2 521641+0x2 521642+0x2 521643+0x2 521644+0x2 521645+0x2 521646+0x3 521647+0x2 521648+0x1
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.5.254.2:8080",namespace="staging",pod="chat-api-q7rcn",service="chat-api"}
+    values: 854936+0x30
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="LoyaltyGwErrorBudgetBurnFast",alertstate="firing",service="loyalty-gw"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="LoyaltyGwErrorBudgetBurnFast",alertstate="firing",service="loyalty-gw"}) or vector(0)
+    eval_time: 27m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="LoyaltyGwErrorBudgetBurnFast",alertstate="firing",service="chat-api"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+- name: LoyaltyGwErrorBudgetBurnFast normal
+  interval: 1m
+  input_series:
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.161.108.2:8080",namespace="staging",pod="loyalty-gw-6m772",service="loyalty-gw"}
+    values: 18939+592x1 20121+592x1 21304+590x1 22483+590x1 23662+590x1 24840+589x1 26017+588x1 27191+588x2 28952+587x1 30124+585x4 33047+584x1 34214+583x1 35379+582x1 36544+583x1 37709+581x5 41194+580x4 44093+579x2 45829+578x2 47562+576x2 49291+576x1 50442+576x2 52168+574x3
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.161.108.2:8080",namespace="staging",pod="loyalty-gw-6m772",service="loyalty-gw"}
+    values: 931758+20x38 932537+19x21
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.161.108.2:8080",namespace="staging",pod="loyalty-gw-6m772",service="loyalty-gw"}
+    values: 517277+0x60
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.161.108.2:8080",namespace="staging",pod="loyalty-gw-6m772",service="loyalty-gw"}
+    values: 948940+0x60
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.39.241.3:8080",namespace="staging",pod="loyalty-gw-9z5xm",service="loyalty-gw"}
+    values: 348543+785x1 350111+785x2 352464+782x1 354029+783x2 356376+782x1 357938+781x1 359498+779x1 361057+778x1 362614+777x1 364167+776x1 365720+776x1 367271+775x2 369595+774x1 371141+775x1 372690+772x1 374233+772x1 375776+771x1 377319+770x1 378857+769x1 380394+768x1 381928+768x1 383463+766x1 384996+766x1 386527+764x1 388054+766x1 389584+762x1 391110+764x1 392636+761x1 394157+762x1
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.39.241.3:8080",namespace="staging",pod="loyalty-gw-9z5xm",service="loyalty-gw"}
+    values: 857307+27x4 857441+26x55
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.39.241.3:8080",namespace="staging",pod="loyalty-gw-9z5xm",service="loyalty-gw"}
+    values: 397850+0x14 397851+0x13 397852+0x13 397853+0x14 397854+0x2
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.39.241.3:8080",namespace="staging",pod="loyalty-gw-9z5xm",service="loyalty-gw"}
+    values: 866194+0x60
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.132.90.2:8080",namespace="staging",pod="chat-api-pdkwd",service="chat-api"}
+    values: 661310+628x1 662565+628x1 663820+628x1 665074+624x1 666324+625x1 667573+625x1 668822+622x1 670068+622x1 671313+619x1 672554+622x1 673796+621x2 675655+617x1 676891+616x2 678736+616x1 679967+614x1 681196+613x1 682425+614x1 683651+611x1 684875+609x1 686095+610x1 687314+609x3 689748+609x1 690965+609x1 692181+604x2 693997+604x2 695812+604x1 697021+601x2
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.132.90.2:8080",namespace="staging",pod="chat-api-pdkwd",service="chat-api"}
+    values: 584153+21x42 585055+21x1 585096+20x1 585137+20x13
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.132.90.2:8080",namespace="staging",pod="chat-api-pdkwd",service="chat-api"}
+    values: 331932+0x3 331933+0x3 331934+0x3 331935+0x3 331936+0x3 331937+0x3 331938+0x3 331939+0x3 331940+0x3 331941+0x2 331942+0x3 331943+0x3 331944+0x3 331945+0x3 331946+0x3 331947+0x1
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.132.90.2:8080",namespace="staging",pod="chat-api-pdkwd",service="chat-api"}
+    values: 918267+0x60
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="LoyaltyGwErrorBudgetBurnFast",alertstate="firing",service="loyalty-gw"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+  - expr: count(ALERTS{alertname="LoyaltyGwErrorBudgetBurnFast",alertstate="firing",service="loyalty-gw"}) or vector(0)
+    eval_time: 60m
+    exp_samples:
+    - labels: '{}'
+      value: 0

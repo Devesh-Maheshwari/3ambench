@@ -1,0 +1,31 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: slo-notify-worker
+  namespace: monitoring
+  labels:
+    role: alert-rules
+spec:
+  groups:
+  - name: slo-notify-worker
+    rules:
+    - alert: NotifyWorkerErrorBudgetBurnFast
+      expr: slo:sli_error:ratio_rate1h{service="notify-worker"} > (14.4 * 0.0005) and slo:sli_error:ratio_rate5m{service="notify-worker"} > (14.4 * 0.0005)
+      for: 2m
+      labels:
+        severity: page
+        team: commerce-core
+        slo: notify-worker-availability
+      annotations:
+        summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
+        runbook_url: https://runbooks.larkspur.dev/alerts/NotifyWorkerErrorBudgetBurnFast
+    - alert: NotifyWorkerErrorBudgetBurnSlow
+      expr: slo:sli_error:ratio_rate6h{service="notify-worker"} > (6 * 0.0005) and slo:sli_error:ratio_rate30m{service="notify-worker"} > (6 * 0.0005)
+      for: 15m
+      labels:
+        severity: ticket
+        team: commerce-core
+        slo: notify-worker-availability
+      annotations:
+        summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
+        runbook_url: https://runbooks.larkspur.dev/alerts/NotifyWorkerErrorBudgetBurnSlow

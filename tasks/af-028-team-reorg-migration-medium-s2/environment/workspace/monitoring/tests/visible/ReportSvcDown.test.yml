@@ -1,0 +1,24 @@
+rule_files:
+- ../../rules/*.yml
+- ../../rules/*.yaml
+evaluation_interval: 1m
+tests:
+- name: ReportSvcDown all_down
+  interval: 1m
+  input_series:
+  - series: up{instance="10.84.166.2:8080",job="report-svc",namespace="staging",service="report-svc"}
+    values: 1+0x9 0+0x15
+  - series: up{instance="10.50.233.3:8080",job="report-svc",namespace="staging",service="report-svc"}
+    values: 1+0x9 0+0x15
+  - series: up{instance="10.180.183.4:8080",job="report-svc",namespace="staging",service="report-svc"}
+    values: 1+0x9 0+0x15
+  - series: up{instance="10.115.132.2:8080",job="pricing-svc",namespace="staging",service="pricing-svc"}
+    values: 1+0x25
+  - series: up{instance="10.26.95.3:8080",job="pricing-svc",namespace="staging",service="pricing-svc"}
+    values: 1+0x25
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="ReportSvcDown",alertstate="firing",service="report-svc"}) or vector(0)
+    eval_time: 25m
+    exp_samples:
+    - labels: '{}'
+      value: 1

@@ -1,0 +1,13 @@
+services:
+- name: ingest-worker
+  team: commerce-core-core
+  slo_target: 0.995
+  sli_family: http
+  metrics:
+  - http_requests_total
+- name: refund-edge
+  team: finance-eng
+  slo_target: 0.995
+  sli_family: http
+  metrics:
+  - http_requests_total

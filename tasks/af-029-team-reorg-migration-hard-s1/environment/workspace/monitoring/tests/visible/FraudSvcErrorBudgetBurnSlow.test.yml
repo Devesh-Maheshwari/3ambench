@@ -1,0 +1,94 @@
+rule_files:
+- ../../rules/*.yml
+- ../../rules/*.yaml
+evaluation_interval: 1m
+tests:
+- name: FraudSvcErrorBudgetBurnSlow sustained
+  interval: 1m
+  input_series:
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.69.79.2:8080",namespace="staging",pod="fraud-svc-52285",service="fraud-svc"}
+    values: 438955+363x2 440043+362x2 441128+361x4 442931+358x1 443648+358x1 444363+358x1 445080+358x1 445795+357x1 446508+356x4 448287+354x1 448996+353x2 450056+352x1 450761+353x1 451466+352x2 452521+350x1 453222
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.69.79.2:8080",namespace="staging",pod="fraud-svc-52285",service="fraud-svc"}
+    values: 161687+12x40
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.69.79.2:8080",namespace="staging",pod="fraud-svc-52285",service="fraud-svc"}
+    values: 305533+1x12 305545+1x3 305548+1x3 305551+1x2 305553+1x9 305562+1x6
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.69.79.2:8080",namespace="staging",pod="fraud-svc-52285",service="fraud-svc"}
+    values: 662595+0x40
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.0.2.3:8080",namespace="staging",pod="fraud-svc-fkvfl",service="fraud-svc"}
+    values: 880551+224x1 880998+223x3 881889+221x1 882332+221x1 882775+220x4 883874+220x2 884533+220x2 885192+218x1 885629+218x1 886066+219x1 886503+218x1 886938+218x2 887591+217x2 888241+216x5
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.0.2.3:8080",namespace="staging",pod="fraud-svc-fkvfl",service="fraud-svc"}
+    values: 737907+7x40
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.0.2.3:8080",namespace="staging",pod="fraud-svc-fkvfl",service="fraud-svc"}
+    values: 172968+1x6 172976+1x1 172979+1x1 172982+1x3 172987+1x2 172991+1x3 172996+1x5 173003+1x6 173011+1x5
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.0.2.3:8080",namespace="staging",pod="fraud-svc-fkvfl",service="fraud-svc"}
+    values: 547407+0x40
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.246.120.4:8080",namespace="staging",pod="fraud-svc-h8gb4",service="fraud-svc"}
+    values: 963597+339x1 964274+337x1 964949+338x1 965622+335x3 966963+335x1 967632+335x2 968635+334x1 969304+333x3 970635+331x1 971298+331x1 971961+330x4 973610+329x2 974596+328x1 975251+328x1 975906+326x1 976559+327x1
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.246.120.4:8080",namespace="staging",pod="fraud-svc-h8gb4",service="fraud-svc"}
+    values: 683083+11x40
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.246.120.4:8080",namespace="staging",pod="fraud-svc-h8gb4",service="fraud-svc"}
+    values: 196884+2x1 196889+3x2 196897+3x4 196911+3x2 196919+2x1 196924+2x2 196931+2x1 196936+2x1 196941+3x1 196946+2x1 196951+2x1 196956+2x1 196961+3x1 196966+3x1 196971+3x1 196976+3x2 196984+3x1
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.246.120.4:8080",namespace="staging",pod="fraud-svc-h8gb4",service="fraud-svc"}
+    values: 614973+0x40
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.231.42.2:8080",namespace="staging",pod="ingest-edge-2w2dj",service="ingest-edge"}
+    values: 964809+849x1 966505+848x2 969050+852x1 970751+850x1 972450+851x2 975007+854x1 976714+853x1 978422+854x1 980131+855x1 981842+855x1 983556+855x1 985267+860x1 986983+861x2 989565+859x1 991287+863x1 993010+861x1 994735+863x2 997325+865x1 999054
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.231.42.2:8080",namespace="staging",pod="ingest-edge-2w2dj",service="ingest-edge"}
+    values: 217760+29x40
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.231.42.2:8080",namespace="staging",pod="ingest-edge-2w2dj",service="ingest-edge"}
+    values: 744679+0x3 744680+0x2 744681+0x2 744682+0x2 744683+0x3 744684+0x2 744685+0x2 744686+0x2 744687+0x3 744688+0x2 744689+0x2 744690+0x2 744691+0x1
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.231.42.2:8080",namespace="staging",pod="ingest-edge-2w2dj",service="ingest-edge"}
+    values: 84329+0x40
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="FraudSvcErrorBudgetBurnSlow",alertstate="firing",service="fraud-svc"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="FraudSvcErrorBudgetBurnSlow",alertstate="firing",service="fraud-svc"}) or vector(0)
+    eval_time: 37m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="FraudSvcErrorBudgetBurnSlow",alertstate="firing",service="ingest-edge"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+- name: FraudSvcErrorBudgetBurnSlow normal
+  interval: 1m
+  input_series:
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.223.2.2:8080",namespace="staging",pod="fraud-svc-gsscj",service="fraud-svc"}
+    values: 271633+159x1 271950+158x1 272267+159x4 273061+158x1 273378+159x1 273695+159x2 274171+159x1 274488+159x1 274804+158x1 275121+157x2 275593+158x3 276226+157x1 276541+159x2 277017+159x1 277333+159x2 277809+159x2 278285+158x2 278760+157x1 279076+158x1 279391+158x1 279706+158x1 280023+158x1 280340+158x2 280815+159x1 281132
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.223.2.2:8080",namespace="staging",pod="fraud-svc-gsscj",service="fraud-svc"}
+    values: 872111+5x60
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.223.2.2:8080",namespace="staging",pod="fraud-svc-gsscj",service="fraud-svc"}
+    values: 655847+0x60
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.223.2.2:8080",namespace="staging",pod="fraud-svc-gsscj",service="fraud-svc"}
+    values: 906515+0x60
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.103.107.3:8080",namespace="staging",pod="fraud-svc-dtx99",service="fraud-svc"}
+    values: 907591+208x3 908424+210x1 908843+208x2 909466+207x1 909881+209x1 910298+210x1 910717+206x1 911132+207x1 911547+207x2 912170+206x1 912583+208x1 912998+208x3 913829+207x1 914244+208x1 914659+208x1 915074+208x2 915697+209x2 916323+207x2 916945+206x1 917359+208x1 917774+208x1 918189+208x2 918812+209x1 919228+207x1 919643+209x1 920060
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.103.107.3:8080",namespace="staging",pod="fraud-svc-dtx99",service="fraud-svc"}
+    values: 756531+7x60
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.103.107.3:8080",namespace="staging",pod="fraud-svc-dtx99",service="fraud-svc"}
+    values: 266092+0x7 266093+0x7 266094+0x6 266095+0x7 266096+0x6 266097+0x7 266098+0x6 266099+0x7
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.103.107.3:8080",namespace="staging",pod="fraud-svc-dtx99",service="fraud-svc"}
+    values: 89118+0x60
+  - series: grpc_server_handled_total{grpc_code="OK",grpc_method="Get",instance="10.151.85.2:8080",namespace="staging",pod="ingest-edge-bmtt4",service="ingest-edge"}
+    values: 393137+350x1 393835+351x1 394534+350x1 395233+349x1 395934+353x1 396636+350x1 397337+349x1 398037+352x2 399094+350x1 399797+350x1 400501+352x1 401203+353x2 402260+352x1 402962+352x2 404021+353x1 404730+356x1 405441+352x3 406853+353x1 407562+353x1 408270+355x1 408982+355x1 409693+355x1 410404+357x1 411115+358x1 411828+359x1 412543+358x1 413257+355x2 414324
+  - series: grpc_server_handled_total{grpc_code="NotFound",grpc_method="Get",instance="10.151.85.2:8080",namespace="staging",pod="ingest-edge-bmtt4",service="ingest-edge"}
+    values: 783928+12x60
+  - series: grpc_server_handled_total{grpc_code="Unavailable",grpc_method="Get",instance="10.151.85.2:8080",namespace="staging",pod="ingest-edge-bmtt4",service="ingest-edge"}
+    values: 974886+0x27 974887+0x26 974888+0x5
+  - series: grpc_server_handled_total{grpc_code="Internal",grpc_method="Get",instance="10.151.85.2:8080",namespace="staging",pod="ingest-edge-bmtt4",service="ingest-edge"}
+    values: 9450+0x60
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="FraudSvcErrorBudgetBurnSlow",alertstate="firing",service="fraud-svc"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+  - expr: count(ALERTS{alertname="FraudSvcErrorBudgetBurnSlow",alertstate="firing",service="fraud-svc"}) or vector(0)
+    eval_time: 60m
+    exp_samples:
+    - labels: '{}'
+      value: 0

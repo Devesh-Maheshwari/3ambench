@@ -1,0 +1,19 @@
+services:
+- name: payments-gw
+  team: fulfillment-core
+  slo_target: 0.99
+  sli_family: grpc
+  metrics:
+  - grpc_server_handled_total
+- name: fraud-svc
+  team: fulfillment-edge
+  slo_target: 0.9995
+  sli_family: grpc
+  metrics:
+  - grpc_server_handled_total
+- name: profile-edge
+  team: growth
+  slo_target: 0.9995
+  sli_family: grpc
+  metrics:
+  - grpc_server_handled_total

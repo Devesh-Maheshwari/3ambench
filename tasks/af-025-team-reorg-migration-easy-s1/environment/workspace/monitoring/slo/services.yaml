@@ -1,0 +1,13 @@
+services:
+- name: loyalty-gw
+  team: fulfillment-core
+  slo_target: 0.9995
+  sli_family: grpc
+  metrics:
+  - grpc_server_handled_total
+- name: invoice-worker
+  team: trust-safety
+  slo_target: 0.999
+  sli_family: grpc
+  metrics:
+  - grpc_server_handled_total

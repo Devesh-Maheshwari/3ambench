@@ -1,0 +1,23 @@
+groups:
+- name: slo-refund-edge
+  rules:
+  - alert: RefundEdgeErrorBudgetBurnFast
+    expr: slo:sli_error:ratio_rate1h{service="refund-edge"} > (14.4 * 0.005) and slo:sli_error:ratio_rate5m{service="refund-edge"} > (14.4 * 0.005)
+    for: 2m
+    labels:
+      severity: page
+      team: finance-eng
+      slo: refund-edge-availability
+    annotations:
+      summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
+      runbook_url: https://runbooks.tidewater.dev/alerts/RefundEdgeErrorBudgetBurnFast
+  - alert: RefundEdgeErrorBudgetBurnSlow
+    expr: slo:sli_error:ratio_rate6h{service="refund-edge"} > (6 * 0.005) and slo:sli_error:ratio_rate30m{service="refund-edge"} > (6 * 0.005)
+    for: 15m
+    labels:
+      severity: ticket
+      team: finance-eng
+      slo: refund-edge-availability
+    annotations:
+      summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
+      runbook_url: https://runbooks.tidewater.dev/alerts/RefundEdgeErrorBudgetBurnSlow

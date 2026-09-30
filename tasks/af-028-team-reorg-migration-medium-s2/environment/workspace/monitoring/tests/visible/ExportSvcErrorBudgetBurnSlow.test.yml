@@ -1,0 +1,94 @@
+rule_files:
+- ../../rules/*.yml
+- ../../rules/*.yaml
+evaluation_interval: 1m
+tests:
+- name: ExportSvcErrorBudgetBurnSlow sustained
+  interval: 1m
+  input_series:
+  - series: http_requests_total{code="200",instance="10.110.183.2:8080",method="GET",namespace="staging",pod="export-svc-r6fm8",service="export-svc"}
+    values: 534268+366x3 535731+364x5 537913+360x1 538636+362x1 539358+360x1 540077+360x2 541156+358x1 541873+358x2 542946+356x3 544368+354x2 545429+353x1 546136+353x2 547194+351x3 548597
+  - series: http_requests_total{code="404",instance="10.110.183.2:8080",method="GET",namespace="staging",pod="export-svc-r6fm8",service="export-svc"}
+    values: 4574+15x13 4783+15x1 4812+14x24
+  - series: http_requests_total{code="500",instance="10.110.183.2:8080",method="GET",namespace="staging",pod="export-svc-r6fm8",service="export-svc"}
+    values: 2665+9x2 2693+9x1 2712+9x4 2758+10x1 2777+9x1 2796+9x1 2815+9x24
+  - series: http_requests_total{code="503",instance="10.110.183.2:8080",method="GET",namespace="staging",pod="export-svc-r6fm8",service="export-svc"}
+    values: 4374+4x40
+  - series: http_requests_total{code="200",instance="10.2.86.3:8080",method="GET",namespace="staging",pod="export-svc-rhgr9",service="export-svc"}
+    values: 944696+310x3 945935+308x5 947781+305x1 948393+306x1 949003+305x1 949611+304x2 950522+302x1 951127+302x3 952334+300x2 953233+299x2 954129+298x3 955320+297x2 956210+296x1 956801
+  - series: http_requests_total{code="404",instance="10.2.86.3:8080",method="GET",namespace="staging",pod="export-svc-rhgr9",service="export-svc"}
+    values: 885+12x40
+  - series: http_requests_total{code="500",instance="10.2.86.3:8080",method="GET",namespace="staging",pod="export-svc-rhgr9",service="export-svc"}
+    values: 3106+18x2 3161+18x1 3198+18x4 3289+19x1 3326+18x1 3363+18x1 3400+18x24
+  - series: http_requests_total{code="503",instance="10.2.86.3:8080",method="GET",namespace="staging",pod="export-svc-rhgr9",service="export-svc"}
+    values: 4589+9x36 4921+9x3
+  - series: http_requests_total{code="200",instance="10.209.22.4:8080",method="GET",namespace="staging",pod="export-svc-s9n8w",service="export-svc"}
+    values: 611056+275x2 611880+273x1 612428+274x2 613249+272x3 614336+271x2 615148+270x1 615686+269x1 616223+269x3 617298+268x1 617832+267x1 618365+266x1 618896+265x1 619427+265x1 619956+266x1 620486+264x3 621541+263x1
+  - series: http_requests_total{code="404",instance="10.209.22.4:8080",method="GET",namespace="staging",pod="export-svc-s9n8w",service="export-svc"}
+    values: 3538+11x34 3922+11x1 3943+11x1 3964+10x1
+  - series: http_requests_total{code="500",instance="10.209.22.4:8080",method="GET",namespace="staging",pod="export-svc-s9n8w",service="export-svc"}
+    values: 1604+11x2 1638+12x1 1661+11x3 1706+11x2 1740+12x1 1763+11x2 1797+11x3 1842+11x3 1887+11x4 1943+10x2 1975+10x1 1997+10x2 2028+11x1 2049
+  - series: http_requests_total{code="503",instance="10.209.22.4:8080",method="GET",namespace="staging",pod="export-svc-s9n8w",service="export-svc"}
+    values: 2717+5x40
+  - series: http_requests_total{code="200",instance="10.15.41.2:8080",method="GET",namespace="staging",pod="pricing-svc-sgpnr",service="pricing-svc"}
+    values: 579919+1277x1 582469+1279x1 585024+1276x1 587581+1277x1 590138+1279x1 592700+1280x1 595261+1282x2 599108+1286x1 601681+1285x1 604256+1288x5 611987+1290x1 614568+1293x1 617155+1295x3 622336+1296x3 627525+1299x1 630122+1300x1
+  - series: http_requests_total{code="404",instance="10.15.41.2:8080",method="GET",namespace="staging",pod="pricing-svc-sgpnr",service="pricing-svc"}
+    values: 2412+53x36 4374+54x3
+  - series: http_requests_total{code="500",instance="10.15.41.2:8080",method="GET",namespace="staging",pod="pricing-svc-sgpnr",service="pricing-svc"}
+    values: 2585+0x1 2586+0x1 2587+1x1 2588+1x2 2590+1x2 2592+1x2 2594+1x3 2597+1x2 2599+1x2 2601+1x2 2603+1x2 2605+1x2 2607+1x2 2609+1x2 2611
+  - series: http_requests_total{code="503",instance="10.15.41.2:8080",method="GET",namespace="staging",pod="pricing-svc-sgpnr",service="pricing-svc"}
+    values: 1756+0x40
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="ExportSvcErrorBudgetBurnSlow",alertstate="firing",service="export-svc"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="ExportSvcErrorBudgetBurnSlow",alertstate="firing",service="export-svc"}) or vector(0)
+    eval_time: 37m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="ExportSvcErrorBudgetBurnSlow",alertstate="firing",service="pricing-svc"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+- name: ExportSvcErrorBudgetBurnSlow normal
+  interval: 1m
+  input_series:
+  - series: http_requests_total{code="200",instance="10.51.205.2:8080",method="GET",namespace="staging",pod="export-svc-fh488",service="export-svc"}
+    values: 630284+406x3 631909+408x1 632723+408x5 635170+408x9 639251+409x2 640477+408x3 642111+409x1 642928+408x1 643745+409x1 644562+411x1 645382+411x1 646203+410x1 647024+412x1 647846+411x1 648666+410x1 649488+411x1 650309+412x2 651544+411x1 652367+411x2 653601+413x2 654839
+  - series: http_requests_total{code="404",instance="10.51.205.2:8080",method="GET",namespace="staging",pod="export-svc-fh488",service="export-svc"}
+    values: 3575+16x8 3720+17x2 3770+17x1 3803+17x4 3887+17x41
+  - series: http_requests_total{code="500",instance="10.51.205.2:8080",method="GET",namespace="staging",pod="export-svc-fh488",service="export-svc"}
+    values: 953+0x60
+  - series: http_requests_total{code="503",instance="10.51.205.2:8080",method="GET",namespace="staging",pod="export-svc-fh488",service="export-svc"}
+    values: 3004+0x60
+  - series: http_requests_total{code="200",instance="10.204.80.3:8080",method="GET",namespace="staging",pod="export-svc-2hj9j",service="export-svc"}
+    values: 968055+349x2 969101+349x1 969802+349x1 970502+351x2 971556+351x1 972257+352x1 972959+353x1 973664+351x2 974718+352x2 975775+353x2 976833+352x1 977536+351x1 978241+353x1 978946+352x1 979651+353x1 980356+354x1 981063+354x2 982124+354x2 983185+354x1 983892+353x1 984599+353x1 985306+355x1 986015+354x2 987079+354x2 988142+356x2 989208
+  - series: http_requests_total{code="404",instance="10.204.80.3:8080",method="GET",namespace="staging",pod="export-svc-2hj9j",service="export-svc"}
+    values: 4530+14x60
+  - series: http_requests_total{code="500",instance="10.204.80.3:8080",method="GET",namespace="staging",pod="export-svc-2hj9j",service="export-svc"}
+    values: 2143+0x1 2144+1x2 2146+1x4 2150+1x4 2154+1x3 2157+1x4 2161+1x4 2165+1x4 2169+1x4 2173+1x4 2177+1x4 2181+1x4 2185+1x4 2189+1x1
+  - series: http_requests_total{code="503",instance="10.204.80.3:8080",method="GET",namespace="staging",pod="export-svc-2hj9j",service="export-svc"}
+    values: 3848+0x60
+  - series: http_requests_total{code="200",instance="10.249.56.2:8080",method="GET",namespace="staging",pod="pricing-svc-tsh4s",service="pricing-svc"}
+    values: 332727+607x1 333944+608x2 335771+609x2 337602+613x1 338825+615x2 340668+612x1 341895+615x1 343123+617x1 344354+616x2 346205+619x1 347441+620x1 348679+620x1 349922+619x1 351165+623x1 352409+622x1 353656+624x2 355529+623x1 356777+623x1 358026+625x1 359279+629x1 360534+626x1 361790+627x1 363048+630x2 364940+629x1 366200+630x1 367461+630x1 368726+634x1 369992
+  - series: http_requests_total{code="404",instance="10.249.56.2:8080",method="GET",namespace="staging",pod="pricing-svc-tsh4s",service="pricing-svc"}
+    values: 2199+25x33 3050+26x3 3153+26x1 3204+26x20
+  - series: http_requests_total{code="500",instance="10.249.56.2:8080",method="GET",namespace="staging",pod="pricing-svc-tsh4s",service="pricing-svc"}
+    values: 4458+2x60
+  - series: http_requests_total{code="503",instance="10.249.56.2:8080",method="GET",namespace="staging",pod="pricing-svc-tsh4s",service="pricing-svc"}
+    values: 680+0x4 681+0x3 682+0x3 683+0x3 684+0x3 685+0x3 686+0x3 687+0x3 688+0x2 689+0x3 690+0x2 691+0x3 692+0x2 693+0x2 694+0x3 695+0x2 696
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="ExportSvcErrorBudgetBurnSlow",alertstate="firing",service="export-svc"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+  - expr: count(ALERTS{alertname="ExportSvcErrorBudgetBurnSlow",alertstate="firing",service="export-svc"}) or vector(0)
+    eval_time: 60m
+    exp_samples:
+    - labels: '{}'
+      value: 0

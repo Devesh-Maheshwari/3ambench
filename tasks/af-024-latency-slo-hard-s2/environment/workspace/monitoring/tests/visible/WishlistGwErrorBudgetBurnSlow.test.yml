@@ -1,0 +1,150 @@
+rule_files:
+- ../../rules/*.yml
+- ../../rules/*.yaml
+evaluation_interval: 1m
+tests:
+- name: WishlistGwErrorBudgetBurnSlow sustained
+  interval: 1m
+  input_series:
+  - series: http_request_duration_seconds_bucket{instance="10.139.158.2:8080",le="0.05",namespace="staging",pod="wishlist-gw-l6hnn",service="wishlist-gw"}
+    values: 86122+105x10 87276+105x2 87590+105x1 87799+105x1 88008+104x3 88425+103x1 88632+104x4 89151+103x1 89358+103x1 89565+103x7
+  - series: http_request_duration_seconds_bucket{instance="10.139.158.2:8080",le="0.1",namespace="staging",pod="wishlist-gw-l6hnn",service="wishlist-gw"}
+    values: 86164+149x10 87801+149x2 88246+149x1 88542+149x1 88838+147x3 89428+146x1 89721+147x4 90455+146x1 90748+146x1 91041+146x7
+  - series: http_request_duration_seconds_bucket{instance="10.139.158.2:8080",le="0.25",namespace="staging",pod="wishlist-gw-l6hnn",service="wishlist-gw"}
+    values: 86178+243x3 87149+243x3 88120+242x1 88605+241x1 89088+242x1 89571+242x1 90053+242x1 90536+240x2 91257+242x1 91738+240x5 93177+239x1 93656+238x1 94134+238x6 95801
+  - series: http_request_duration_seconds_bucket{instance="10.139.158.2:8080",le="0.5",namespace="staging",pod="wishlist-gw-l6hnn",service="wishlist-gw"}
+    values: 86218+247x3 87205+247x3 88192+246x1 88685+245x1 89176+246x1 89667+246x1 90157+246x1 90648+244x2 91381+246x1 91870+244x5 93333+243x1 93820+242x1 94306+242x6 96001
+  - series: http_request_duration_seconds_bucket{instance="10.139.158.2:8080",le="1",namespace="staging",pod="wishlist-gw-l6hnn",service="wishlist-gw"}
+    values: 86231+250x8 88480+250x1 88978+249x2 89724+249x1 90221+249x1 90718+248x1 91213+248x1 91710+247x6 93438+246x1 93931+245x1 94423+245x6 96139
+  - series: http_request_duration_seconds_bucket{instance="10.139.158.2:8080",le="2.5",namespace="staging",pod="wishlist-gw-l6hnn",service="wishlist-gw"}
+    values: 86240+254x8 88525+254x1 89031+253x2 89789+253x1 90294+253x1 90799+252x1 91302+252x1 91807+251x6 93563+250x1 94064+249x1 94564+249x6 96308
+  - series: http_request_duration_seconds_bucket{instance="10.139.158.2:8080",le="+Inf",namespace="staging",pod="wishlist-gw-l6hnn",service="wishlist-gw"}
+    values: 86288+259x8 88618+259x1 89134+258x2 89907+258x1 90422+257x3 91449+257x2 92219+256x5 93754+255x1 94265+254x1 94774+254x7
+  - series: http_request_duration_seconds_count{instance="10.139.158.2:8080",namespace="staging",pod="wishlist-gw-l6hnn",service="wishlist-gw"}
+    values: 86288+259x8 88618+259x1 89134+258x2 89907+258x1 90422+257x3 91449+257x2 92219+256x5 93754+255x1 94265+254x1 94774+254x7
+  - series: http_request_duration_seconds_bucket{instance="10.106.72.3:8080",le="0.05",namespace="staging",pod="wishlist-gw-n75w9",service="wishlist-gw"}
+    values: 76835+95x3 77214+95x3 77593+94x1 77782+94x19 79661+93x10
+  - series: http_request_duration_seconds_bucket{instance="10.106.72.3:8080",le="0.1",namespace="staging",pod="wishlist-gw-n75w9",service="wishlist-gw"}
+    values: 76878+200x3 77676+200x3 78474+198x1 78872+198x8 80653+197x1 81048+198x1 81443+197x6 82821+196x1 83212+196x1 83603+196x1 83994+195x2 84580+196x1
+  - series: http_request_duration_seconds_bucket{instance="10.106.72.3:8080",le="0.25",namespace="staging",pod="wishlist-gw-n75w9",service="wishlist-gw"}
+    values: 76898+274x2 77721+273x1 78268+274x2 79089+273x1 79636+272x1 80181+273x1 80726+273x1 81271+272x2 82086+271x1 82629+272x1 83172+271x6 85067+270x1 85605+270x1 86143+269x1 86680+268x2 87485+269x1
+  - series: http_request_duration_seconds_bucket{instance="10.106.72.3:8080",le="0.5",namespace="staging",pod="wishlist-gw-n75w9",service="wishlist-gw"}
+    values: 76939+276x2 77768+275x1 78319+276x2 79146+275x1 79697+274x1 80246+275x1 80795+275x1 81344+274x2 82165+273x1 82712+274x1 83259+273x6 85168+272x1 85710+272x1 86252+271x1 86793+270x2 87604+271x1
+  - series: http_request_duration_seconds_bucket{instance="10.106.72.3:8080",le="1",namespace="staging",pod="wishlist-gw-n75w9",service="wishlist-gw"}
+    values: 76957+279x2 77795+278x1 78352+279x2 79188+278x1 79745+277x1 80300+278x1 80855+278x1 81410+277x2 82240+276x1 82793+277x1 83346+276x6 85276+275x1 85824+275x1 86372+274x1 86919+273x2 87739+274x1
+  - series: http_request_duration_seconds_bucket{instance="10.106.72.3:8080",le="2.5",namespace="staging",pod="wishlist-gw-n75w9",service="wishlist-gw"}
+    values: 76967+283x3 78098+282x1 78663+283x1 79228+281x1 79792+281x1 80355+281x2 81199+281x1 81760+281x1 82321+280x1 82882+280x2 83721+279x1 84280+279x3 85395+279x1 85951+278x1 86506+277x6
+  - series: http_request_duration_seconds_bucket{instance="10.106.72.3:8080",le="+Inf",namespace="staging",pod="wishlist-gw-n75w9",service="wishlist-gw"}
+    values: 76983+288x3 78134+287x1 78709+288x1 79284+286x1 79858+286x1 80431+286x2 81290+286x1 81861+286x1 82432+285x1 83003+285x2 83857+284x1 84426+284x3 85561+284x1 86127+283x1 86692+282x6
+  - series: http_request_duration_seconds_count{instance="10.106.72.3:8080",namespace="staging",pod="wishlist-gw-n75w9",service="wishlist-gw"}
+    values: 76983+288x3 78134+287x1 78709+288x1 79284+286x1 79858+286x1 80431+286x2 81290+286x1 81861+286x1 82432+285x1 83003+285x2 83857+284x1 84426+284x3 85561+284x1 86127+283x1 86692+282x6
+  - series: http_request_duration_seconds_bucket{instance="10.124.93.4:8080",le="0.05",namespace="staging",pod="wishlist-gw-2sj7j",service="wishlist-gw"}
+    values: 22138+60x1 22257+60x1 22376+59x1 22495+59x20 23733+59x1 23850+58x11
+  - series: http_request_duration_seconds_bucket{instance="10.124.93.4:8080",le="0.1",namespace="staging",pod="wishlist-gw-2sj7j",service="wishlist-gw"}
+    values: 22146+146x1 22436+146x1 22726+144x1 23016+144x17 25607+143x2 26035+143x1 26320+142x8 27597+142x1 27880
+  - series: http_request_duration_seconds_bucket{instance="10.124.93.4:8080",le="0.25",namespace="staging",pod="wishlist-gw-2sj7j",service="wishlist-gw"}
+    values: 22156+265x1 22685+265x1 23214+264x1 23743+264x2 24534+264x1 25061+264x1 25588+263x3 26639+262x6 28472+261x2 29254+261x1 29775+260x4 31074+259x3 32109+260x1 32627
+  - series: http_request_duration_seconds_bucket{instance="10.124.93.4:8080",le="0.5",namespace="staging",pod="wishlist-gw-2sj7j",service="wishlist-gw"}
+    values: 22186+267x1 22719+267x1 23252+266x1 23785+266x2 24582+266x1 25113+266x1 25644+265x3 26703+264x6 28550+263x2 29338+263x1 29863+262x4 31172+261x3 32215+262x1 32737
+  - series: http_request_duration_seconds_bucket{instance="10.124.93.4:8080",le="1",namespace="staging",pod="wishlist-gw-2sj7j",service="wishlist-gw"}
+    values: 22200+269x1 22737+269x1 23274+268x1 23811+268x2 24614+268x1 25149+268x1 25684+267x3 26751+266x6 28612+265x2 29406+265x1 29935+264x4 31254+263x3 32305+264x1 32831
+  - series: http_request_duration_seconds_bucket{instance="10.124.93.4:8080",le="2.5",namespace="staging",pod="wishlist-gw-2sj7j",service="wishlist-gw"}
+    values: 22238+271x1 22779+271x1 23320+270x1 23861+270x2 24670+270x1 25209+270x1 25748+269x3 26823+268x6 28698+267x2 29498+267x1 30031+266x4 31360+265x3 32419+266x1 32949
+  - series: http_request_duration_seconds_bucket{instance="10.124.93.4:8080",le="+Inf",namespace="staging",pod="wishlist-gw-2sj7j",service="wishlist-gw"}
+    values: 22268+276x1 22819+276x1 23370+275x1 23921+275x2 24745+275x1 25294+275x1 25843+274x3 26938+273x6 28848+272x2 29663+272x1 30206+271x4 31560+270x3 32639+271x1 33179
+  - series: http_request_duration_seconds_count{instance="10.124.93.4:8080",namespace="staging",pod="wishlist-gw-2sj7j",service="wishlist-gw"}
+    values: 22268+276x1 22819+276x1 23370+275x1 23921+275x2 24745+275x1 25294+275x1 25843+274x3 26938+273x6 28848+272x2 29663+272x1 30206+271x4 31560+270x3 32639+271x1 33179
+  - series: http_request_duration_seconds_bucket{instance="10.128.156.2:8080",le="0.05",namespace="staging",pod="catalog-worker-s5j4r",service="catalog-worker"}
+    values: 50629+289x4 52075+290x3 53236+290x3 54397+291x2 55271+291x1 55854+291x1 56437+292x1 57022+292x1 57607+293x2 58487+293x2 59367+294x4 60838+295x5
+  - series: http_request_duration_seconds_bucket{instance="10.128.156.2:8080",le="0.1",namespace="staging",pod="catalog-worker-s5j4r",service="catalog-worker"}
+    values: 50634+946x2 53473+948x1 55371+950x1 57272+950x1 59174+951x3 62979+954x1 64886+956x1 66795+957x1 68707+957x2 71580+958x1 73498+960x2 76381+960x1 78302+964x1 80229+963x1 82156+964x1 84085+966x1 86018+967x3
+  - series: http_request_duration_seconds_bucket{instance="10.128.156.2:8080",le="0.25",namespace="staging",pod="catalog-worker-s5j4r",service="catalog-worker"}
+    values: 50637+1534x1 53704+1536x1 56777+1540x2 61398+1539x1 64480+1542x3 70649+1547x1 73741+1549x1 76835+1551x1 79934+1552x1 83037+1554x1 86144+1555x1 89256+1556x1 92372+1557x1 95487+1562x1 98609+1561x1 101732+1563x1 104859+1566x1 107992+1567x1 111127+1568x1
+  - series: http_request_duration_seconds_bucket{instance="10.128.156.2:8080",le="0.5",namespace="staging",pod="catalog-worker-s5j4r",service="catalog-worker"}
+    values: 50676+1535x1 53745+1538x1 56822+1541x1 59905+1542x1 62988+1545x1 66076+1544x2 70709+1549x1 73805+1551x1 76903+1553x1 80006+1553x2 84668+1555x1 87780+1559x1 90897+1561x1 94016+1560x1 97139+1562x2 101827+1565x1 104958+1568x1 108095+1569x2 112803
+  - series: http_request_duration_seconds_bucket{instance="10.128.156.2:8080",le="1",namespace="staging",pod="catalog-worker-s5j4r",service="catalog-worker"}
+    values: 50724+1536x1 53795+1539x1 56874+1542x1 59959+1543x1 63044+1546x1 66134+1545x2 70770+1550x1 73868+1552x1 76968+1554x1 80073+1554x2 84738+1556x1 87852+1560x1 90971+1562x1 94092+1562x1 97218+1563x2 101910+1566x1 105043+1569x1 108182+1570x2 112893
+  - series: http_request_duration_seconds_bucket{instance="10.128.156.2:8080",le="2.5",namespace="staging",pod="catalog-worker-s5j4r",service="catalog-worker"}
+    values: 50774+1536x1 53845+1539x1 56924+1542x1 60009+1543x1 63094+1546x1 66184+1545x2 70820+1550x1 73918+1552x1 77018+1554x1 80123+1554x2 84788+1556x1 87902+1560x1 91021+1562x1 94142+1563x1 97269+1563x2 101962+1566x1 105095+1569x1 108234+1570x2 112945
+  - series: http_request_duration_seconds_bucket{instance="10.128.156.2:8080",le="+Inf",namespace="staging",pod="catalog-worker-s5j4r",service="catalog-worker"}
+    values: 50785+1539x1 53862+1542x1 56948+1545x1 60039+1546x2 64680+1547x1 67775+1549x2 72426+1551x1 75532+1552x1 78641+1554x1 81752+1557x1 84869+1560x1 87990+1563x1 91115+1565x1 94242+1566x1 97375+1567x1 100508+1570x1 103647+1570x1 106789+1573x3 113083
+  - series: http_request_duration_seconds_count{instance="10.128.156.2:8080",namespace="staging",pod="catalog-worker-s5j4r",service="catalog-worker"}
+    values: 50785+1539x1 53862+1542x1 56948+1545x1 60039+1546x2 64680+1547x1 67775+1549x2 72426+1551x1 75532+1552x1 78641+1554x1 81752+1557x1 84869+1560x1 87990+1563x1 91115+1565x1 94242+1566x1 97375+1567x1 100508+1570x1 103647+1570x1 106789+1573x3 113083
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="WishlistGwErrorBudgetBurnSlow",alertstate="firing",service="wishlist-gw"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="WishlistGwErrorBudgetBurnSlow",alertstate="firing",service="wishlist-gw"}) or vector(0)
+    eval_time: 37m
+    exp_samples:
+    - labels: '{}'
+      value: 1
+  - expr: count(ALERTS{alertname="WishlistGwErrorBudgetBurnSlow",alertstate="firing",service="catalog-worker"}) or vector(0)
+    eval_time: 40m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+- name: WishlistGwErrorBudgetBurnSlow normal
+  interval: 1m
+  input_series:
+  - series: http_request_duration_seconds_bucket{instance="10.91.45.2:8080",le="0.05",namespace="staging",pod="wishlist-gw-k2822",service="wishlist-gw"}
+    values: 71985+143x2 72415+143x1 72702+144x6 73711+145x3 74290+145x3 74871+146x10 76478+147x8 77802+147x1 78097+148x7 79282+149x2 79730+149x1 80029+149x1 80328+149x1 80627+150x1
+  - series: http_request_duration_seconds_bucket{instance="10.91.45.2:8080",le="0.1",namespace="staging",pod="wishlist-gw-k2822",service="wishlist-gw"}
+    values: 71999+318x2 72955+318x1 73593+319x2 74551+320x3 75833+322x3 77119+322x3 78409+324x4 80030+324x1 80679+324x2 81652+326x6 83935+327x2 84918+327x1 85574+328x2 86559+329x4 88206+330x1 88867+333x1 89531+333x1 90195+333x1 90859+333x2
+  - series: http_request_duration_seconds_bucket{instance="10.91.45.2:8080",le="0.25",namespace="staging",pod="wishlist-gw-k2822",service="wishlist-gw"}
+    values: 72001+434x2 73305+434x1 74175+435x2 75482+437x1 76355+437x1 77230+438x3 78981+440x1 79860+440x1 80741+441x4 82948+442x1 83833+442x2 85160+444x2 86493+444x3 88271+446x2 89611+446x1 90505+447x2 91848+449x3 93643+451x1 94544+451x1 95448+451x1 96352+452x1 97257+452x1 98163+453x1
+  - series: http_request_duration_seconds_bucket{instance="10.91.45.2:8080",le="0.5",namespace="staging",pod="wishlist-gw-k2822",service="wishlist-gw"}
+    values: 72042+434x2 73346+434x1 74216+435x2 75523+437x1 76396+437x1 77271+438x3 79022+440x1 79901+440x1 80782+441x4 82989+442x1 83874+442x2 85201+444x2 86534+444x3 88312+446x2 89652+446x1 90546+447x2 91889+449x3 93684+451x1 94585+451x1 95489+451x1 96393+452x1 97298+452x1 98204+453x1
+  - series: http_request_duration_seconds_bucket{instance="10.91.45.2:8080",le="1",namespace="staging",pod="wishlist-gw-k2822",service="wishlist-gw"}
+    values: 72071+434x2 73375+434x1 74245+435x2 75552+437x1 76425+437x1 77300+438x3 79051+440x1 79930+440x1 80811+441x4 83018+442x1 83903+442x2 85230+444x2 86563+444x3 88341+446x2 89681+446x1 90575+447x2 91918+449x3 93713+451x1 94614+451x1 95518+451x1 96422+452x1 97327+452x1 98233+453x1
+  - series: http_request_duration_seconds_bucket{instance="10.91.45.2:8080",le="2.5",namespace="staging",pod="wishlist-gw-k2822",service="wishlist-gw"}
+    values: 72081+434x2 73385+434x1 74255+435x2 75562+437x1 76435+437x1 77310+438x3 79061+440x1 79940+440x1 80821+441x4 83028+442x1 83913+442x2 85240+444x2 86573+444x3 88351+446x2 89691+446x1 90585+447x2 91928+449x3 93723+451x1 94624+451x1 95528+451x1 96432+452x1 97337+452x1 98243+453x1
+  - series: http_request_duration_seconds_bucket{instance="10.91.45.2:8080",le="+Inf",namespace="staging",pod="wishlist-gw-k2822",service="wishlist-gw"}
+    values: 72127+434x1 72996+436x1 73867+436x3 75612+438x1 76486+438x2 77801+439x1 78678+438x1 79556+440x1 80437+441x1 81320+441x1 82203+442x1 83088+443x5 85748+444x1 86638+445x1 87527+445x1 88418+447x2 89760+447x1 90655+448x2 92000+450x2 93349+449x1 94249+451x1 95152+453x1 96057+454x1 96963+454x1 97870+454x2
+  - series: http_request_duration_seconds_count{instance="10.91.45.2:8080",namespace="staging",pod="wishlist-gw-k2822",service="wishlist-gw"}
+    values: 72127+434x1 72996+436x1 73867+436x3 75612+438x1 76486+438x2 77801+439x1 78678+438x1 79556+440x1 80437+441x1 81320+441x1 82203+442x1 83088+443x5 85748+444x1 86638+445x1 87527+445x1 88418+447x2 89760+447x1 90655+448x2 92000+450x2 93349+449x1 94249+451x1 95152+453x1 96057+454x1 96963+454x1 97870+454x2
+  - series: http_request_duration_seconds_bucket{instance="10.246.112.3:8080",le="0.05",namespace="staging",pod="wishlist-gw-h4lwx",service="wishlist-gw"}
+    values: 35867+155x1 36178+156x5 37115+157x1 37428+157x7 38685+158x6 39792+159x7 41065+159x3 41702+160x2 42183+160x3 42824+161x5 43791+162x4 44602+162x1 44927+163x3
+  - series: http_request_duration_seconds_bucket{instance="10.246.112.3:8080",le="0.1",namespace="staging",pod="wishlist-gw-h4lwx",service="wishlist-gw"}
+    values: 35873+306x1 36486+308x1 37101+308x3 38334+309x1 38951+309x1 39570+310x5 41431+311x2 42365+311x1 42988+312x1 43613+313x5 45492+313x1 46120+314x3 47377+316x2 48326+315x1 48957+316x1 49590+318x5 51499+319x2 52457+319x1 53097+319x1 53737+321x3
+  - series: http_request_duration_seconds_bucket{instance="10.246.112.3:8080",le="0.25",namespace="staging",pod="wishlist-gw-h4lwx",service="wishlist-gw"}
+    values: 35907+610x1 37128+613x1 38353+613x3 40807+616x1 42037+616x1 43270+618x1 44505+617x2 46357+619x1 47596+620x1 48837+620x1 50078+622x1 51323+623x2 53193+623x2 55065+624x1 56316+626x3 58822+630x1 60081+631x1 61340+630x2 63231+633x5 67030+634x1 68300+637x1 69572+638x1 70846+638x2 72762+640x1
+  - series: http_request_duration_seconds_bucket{instance="10.246.112.3:8080",le="0.5",namespace="staging",pod="wishlist-gw-h4lwx",service="wishlist-gw"}
+    values: 35926+610x1 37147+613x1 38372+613x3 40826+616x1 42056+616x1 43289+618x1 44524+617x2 46376+619x1 47615+620x1 48856+620x1 50097+622x1 51342+623x2 53212+623x2 55084+624x1 56335+626x3 58841+630x1 60100+631x1 61359+630x2 63250+633x5 67049+634x1 68319+637x1 69591+638x1 70865+638x2 72781+640x1
+  - series: http_request_duration_seconds_bucket{instance="10.246.112.3:8080",le="1",namespace="staging",pod="wishlist-gw-h4lwx",service="wishlist-gw"}
+    values: 35964+610x1 37185+613x1 38410+613x3 40864+616x1 42094+616x1 43327+618x1 44562+617x2 46414+619x1 47653+620x1 48894+620x1 50135+622x1 51380+623x2 53250+623x2 55122+624x1 56373+626x3 58879+630x1 60138+631x1 61397+630x2 63288+633x5 67087+634x1 68357+637x1 69629+638x1 70903+638x2 72819+640x1
+  - series: http_request_duration_seconds_bucket{instance="10.246.112.3:8080",le="2.5",namespace="staging",pod="wishlist-gw-h4lwx",service="wishlist-gw"}
+    values: 35965+610x1 37186+613x1 38411+613x3 40865+616x1 42095+616x1 43328+618x1 44563+617x2 46415+619x1 47654+620x1 48895+620x1 50136+622x1 51381+623x2 53251+623x2 55123+624x1 56374+626x3 58880+630x1 60139+631x1 61398+630x2 63289+633x5 67088+634x1 68358+637x1 69630+638x1 70904+638x2 72820+640x1
+  - series: http_request_duration_seconds_bucket{instance="10.246.112.3:8080",le="+Inf",namespace="staging",pod="wishlist-gw-h4lwx",service="wishlist-gw"}
+    values: 36009+611x1 37232+614x1 38459+614x3 40917+617x1 42149+617x1 43384+619x1 44621+618x2 46476+620x1 47717+621x1 48960+621x1 50203+623x1 51450+624x2 53323+624x2 55198+625x1 56451+627x3 58961+631x1 60222+632x1 61483+631x2 63377+634x5 67182+635x1 68454+638x1 69728+639x1 71004+639x2 72923+641x1
+  - series: http_request_duration_seconds_count{instance="10.246.112.3:8080",namespace="staging",pod="wishlist-gw-h4lwx",service="wishlist-gw"}
+    values: 36009+611x1 37232+614x1 38459+614x3 40917+617x1 42149+617x1 43384+619x1 44621+618x2 46476+620x1 47717+621x1 48960+621x1 50203+623x1 51450+624x2 53323+624x2 55198+625x1 56451+627x3 58961+631x1 60222+632x1 61483+631x2 63377+634x5 67182+635x1 68454+638x1 69728+639x1 71004+639x2 72923+641x1
+  - series: http_request_duration_seconds_bucket{instance="10.15.162.2:8080",le="0.05",namespace="staging",pod="catalog-worker-vjr5b",service="catalog-worker"}
+    values: 83274+188x5 84401+187x2 84963+188x2 85526+188x1 85901+187x6 87211+186x1 87584+186x1 87958+187x1 88331+185x1 88703+186x1 89076+187x2 89635+186x1 90008+186x1 90381+186x2 90938+185x5 92049+185x1 92418+185x1 92787+186x1 93158+184x1 93527+186x1 93898+184x1 94267+185x1
+  - series: http_request_duration_seconds_bucket{instance="10.15.162.2:8080",le="0.1",namespace="staging",pod="catalog-worker-vjr5b",service="catalog-worker"}
+    values: 83318+327x2 84300+327x1 84955+326x3 86260+327x2 87240+328x1 87894+326x6 90177+324x1 90827+324x1 91478+326x1 92128+323x1 92777+324x1 93427+326x2 94402+324x1 95052+324x1 95702+324x2 96672+323x1 97317+323x1 97962+323x1 98609+323x1 99253+322x1 99896+324x1 100543+321x1 101186+324x1 101832+321x1 102475+322x1
+  - series: http_request_duration_seconds_bucket{instance="10.15.162.2:8080",le="0.25",namespace="staging",pod="catalog-worker-vjr5b",service="catalog-worker"}
+    values: 83359+515x2 84906+515x1 85937+513x1 86964+514x1 87993+515x2 89537+517x1 90566+512x1 91592+513x4 94159+510x1 95182+510x1 96207+512x1 97230+509x1 98252+511x1 99275+512x2 100808+510x1 101830+510x1 102853+510x1 103874+508x1 104891+508x1 105908+508x1 106925+510x1 107944+506x1 108958+506x1 109975+509x1 110990+508x1 112008+507x1 113021+508x1 114036
+  - series: http_request_duration_seconds_bucket{instance="10.15.162.2:8080",le="0.5",namespace="staging",pod="catalog-worker-vjr5b",service="catalog-worker"}
+    values: 83395+515x2 84942+515x1 85973+513x1 87000+514x1 88029+515x2 89573+517x1 90602+512x1 91628+513x4 94195+510x1 95218+510x1 96243+512x1 97266+509x1 98288+511x1 99311+512x2 100844+510x1 101866+510x1 102889+510x1 103910+508x1 104927+508x1 105944+508x1 106961+510x1 107980+506x1 108994+506x1 110011+509x1 111026+508x1 112044+507x1 113057+508x1 114072
+  - series: http_request_duration_seconds_bucket{instance="10.15.162.2:8080",le="1",namespace="staging",pod="catalog-worker-vjr5b",service="catalog-worker"}
+    values: 83431+515x2 84978+515x1 86009+513x1 87036+514x1 88065+515x2 89609+517x1 90638+512x1 91664+513x4 94231+510x1 95254+510x1 96279+512x1 97302+509x1 98324+511x1 99347+512x2 100880+510x1 101902+510x1 102925+510x1 103946+508x1 104963+508x1 105980+508x1 106997+510x1 108016+506x1 109030+506x1 110047+509x1 111062+508x1 112080+507x1 113093+508x1 114108
+  - series: http_request_duration_seconds_bucket{instance="10.15.162.2:8080",le="2.5",namespace="staging",pod="catalog-worker-vjr5b",service="catalog-worker"}
+    values: 83454+515x2 85001+515x1 86032+513x1 87059+514x1 88088+515x2 89632+517x1 90661+512x1 91687+513x4 94254+510x1 95277+510x1 96302+512x1 97325+509x1 98347+511x1 99370+512x2 100903+510x1 101925+510x1 102948+510x1 103969+508x1 104986+508x1 106003+508x1 107020+510x1 108039+506x1 109053+506x1 110070+509x1 111085+508x1 112103+507x1 113116+508x1 114131
+  - series: http_request_duration_seconds_bucket{instance="10.15.162.2:8080",le="+Inf",namespace="staging",pod="catalog-worker-vjr5b",service="catalog-worker"}
+    values: 83469+515x1 84500+517x1 85533+516x1 86563+514x1 87592+515x1 88623+515x2 90170+513x1 91195+515x1 92223+514x1 93250+514x1 94279+511x1 95303+511x1 96329+513x1 97353+510x1 98376+512x2 99913+512x1 100935+510x1 101958+511x1 102982+511x2 104513+509x5 107569+509x1 108585+508x1 109600+511x1 110621+506x1 111636+510x1 112654+506x1 113669+507x1
+  - series: http_request_duration_seconds_count{instance="10.15.162.2:8080",namespace="staging",pod="catalog-worker-vjr5b",service="catalog-worker"}
+    values: 83469+515x1 84500+517x1 85533+516x1 86563+514x1 87592+515x1 88623+515x2 90170+513x1 91195+515x1 92223+514x1 93250+514x1 94279+511x1 95303+511x1 96329+513x1 97353+510x1 98376+512x2 99913+512x1 100935+510x1 101958+511x1 102982+511x2 104513+509x5 107569+509x1 108585+508x1 109600+511x1 110621+506x1 111636+510x1 112654+506x1 113669+507x1
+  promql_expr_test:
+  - expr: count(ALERTS{alertname="WishlistGwErrorBudgetBurnSlow",alertstate="firing",service="wishlist-gw"}) or vector(0)
+    eval_time: 30m
+    exp_samples:
+    - labels: '{}'
+      value: 0
+  - expr: count(ALERTS{alertname="WishlistGwErrorBudgetBurnSlow",alertstate="firing",service="wishlist-gw"}) or vector(0)
+    eval_time: 60m
+    exp_samples:
+    - labels: '{}'
+      value: 0
