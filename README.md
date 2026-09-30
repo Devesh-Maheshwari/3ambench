@@ -61,6 +61,17 @@ with AlertForgeEnv(base_url="https://openenvforge-3ambench-env.hf.space").sync()
 
 **Fresh tasks (training, private held-out sets):** `python generator/generate.py --master-seed <secret>`.
 
+## Try it
+
+- **Replay runs in the browser:** [3amBench Replay](https://huggingface.co/spaces/openenvforge/3ambench-replay)
+  steps through recorded runs (tool calls, file diffs, the reward curve, and which checks pass after each step).
+  Its data comes from `scripts/record_reference_runs.py`, `scripts/record_agent_runs.sh` and `scripts/export_runs.py`;
+  the page itself is in `space/`.
+- **Run the environment locally** and open the web interface at http://localhost:8000/web:
+  ```bash
+  docker run -p 8000:8000 -e ENABLE_WEB_INTERFACE=true ghcr.io/devesh-maheshwari/3ambench-env:0.1.0
+  ```
+
 ## What a task looks like
 
 `af-001-slo-onboarding-easy-s1` (instruction excerpt; change requests are shuffled):
@@ -184,7 +195,7 @@ equivalent of Skill2Env's freeze boundary.
 
 `tasks/` (Harbor tasks) · `registry.json` (`3ambench`, `3ambench-mini`) · `manifest.jsonl` (one row per
 task) · `partial/`, `null/` (reference policies) · `skill/`, `workflows/` · `generator/generate.py` + `src/alertforge/` (the generator and grader source) ·
-`openenv/alertforge_env/` (OpenEnv server) · `scripts/` · `tests/` (pytest).
+`openenv/alertforge_env/` (OpenEnv server) · `space/` (static replay viewer) · `scripts/` · `tests/` (pytest).
 
 ## License and citation
 

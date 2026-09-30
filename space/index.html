@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3amBench Replay</title>
+  <meta name="description" content="Step through agent runs on 3amBench: tool calls, file diffs, per-step reward and which alerting checks pass.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <h1>3amBench Replay</h1>
+      <p class="pitch">Watch agents write Prometheus alerts and Alertmanager routes, step by step, with every change
+        graded by hidden outage replays through <code>promtool</code> and <code>amtool</code>.</p>
+      <nav class="links">
+        <a href="https://github.com/Devesh-Maheshwari/3ambench">GitHub</a>
+        <a href="https://huggingface.co/datasets/openenvforge/3ambench">Dataset</a>
+        <span class="cmd"><code id="docker-cmd">docker run -p 8000:8000 -e ENABLE_WEB_INTERFACE=true ghcr.io/devesh-maheshwari/3ambench-env:0.1.0</code>
+          <button type="button" id="copy-cmd" class="ghost">Copy</button></span>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <p id="load-status" class="muted">Loading runs…</p>
+
+    <section id="board-section" hidden>
+      <h2>Leaderboard</h2>
+      <p class="muted small">Mean over the recorded runs. <em>reference</em> rows are scripted policies (no model) that
+        calibrate the reward scale; model rows appear once real runs are recorded.</p>
+      <div class="table-scroll"><table id="board"></table></div>
+    </section>
+
+    <section id="replay-section" hidden>
+      <h2>Replay</h2>
+      <div class="pickers">
+        <label>Task <select id="task-pick"></select></label>
+        <label>Run <select id="run-pick"></select></label>
+      </div>
+      <div id="run-meta" class="run-meta"></div>
+
+      <details id="instruction-box" class="card">
+        <summary>Task instruction</summary>
+        <div id="instruction" class="md"></div>
+      </details>
+
+      <div class="player card">
+        <div class="controls">
+          <button type="button" id="btn-first" title="First step" aria-label="First step">⏮</button>
+          <button type="button" id="btn-prev" title="Previous step (←)" aria-label="Previous step">◀</button>
+          <button type="button" id="btn-play" class="primary" title="Play / pause (space)">Play</button>
+          <button type="button" id="btn-next" title="Next step (→)" aria-label="Next step">▶</button>
+          <button type="button" id="btn-last" title="Last step" aria-label="Last step">⏭</button>
+          <input type="range" id="scrub" min="0" max="0" value="0" aria-label="Step">
+          <span id="step-label" class="mono small"></span>
+          <label class="small">Speed <select id="speed">
+            <option value="1600">slow</option><option value="800" selected>normal</option><option value="300">fast</option>
+          </select></label>
+        </div>
+        <figure class="curve">
+          <figcaption class="small muted">Cumulative reward by step
+            <span class="legend"><span class="tri up">▲</span> step gained reward
+              <span class="tri down">▼</span> step lost reward</span></figcaption>
+          <div id="curve"></div>
+          <div id="tip" class="tip" hidden></div>
+        </figure>
+      </div>
+
+      <div class="grid2">
+        <div class="col">
+          <div class="card">
+            <h3>Current step</h3>
+            <div id="step-detail"></div>
+          </div>
+          <div class="card">
+            <h3>Timeline</h3>
+            <ol id="timeline" class="timeline"></ol>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <h3>Checks <span id="checks-when" class="small muted"></span></h3>
+            <div id="checks-summary" class="small"></div>
+            <div id="checks"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap small muted">
+    3amBench is an RL environment for Prometheus alerting and Alertmanager routing as code. Apache-2.0.
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
