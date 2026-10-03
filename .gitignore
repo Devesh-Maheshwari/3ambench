@@ -4,10 +4,4 @@ __pycache__/
 .venv/
 .DS_Store
 dist/
-.claude/
-.claude-flow/
-CLAUDE.md
-.mcp.json
-.swarm/
-.hive-mind/
 *.egg-info/

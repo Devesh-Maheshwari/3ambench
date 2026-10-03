@@ -1,168 +1,129 @@
 [
   {
     "name": "3ambench",
-    "version": "0.1.1",
-    "description": "Prometheus alerting-as-code tasks graded behaviorally by promtool/amtool.",
+    "version": "0.2.0",
+    "description": "The 30 core tasks: Prometheus alerting-as-code tasks graded behaviorally by promtool/amtool (the 0.1.1 tasks with reserved .example company domains; same checks).",
     "tasks": [
-      {
-        "name": "af-001-slo-onboarding-easy-s1",
-        "path": "tasks/af-001-slo-onboarding-easy-s1"
-      },
-      {
-        "name": "af-002-slo-onboarding-easy-s2",
-        "path": "tasks/af-002-slo-onboarding-easy-s2"
-      },
-      {
-        "name": "af-003-slo-onboarding-medium-s1",
-        "path": "tasks/af-003-slo-onboarding-medium-s1"
-      },
-      {
-        "name": "af-004-slo-onboarding-medium-s2",
-        "path": "tasks/af-004-slo-onboarding-medium-s2"
-      },
-      {
-        "name": "af-005-slo-onboarding-hard-s1",
-        "path": "tasks/af-005-slo-onboarding-hard-s1"
-      },
-      {
-        "name": "af-006-slo-onboarding-hard-s2",
-        "path": "tasks/af-006-slo-onboarding-hard-s2"
-      },
-      {
-        "name": "af-007-alert-storm-cleanup-easy-s1",
-        "path": "tasks/af-007-alert-storm-cleanup-easy-s1"
-      },
-      {
-        "name": "af-008-alert-storm-cleanup-easy-s2",
-        "path": "tasks/af-008-alert-storm-cleanup-easy-s2"
-      },
-      {
-        "name": "af-009-alert-storm-cleanup-medium-s1",
-        "path": "tasks/af-009-alert-storm-cleanup-medium-s1"
-      },
-      {
-        "name": "af-010-alert-storm-cleanup-medium-s2",
-        "path": "tasks/af-010-alert-storm-cleanup-medium-s2"
-      },
-      {
-        "name": "af-011-alert-storm-cleanup-hard-s1",
-        "path": "tasks/af-011-alert-storm-cleanup-hard-s1"
-      },
-      {
-        "name": "af-012-alert-storm-cleanup-hard-s2",
-        "path": "tasks/af-012-alert-storm-cleanup-hard-s2"
-      },
-      {
-        "name": "af-013-missed-page-postmortem-easy-s1",
-        "path": "tasks/af-013-missed-page-postmortem-easy-s1"
-      },
-      {
-        "name": "af-014-missed-page-postmortem-easy-s2",
-        "path": "tasks/af-014-missed-page-postmortem-easy-s2"
-      },
-      {
-        "name": "af-015-missed-page-postmortem-medium-s1",
-        "path": "tasks/af-015-missed-page-postmortem-medium-s1"
-      },
-      {
-        "name": "af-016-missed-page-postmortem-medium-s2",
-        "path": "tasks/af-016-missed-page-postmortem-medium-s2"
-      },
-      {
-        "name": "af-017-missed-page-postmortem-hard-s1",
-        "path": "tasks/af-017-missed-page-postmortem-hard-s1"
-      },
-      {
-        "name": "af-018-missed-page-postmortem-hard-s2",
-        "path": "tasks/af-018-missed-page-postmortem-hard-s2"
-      },
-      {
-        "name": "af-019-latency-slo-easy-s1",
-        "path": "tasks/af-019-latency-slo-easy-s1"
-      },
-      {
-        "name": "af-020-latency-slo-easy-s2",
-        "path": "tasks/af-020-latency-slo-easy-s2"
-      },
-      {
-        "name": "af-021-latency-slo-medium-s1",
-        "path": "tasks/af-021-latency-slo-medium-s1"
-      },
-      {
-        "name": "af-022-latency-slo-medium-s2",
-        "path": "tasks/af-022-latency-slo-medium-s2"
-      },
-      {
-        "name": "af-023-latency-slo-hard-s1",
-        "path": "tasks/af-023-latency-slo-hard-s1"
-      },
-      {
-        "name": "af-024-latency-slo-hard-s2",
-        "path": "tasks/af-024-latency-slo-hard-s2"
-      },
-      {
-        "name": "af-025-team-reorg-migration-easy-s1",
-        "path": "tasks/af-025-team-reorg-migration-easy-s1"
-      },
-      {
-        "name": "af-026-team-reorg-migration-easy-s2",
-        "path": "tasks/af-026-team-reorg-migration-easy-s2"
-      },
-      {
-        "name": "af-027-team-reorg-migration-medium-s1",
-        "path": "tasks/af-027-team-reorg-migration-medium-s1"
-      },
-      {
-        "name": "af-028-team-reorg-migration-medium-s2",
-        "path": "tasks/af-028-team-reorg-migration-medium-s2"
-      },
-      {
-        "name": "af-029-team-reorg-migration-hard-s1",
-        "path": "tasks/af-029-team-reorg-migration-hard-s1"
-      },
-      {
-        "name": "af-030-team-reorg-migration-hard-s2",
-        "path": "tasks/af-030-team-reorg-migration-hard-s2"
-      }
+      {"name": "af-001-slo-onboarding-easy-s1", "path": "tasks/af-001-slo-onboarding-easy-s1"},
+      {"name": "af-002-slo-onboarding-easy-s2", "path": "tasks/af-002-slo-onboarding-easy-s2"},
+      {"name": "af-003-slo-onboarding-medium-s1", "path": "tasks/af-003-slo-onboarding-medium-s1"},
+      {"name": "af-004-slo-onboarding-medium-s2", "path": "tasks/af-004-slo-onboarding-medium-s2"},
+      {"name": "af-005-slo-onboarding-hard-s1", "path": "tasks/af-005-slo-onboarding-hard-s1"},
+      {"name": "af-006-slo-onboarding-hard-s2", "path": "tasks/af-006-slo-onboarding-hard-s2"},
+      {"name": "af-007-alert-storm-cleanup-easy-s1", "path": "tasks/af-007-alert-storm-cleanup-easy-s1"},
+      {"name": "af-008-alert-storm-cleanup-easy-s2", "path": "tasks/af-008-alert-storm-cleanup-easy-s2"},
+      {"name": "af-009-alert-storm-cleanup-medium-s1", "path": "tasks/af-009-alert-storm-cleanup-medium-s1"},
+      {"name": "af-010-alert-storm-cleanup-medium-s2", "path": "tasks/af-010-alert-storm-cleanup-medium-s2"},
+      {"name": "af-011-alert-storm-cleanup-hard-s1", "path": "tasks/af-011-alert-storm-cleanup-hard-s1"},
+      {"name": "af-012-alert-storm-cleanup-hard-s2", "path": "tasks/af-012-alert-storm-cleanup-hard-s2"},
+      {"name": "af-013-missed-page-postmortem-easy-s1", "path": "tasks/af-013-missed-page-postmortem-easy-s1"},
+      {"name": "af-014-missed-page-postmortem-easy-s2", "path": "tasks/af-014-missed-page-postmortem-easy-s2"},
+      {"name": "af-015-missed-page-postmortem-medium-s1", "path": "tasks/af-015-missed-page-postmortem-medium-s1"},
+      {"name": "af-016-missed-page-postmortem-medium-s2", "path": "tasks/af-016-missed-page-postmortem-medium-s2"},
+      {"name": "af-017-missed-page-postmortem-hard-s1", "path": "tasks/af-017-missed-page-postmortem-hard-s1"},
+      {"name": "af-018-missed-page-postmortem-hard-s2", "path": "tasks/af-018-missed-page-postmortem-hard-s2"},
+      {"name": "af-019-latency-slo-easy-s1", "path": "tasks/af-019-latency-slo-easy-s1"},
+      {"name": "af-020-latency-slo-easy-s2", "path": "tasks/af-020-latency-slo-easy-s2"},
+      {"name": "af-021-latency-slo-medium-s1", "path": "tasks/af-021-latency-slo-medium-s1"},
+      {"name": "af-022-latency-slo-medium-s2", "path": "tasks/af-022-latency-slo-medium-s2"},
+      {"name": "af-023-latency-slo-hard-s1", "path": "tasks/af-023-latency-slo-hard-s1"},
+      {"name": "af-024-latency-slo-hard-s2", "path": "tasks/af-024-latency-slo-hard-s2"},
+      {"name": "af-025-team-reorg-migration-easy-s1", "path": "tasks/af-025-team-reorg-migration-easy-s1"},
+      {"name": "af-026-team-reorg-migration-easy-s2", "path": "tasks/af-026-team-reorg-migration-easy-s2"},
+      {"name": "af-027-team-reorg-migration-medium-s1", "path": "tasks/af-027-team-reorg-migration-medium-s1"},
+      {"name": "af-028-team-reorg-migration-medium-s2", "path": "tasks/af-028-team-reorg-migration-medium-s2"},
+      {"name": "af-029-team-reorg-migration-hard-s1", "path": "tasks/af-029-team-reorg-migration-hard-s1"},
+      {"name": "af-030-team-reorg-migration-hard-s2", "path": "tasks/af-030-team-reorg-migration-hard-s2"}
     ],
-    "metrics": [
-      {
-        "type": "mean",
-        "kwargs": {}
-      }
-    ]
+    "metrics": [{"type": "mean", "kwargs": {}}]
   },
   {
     "name": "3ambench-mini",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "description": "The 5 easy seed-1 tasks.",
     "tasks": [
-      {
-        "name": "af-001-slo-onboarding-easy-s1",
-        "path": "tasks/af-001-slo-onboarding-easy-s1"
-      },
-      {
-        "name": "af-007-alert-storm-cleanup-easy-s1",
-        "path": "tasks/af-007-alert-storm-cleanup-easy-s1"
-      },
-      {
-        "name": "af-013-missed-page-postmortem-easy-s1",
-        "path": "tasks/af-013-missed-page-postmortem-easy-s1"
-      },
-      {
-        "name": "af-019-latency-slo-easy-s1",
-        "path": "tasks/af-019-latency-slo-easy-s1"
-      },
-      {
-        "name": "af-025-team-reorg-migration-easy-s1",
-        "path": "tasks/af-025-team-reorg-migration-easy-s1"
-      }
+      {"name": "af-001-slo-onboarding-easy-s1", "path": "tasks/af-001-slo-onboarding-easy-s1"},
+      {"name": "af-007-alert-storm-cleanup-easy-s1", "path": "tasks/af-007-alert-storm-cleanup-easy-s1"},
+      {"name": "af-013-missed-page-postmortem-easy-s1", "path": "tasks/af-013-missed-page-postmortem-easy-s1"},
+      {"name": "af-019-latency-slo-easy-s1", "path": "tasks/af-019-latency-slo-easy-s1"},
+      {"name": "af-025-team-reorg-migration-easy-s1", "path": "tasks/af-025-team-reorg-migration-easy-s1"}
     ],
-    "metrics": [
-      {
-        "type": "mean",
-        "kwargs": {}
-      }
-    ]
+    "metrics": [{"type": "mean", "kwargs": {}}]
+  },
+  {
+    "name": "3ambench-expert",
+    "version": "0.2.0",
+    "description": "45 expert tasks (5 families x 9 seeds): a week of the observability queue on a large legacy Prometheus/Alertmanager repo, graded by promtool/amtool replays. The task files are in the Hugging Face dataset openenvforge/3ambench, not in the GitHub repository.",
+    "tasks": [
+      {"name": "afx-e1-s01", "path": "tasks/afx-e1-s01"},
+      {"name": "afx-e1-s02", "path": "tasks/afx-e1-s02"},
+      {"name": "afx-e1-s03", "path": "tasks/afx-e1-s03"},
+      {"name": "afx-e1-s04", "path": "tasks/afx-e1-s04"},
+      {"name": "afx-e1-s05", "path": "tasks/afx-e1-s05"},
+      {"name": "afx-e1-s06", "path": "tasks/afx-e1-s06"},
+      {"name": "afx-e1-s07", "path": "tasks/afx-e1-s07"},
+      {"name": "afx-e1-s08", "path": "tasks/afx-e1-s08"},
+      {"name": "afx-e1-s09", "path": "tasks/afx-e1-s09"},
+      {"name": "afx-e2-s01", "path": "tasks/afx-e2-s01"},
+      {"name": "afx-e2-s02", "path": "tasks/afx-e2-s02"},
+      {"name": "afx-e2-s03", "path": "tasks/afx-e2-s03"},
+      {"name": "afx-e2-s04", "path": "tasks/afx-e2-s04"},
+      {"name": "afx-e2-s05", "path": "tasks/afx-e2-s05"},
+      {"name": "afx-e2-s06", "path": "tasks/afx-e2-s06"},
+      {"name": "afx-e2-s07", "path": "tasks/afx-e2-s07"},
+      {"name": "afx-e2-s08", "path": "tasks/afx-e2-s08"},
+      {"name": "afx-e2-s09", "path": "tasks/afx-e2-s09"},
+      {"name": "afx-e3-s01", "path": "tasks/afx-e3-s01"},
+      {"name": "afx-e3-s02", "path": "tasks/afx-e3-s02"},
+      {"name": "afx-e3-s03", "path": "tasks/afx-e3-s03"},
+      {"name": "afx-e3-s04", "path": "tasks/afx-e3-s04"},
+      {"name": "afx-e3-s05", "path": "tasks/afx-e3-s05"},
+      {"name": "afx-e3-s06", "path": "tasks/afx-e3-s06"},
+      {"name": "afx-e3-s07", "path": "tasks/afx-e3-s07"},
+      {"name": "afx-e3-s08", "path": "tasks/afx-e3-s08"},
+      {"name": "afx-e3-s09", "path": "tasks/afx-e3-s09"},
+      {"name": "afx-e4-s01", "path": "tasks/afx-e4-s01"},
+      {"name": "afx-e4-s02", "path": "tasks/afx-e4-s02"},
+      {"name": "afx-e4-s03", "path": "tasks/afx-e4-s03"},
+      {"name": "afx-e4-s04", "path": "tasks/afx-e4-s04"},
+      {"name": "afx-e4-s05", "path": "tasks/afx-e4-s05"},
+      {"name": "afx-e4-s06", "path": "tasks/afx-e4-s06"},
+      {"name": "afx-e4-s07", "path": "tasks/afx-e4-s07"},
+      {"name": "afx-e4-s08", "path": "tasks/afx-e4-s08"},
+      {"name": "afx-e4-s09", "path": "tasks/afx-e4-s09"},
+      {"name": "afx-e5-s01", "path": "tasks/afx-e5-s01"},
+      {"name": "afx-e5-s02", "path": "tasks/afx-e5-s02"},
+      {"name": "afx-e5-s03", "path": "tasks/afx-e5-s03"},
+      {"name": "afx-e5-s04", "path": "tasks/afx-e5-s04"},
+      {"name": "afx-e5-s05", "path": "tasks/afx-e5-s05"},
+      {"name": "afx-e5-s06", "path": "tasks/afx-e5-s06"},
+      {"name": "afx-e5-s07", "path": "tasks/afx-e5-s07"},
+      {"name": "afx-e5-s08", "path": "tasks/afx-e5-s08"},
+      {"name": "afx-e5-s09", "path": "tasks/afx-e5-s09"}
+    ],
+    "metrics": [{"type": "mean", "kwargs": {}}]
+  },
+  {
+    "name": "3ambench-expert-lb",
+    "version": "0.2.0",
+    "description": "The 15 expert tasks of the v0.2 leaderboard (3 per family; the development pilot set). The task files are in the Hugging Face dataset openenvforge/3ambench, not in the GitHub repository.",
+    "tasks": [
+      {"name": "afx-e1-s03", "path": "tasks/afx-e1-s03"},
+      {"name": "afx-e1-s02", "path": "tasks/afx-e1-s02"},
+      {"name": "afx-e1-s06", "path": "tasks/afx-e1-s06"},
+      {"name": "afx-e2-s06", "path": "tasks/afx-e2-s06"},
+      {"name": "afx-e2-s01", "path": "tasks/afx-e2-s01"},
+      {"name": "afx-e2-s03", "path": "tasks/afx-e2-s03"},
+      {"name": "afx-e3-s08", "path": "tasks/afx-e3-s08"},
+      {"name": "afx-e3-s05", "path": "tasks/afx-e3-s05"},
+      {"name": "afx-e3-s04", "path": "tasks/afx-e3-s04"},
+      {"name": "afx-e4-s03", "path": "tasks/afx-e4-s03"},
+      {"name": "afx-e4-s02", "path": "tasks/afx-e4-s02"},
+      {"name": "afx-e4-s04", "path": "tasks/afx-e4-s04"},
+      {"name": "afx-e5-s01", "path": "tasks/afx-e5-s01"},
+      {"name": "afx-e5-s08", "path": "tasks/afx-e5-s08"},
+      {"name": "afx-e5-s03", "path": "tasks/afx-e5-s03"}
+    ],
+    "metrics": [{"type": "mean", "kwargs": {}}]
   }
 ]
