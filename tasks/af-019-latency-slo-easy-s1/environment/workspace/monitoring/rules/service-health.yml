@@ -9,7 +9,7 @@ groups:
       team: discovery
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/LedgerGwDown
+      runbook_url: https://runbooks.cobaltline.example/alerts/LedgerGwDown
   - alert: ChatApiDown
     expr: sum by (service) (up{service="chat-api"}) == 0 or absent(up{service="chat-api"})
     for: 3m
@@ -18,4 +18,4 @@ groups:
       team: storefront
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/ChatApiDown
+      runbook_url: https://runbooks.cobaltline.example/alerts/ChatApiDown

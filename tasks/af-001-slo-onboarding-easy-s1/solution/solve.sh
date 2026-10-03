@@ -71,7 +71,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.quillon.dev:9095/alerts/SRE
+  - url: http://jira-bridge.quillon.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-data-ingest
   pagerduty_configs:
@@ -129,7 +129,7 @@ groups:
       team: infra
     annotations:
       summary: '{{ $labels.service }} error ratio is {{ $value | humanizePercentage }}'
-      runbook_url: https://runbooks.quillon.dev/alerts/HighErrorRatio
+      runbook_url: https://runbooks.quillon.example/alerts/HighErrorRatio
   - alert: ContainerMemoryNearLimit
     expr: max by (service) (container_memory_working_set_bytes{container="app"} / container_spec_memory_limit_bytes{container="app"}) > 0.85
     for: 5m
@@ -138,7 +138,7 @@ groups:
       team: infra
     annotations:
       summary: '{{ $labels.service }} has a container above its memory limit threshold'
-      runbook_url: https://runbooks.quillon.dev/alerts/ContainerMemoryNearLimit
+      runbook_url: https://runbooks.quillon.example/alerts/ContainerMemoryNearLimit
   - alert: PodCrashLooping
     expr: sum by (service) (increase(kube_pod_container_status_restarts_total[15m])) > 3
     for: 10m
@@ -147,7 +147,7 @@ groups:
       team: infra
     annotations:
       summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-      runbook_url: https://runbooks.quillon.dev/alerts/PodCrashLooping
+      runbook_url: https://runbooks.quillon.example/alerts/PodCrashLooping
   - alert: SlowRequestsP99
     expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 1
     for: 10m
@@ -156,7 +156,7 @@ groups:
       team: infra
     annotations:
       summary: '{{ $labels.service }} p99 latency is {{ $value | humanizeDuration }}'
-      runbook_url: https://runbooks.quillon.dev/alerts/SlowRequestsP99
+      runbook_url: https://runbooks.quillon.example/alerts/SlowRequestsP99
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-chat-gw.yml' <<'AF_EOF'
@@ -172,7 +172,7 @@ groups:
       slo: chat-gw-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.quillon.dev/alerts/ChatGwErrorBudgetBurnFast
+      runbook_url: https://runbooks.quillon.example/alerts/ChatGwErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-recording.yml' <<'AF_EOF'

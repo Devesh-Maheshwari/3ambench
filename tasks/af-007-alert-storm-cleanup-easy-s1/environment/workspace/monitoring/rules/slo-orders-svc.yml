@@ -10,4 +10,4 @@ groups:
       slo: orders-svc-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.quillon.dev/alerts/OrdersSvcErrorBudgetBurnFast
+      runbook_url: https://runbooks.quillon.example/alerts/OrdersSvcErrorBudgetBurnFast

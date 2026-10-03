@@ -17,4 +17,4 @@ spec:
         team: data-ingest
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.larkspur.dev/alerts/ReportWorkerDown
+        runbook_url: https://runbooks.larkspur.example/alerts/ReportWorkerDown

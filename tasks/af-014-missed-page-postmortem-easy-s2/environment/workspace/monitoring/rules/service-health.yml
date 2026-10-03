@@ -9,4 +9,4 @@ groups:
       team: messaging
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.larkspur.dev/alerts/ChatEdgeDown
+      runbook_url: https://runbooks.larkspur.example/alerts/ChatEdgeDown

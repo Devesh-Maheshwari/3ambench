@@ -9,7 +9,7 @@ groups:
       team: media-infra
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/WishlistApiDown
+      runbook_url: https://runbooks.marrowpine.example/alerts/WishlistApiDown
   - alert: SearchApiDown
     expr: sum by (service) (up{service="search-api"}) == 0 or absent(up{service="search-api"})
     for: 3m
@@ -18,4 +18,4 @@ groups:
       team: fulfillment
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/SearchApiDown
+      runbook_url: https://runbooks.marrowpine.example/alerts/SearchApiDown

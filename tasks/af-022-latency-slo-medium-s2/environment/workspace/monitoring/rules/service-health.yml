@@ -17,7 +17,7 @@ spec:
         team: data-ingest
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.larkspur.dev/alerts/InvoiceApiDown
+        runbook_url: https://runbooks.larkspur.example/alerts/InvoiceApiDown
     - alert: NotifyWorkerDown
       expr: sum by (service) (up{service="notify-worker"}) == 0 or absent(up{service="notify-worker"})
       for: 3m
@@ -26,4 +26,4 @@ spec:
         team: commerce-core
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.larkspur.dev/alerts/NotifyWorkerDown
+        runbook_url: https://runbooks.larkspur.example/alerts/NotifyWorkerDown

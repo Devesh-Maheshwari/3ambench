@@ -4,7 +4,7 @@ artifacts = ["/workspace/monitoring"]
 
 [task]
 name = "openenvforge/af-015-missed-page-postmortem-medium-s1"
-version = "0.1.1"
+version = "0.2.0"
 description = "missed-page-postmortem (medium): 10 change requests on a Prometheus/Alertmanager repo, graded by promtool/amtool replays."
 keywords = ["alertforge", "3ambench", "prometheus", "alertmanager", "slo", "sre", "rl-environment", "dense-reward"]
 
@@ -22,7 +22,7 @@ expertise = "practitioner"
 rules_format = "prometheusrule"
 n_requirements = 10
 n_checks = 137
-generator = "alertforge 0.1.1"
+generator = "alertforge 0.2.0"
 expert_time_estimate_min = 25
 
 [agent]

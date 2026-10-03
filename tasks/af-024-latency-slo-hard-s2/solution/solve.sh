@@ -93,7 +93,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.tidewater.dev:9095/alerts/SRE
+  - url: http://jira-bridge.tidewater.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-data-ingest
   pagerduty_configs:
@@ -179,7 +179,7 @@ spec:
         team: sre-core
       annotations:
         summary: '{{ $labels.service }} error ratio is {{ $value | humanizePercentage }}'
-        runbook_url: https://runbooks.tidewater.dev/alerts/HighErrorRatio
+        runbook_url: https://runbooks.tidewater.example/alerts/HighErrorRatio
     - alert: PodMemoryHigh
       expr: max by (service) (container_memory_working_set_bytes{container="app"} / container_spec_memory_limit_bytes{container="app"}) > 0.85
       for: 5m
@@ -188,7 +188,7 @@ spec:
         team: sre-core
       annotations:
         summary: '{{ $labels.service }} has a container above its memory limit threshold'
-        runbook_url: https://runbooks.tidewater.dev/alerts/PodMemoryHigh
+        runbook_url: https://runbooks.tidewater.example/alerts/PodMemoryHigh
     - alert: PodCrashLooping
       expr: sum by (service) (increase(kube_pod_container_status_restarts_total[15m])) > 3
       for: 10m
@@ -197,7 +197,7 @@ spec:
         team: sre-core
       annotations:
         summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-        runbook_url: https://runbooks.tidewater.dev/alerts/PodCrashLooping
+        runbook_url: https://runbooks.tidewater.example/alerts/PodCrashLooping
     - alert: SlowRequestsP99
       expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 1
       for: 10m
@@ -206,7 +206,7 @@ spec:
         team: sre-core
       annotations:
         summary: '{{ $labels.service }} p99 latency is {{ $value | humanizeDuration }}'
-        runbook_url: https://runbooks.tidewater.dev/alerts/SlowRequestsP99
+        runbook_url: https://runbooks.tidewater.example/alerts/SlowRequestsP99
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/service-health.yml' <<'AF_EOF'
@@ -229,7 +229,7 @@ spec:
         team: trust-safety
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.tidewater.dev/alerts/WishlistGwDown
+        runbook_url: https://runbooks.tidewater.example/alerts/WishlistGwDown
     - alert: FraudWorkerDown
       expr: sum by (service) (up{service="fraud-worker"}) == 0 or absent(up{service="fraud-worker"})
       for: 3m
@@ -238,7 +238,7 @@ spec:
         team: storefront
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.tidewater.dev/alerts/FraudWorkerDown
+        runbook_url: https://runbooks.tidewater.example/alerts/FraudWorkerDown
     - alert: StockGwDown
       expr: sum by (service) (up{service="stock-gw"}) == 0 or absent(up{service="stock-gw"})
       for: 3m
@@ -247,7 +247,7 @@ spec:
         team: data-ingest
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.tidewater.dev/alerts/StockGwDown
+        runbook_url: https://runbooks.tidewater.example/alerts/StockGwDown
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-fraud-worker.yml' <<'AF_EOF'
@@ -271,7 +271,7 @@ spec:
         slo: fraud-worker-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-        runbook_url: https://runbooks.tidewater.dev/alerts/FraudWorkerErrorBudgetBurnFast
+        runbook_url: https://runbooks.tidewater.example/alerts/FraudWorkerErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-recording.yml' <<'AF_EOF'
@@ -327,7 +327,7 @@ spec:
         slo: stock-gw-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-        runbook_url: https://runbooks.tidewater.dev/alerts/StockGwErrorBudgetBurnSlow
+        runbook_url: https://runbooks.tidewater.example/alerts/StockGwErrorBudgetBurnSlow
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-wishlist-gw.yml' <<'AF_EOF'
@@ -351,7 +351,7 @@ spec:
         slo: wishlist-gw-latency
       annotations:
         summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-        runbook_url: https://runbooks.tidewater.dev/alerts/WishlistGwErrorBudgetBurnFast
+        runbook_url: https://runbooks.tidewater.example/alerts/WishlistGwErrorBudgetBurnFast
     - alert: WishlistGwErrorBudgetBurnSlow
       expr: slo:sli_error:ratio_rate6h{service="wishlist-gw"} > (6 * 0.005) and slo:sli_error:ratio_rate30m{service="wishlist-gw"} > (6 * 0.005)
       for: 15m
@@ -361,5 +361,5 @@ spec:
         slo: wishlist-gw-latency
       annotations:
         summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-        runbook_url: https://runbooks.tidewater.dev/alerts/WishlistGwErrorBudgetBurnSlow
+        runbook_url: https://runbooks.tidewater.example/alerts/WishlistGwErrorBudgetBurnSlow
 AF_EOF

@@ -1,4 +1,6 @@
-"""Seed vocabularies: services (40 domains x 5 suffixes = 200 names), teams, companies (U3)."""
+"""Seed vocabularies: services (40 domains x 5 suffixes = 200 names), teams, companies (U3).
+
+Company domains are reserved names under `.example` (RFC 2606), so no task links to a real site."""
 
 from __future__ import annotations
 
@@ -22,14 +24,14 @@ TEAMS = [
 PLATFORM_TEAMS = ["platform", "sre-core", "infra"]
 
 COMPANIES = [
-    ("Tidewater Commerce", "tidewater.dev"),
-    ("Larkspur Pay", "larkspur.dev"),
-    ("Northwind Freight", "northwind-freight.dev"),
-    ("Quillon Health", "quillon.dev"),
-    ("Brightwell Travel", "brightwell.dev"),
-    ("Marrow & Pine", "marrowpine.dev"),
-    ("Cobaltline Games", "cobaltline.dev"),
-    ("Juniper Ledger", "juniperledger.dev"),
+    ("Tidewater Commerce", "tidewater.example"),
+    ("Larkspur Pay", "larkspur.example"),
+    ("Northwind Freight", "northwind-freight.example"),
+    ("Quillon Health", "quillon.example"),
+    ("Brightwell Travel", "brightwell.example"),
+    ("Marrow & Pine", "marrowpine.example"),
+    ("Cobaltline Games", "cobaltline.example"),
+    ("Juniper Ledger", "juniperledger.example"),
 ]
 
 SLO_TARGETS = ["0.999", "0.995", "0.9995", "0.99"]

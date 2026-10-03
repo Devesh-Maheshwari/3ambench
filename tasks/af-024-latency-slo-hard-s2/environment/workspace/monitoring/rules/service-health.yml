@@ -17,7 +17,7 @@ spec:
         team: storefront
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.tidewater.dev/alerts/FraudWorkerDown
+        runbook_url: https://runbooks.tidewater.example/alerts/FraudWorkerDown
     - alert: StockGwDown
       expr: sum by (service) (up{service="stock-gw"}) == 0 or absent(up{service="stock-gw"})
       for: 3m
@@ -26,4 +26,4 @@ spec:
         team: data-ingest
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.tidewater.dev/alerts/StockGwDown
+        runbook_url: https://runbooks.tidewater.example/alerts/StockGwDown

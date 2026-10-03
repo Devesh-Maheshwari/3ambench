@@ -65,7 +65,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.quillon.dev:9095/alerts/SRE
+  - url: http://jira-bridge.quillon.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-data-ingest
   pagerduty_configs:

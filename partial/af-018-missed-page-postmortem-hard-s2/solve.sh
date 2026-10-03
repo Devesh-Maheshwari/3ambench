@@ -92,7 +92,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.quillon.dev:9095/alerts/SRE
+  - url: http://jira-bridge.quillon.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-billing-eng
   pagerduty_configs:
@@ -178,7 +178,7 @@ spec:
         team: platform
       annotations:
         summary: '{{ $labels.service }} error ratio is {{ $value | humanizePercentage }}'
-        runbook_url: https://runbooks.quillon.dev/alerts/HighErrorRatio
+        runbook_url: https://runbooks.quillon.example/alerts/HighErrorRatio
     - alert: PodMemoryHigh
       expr: max by (service) (container_memory_working_set_bytes{container="app"} / container_spec_memory_limit_bytes{container="app"}) > 0.9
       for: 5m
@@ -187,7 +187,7 @@ spec:
         team: platform
       annotations:
         summary: '{{ $labels.service }} has a container above its memory limit threshold'
-        runbook_url: https://runbooks.quillon.dev/alerts/PodMemoryHigh
+        runbook_url: https://runbooks.quillon.example/alerts/PodMemoryHigh
     - alert: ContainerRestartingOften
       expr: sum by (service) (increase(kube_pod_container_status_restarts_total[15m])) > 3
       for: 10m
@@ -196,7 +196,7 @@ spec:
         team: platform
       annotations:
         summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-        runbook_url: https://runbooks.quillon.dev/alerts/ContainerRestartingOften
+        runbook_url: https://runbooks.quillon.example/alerts/ContainerRestartingOften
     - alert: LatencyP99High
       expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 1
       for: 10m
@@ -205,7 +205,7 @@ spec:
         team: platform
       annotations:
         summary: '{{ $labels.service }} p99 latency is {{ $value | humanizeDuration }}'
-        runbook_url: https://runbooks.quillon.dev/alerts/LatencyP99High
+        runbook_url: https://runbooks.quillon.example/alerts/LatencyP99High
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/service-health.yml' <<'AF_EOF'
@@ -228,7 +228,7 @@ spec:
         team: billing-eng
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.quillon.dev/alerts/FeedEdgeDown
+        runbook_url: https://runbooks.quillon.example/alerts/FeedEdgeDown
     - alert: SearchEdgeDown
       expr: sum by (service) (up{service="search-edge"}) == 0
       for: 3m
@@ -237,7 +237,7 @@ spec:
         team: commerce-core
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.quillon.dev/alerts/SearchEdgeDown
+        runbook_url: https://runbooks.quillon.example/alerts/SearchEdgeDown
     - alert: GeoGwDown
       expr: sum by (service) (up{service="geo-gw"}) == 0 or absent(up{service="geo-gw"})
       for: 3m
@@ -269,7 +269,7 @@ spec:
         slo: feed-edge-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-        runbook_url: https://runbooks.quillon.dev/alerts/FeedEdgeErrorBudgetBurnFast
+        runbook_url: https://runbooks.quillon.example/alerts/FeedEdgeErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-recording.yml' <<'AF_EOF'

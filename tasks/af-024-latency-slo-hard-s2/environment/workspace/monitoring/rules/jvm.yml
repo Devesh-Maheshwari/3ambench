@@ -17,7 +17,7 @@ spec:
         team: sre-core
       annotations:
         summary: JVM heap filling up on {{ $labels.instance }}
-        runbook_url: https://runbooks.tidewater.dev/alerts/JvmMemoryFillingUp
+        runbook_url: https://runbooks.tidewater.example/alerts/JvmMemoryFillingUp
     - alert: JvmGcPausesLong
       expr: rate(jvm_gc_pause_seconds_sum[5m]) / rate(jvm_gc_pause_seconds_count[5m]) > 0.5
       for: 5m
@@ -26,7 +26,7 @@ spec:
         team: sre-core
       annotations:
         summary: Long GC pauses on {{ $labels.instance }}
-        runbook_url: https://runbooks.tidewater.dev/alerts/JvmGcPausesLong
+        runbook_url: https://runbooks.tidewater.example/alerts/JvmGcPausesLong
     - alert: JvmThreadsDeadlocked
       expr: jvm_threads_deadlocked > 0
       labels:
@@ -34,7 +34,7 @@ spec:
         team: sre-core
       annotations:
         summary: Deadlocked threads on {{ $labels.instance }}
-        runbook_url: https://runbooks.tidewater.dev/alerts/JvmThreadsDeadlocked
+        runbook_url: https://runbooks.tidewater.example/alerts/JvmThreadsDeadlocked
     - alert: JvmClassLoadingSpike
       expr: rate(jvm_classes_loaded_total[5m]) > 1000
       for: 10m
@@ -43,4 +43,4 @@ spec:
         team: sre-core
       annotations:
         summary: Class loading spike on {{ $labels.instance }}
-        runbook_url: https://runbooks.tidewater.dev/alerts/JvmClassLoadingSpike
+        runbook_url: https://runbooks.tidewater.example/alerts/JvmClassLoadingSpike

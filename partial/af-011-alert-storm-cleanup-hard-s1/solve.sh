@@ -92,7 +92,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.juniperledger.dev:9095/alerts/SRE
+  - url: http://jira-bridge.juniperledger.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-commerce-core
   pagerduty_configs:
@@ -170,7 +170,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} error ratio is {{ $value | humanizePercentage }}'
-      runbook_url: https://runbooks.juniperledger.dev/alerts/ServiceErrorRateHigh
+      runbook_url: https://runbooks.juniperledger.example/alerts/ServiceErrorRateHigh
   - alert: PodMemoryHigh
     expr: max by (service) (container_memory_working_set_bytes{container="app"} / container_spec_memory_limit_bytes{container="app"}) < 0.9
     for: 5m
@@ -179,7 +179,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} has a container above its memory limit threshold'
-      runbook_url: https://runbooks.juniperledger.dev/alerts/PodMemoryHigh
+      runbook_url: https://runbooks.juniperledger.example/alerts/PodMemoryHigh
   - alert: ContainerRestartingOften
     expr: sum by (service) (increase(kube_pod_container_status_restarts_total[15m])) > 3
     for: 10m
@@ -188,7 +188,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-      runbook_url: https://runbooks.juniperledger.dev/alerts/ContainerRestartingOften
+      runbook_url: https://runbooks.juniperledger.example/alerts/ContainerRestartingOften
   - alert: LatencyP99High
     expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 0.5
     for: 10m
@@ -197,7 +197,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} p99 latency is {{ $value | humanizeDuration }}'
-      runbook_url: https://runbooks.juniperledger.dev/alerts/LatencyP99High
+      runbook_url: https://runbooks.juniperledger.example/alerts/LatencyP99High
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-inventory-svc.yml' <<'AF_EOF'
@@ -213,7 +213,7 @@ groups:
       slo: inventory-svc-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-      runbook_url: https://runbooks.juniperledger.dev/alerts/InventorySvcErrorBudgetBurnSlow
+      runbook_url: https://runbooks.juniperledger.example/alerts/InventorySvcErrorBudgetBurnSlow
   - alert: InventorySvcErrorBudgetBurnFast
     expr: slo:sli_error:ratio_rate1h{service="inventory-svc"} > (14.4 * 0.005)
     for: 2m
@@ -223,7 +223,7 @@ groups:
       slo: inventory-svc-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.juniperledger.dev/alerts/InventorySvcErrorBudgetBurnFast
+      runbook_url: https://runbooks.juniperledger.example/alerts/InventorySvcErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-ratings-svc.yml' <<'AF_EOF'

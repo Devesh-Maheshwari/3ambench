@@ -9,7 +9,7 @@ groups:
       team: billing-eng
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.northwind-freight.dev/alerts/CatalogApiDown
+      runbook_url: https://runbooks.northwind-freight.example/alerts/CatalogApiDown
   - alert: GatewaySvcDown
     expr: sum by (service) (up{service="gateway-svc"}) == 0 or absent(up{service="gateway-svc"})
     for: 3m
@@ -18,4 +18,4 @@ groups:
       team: fulfillment
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.northwind-freight.dev/alerts/GatewaySvcDown
+      runbook_url: https://runbooks.northwind-freight.example/alerts/GatewaySvcDown

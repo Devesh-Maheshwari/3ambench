@@ -82,7 +82,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.tidewater.dev:9095/alerts/SRE
+  - url: http://jira-bridge.tidewater.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-commerce-core
   pagerduty_configs:
@@ -147,7 +147,7 @@ groups:
       team: commerce-core-core
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.tidewater.dev/alerts/IngestWorkerDown
+      runbook_url: https://runbooks.tidewater.example/alerts/IngestWorkerDown
   - alert: RefundEdgeDown
     expr: sum by (service) (up{service="refund-edge"}) == 0 or absent(up{service="refund-edge"})
     for: 3m
@@ -156,7 +156,7 @@ groups:
       team: finance-eng
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.tidewater.dev/alerts/RefundEdgeDown
+      runbook_url: https://runbooks.tidewater.example/alerts/RefundEdgeDown
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-ingest-worker.yml' <<'AF_EOF'
@@ -172,7 +172,7 @@ groups:
       slo: ingest-worker-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.tidewater.dev/alerts/IngestWorkerErrorBudgetBurnFast
+      runbook_url: https://runbooks.tidewater.example/alerts/IngestWorkerErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-recording.yml' <<'AF_EOF'

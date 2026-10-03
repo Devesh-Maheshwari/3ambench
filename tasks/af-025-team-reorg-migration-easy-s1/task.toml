@@ -4,7 +4,7 @@ artifacts = ["/workspace/monitoring"]
 
 [task]
 name = "openenvforge/af-025-team-reorg-migration-easy-s1"
-version = "0.1.1"
+version = "0.2.0"
 description = "team-reorg-migration (easy): 5 change requests on a Prometheus/Alertmanager repo, graded by promtool/amtool replays."
 keywords = ["alertforge", "3ambench", "prometheus", "alertmanager", "slo", "sre", "rl-environment", "dense-reward"]
 
@@ -22,7 +22,7 @@ expertise = "novice"
 rules_format = "plain"
 n_requirements = 5
 n_checks = 61
-generator = "alertforge 0.1.1"
+generator = "alertforge 0.2.0"
 expert_time_estimate_min = 10
 
 [agent]

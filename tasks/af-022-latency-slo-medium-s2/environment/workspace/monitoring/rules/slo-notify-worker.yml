@@ -18,7 +18,7 @@ spec:
         slo: notify-worker-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-        runbook_url: https://runbooks.larkspur.dev/alerts/NotifyWorkerErrorBudgetBurnFast
+        runbook_url: https://runbooks.larkspur.example/alerts/NotifyWorkerErrorBudgetBurnFast
     - alert: NotifyWorkerErrorBudgetBurnSlow
       expr: slo:sli_error:ratio_rate6h{service="notify-worker"} > (6 * 0.0005) and slo:sli_error:ratio_rate30m{service="notify-worker"} > (6 * 0.0005)
       for: 15m
@@ -28,4 +28,4 @@ spec:
         slo: notify-worker-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-        runbook_url: https://runbooks.larkspur.dev/alerts/NotifyWorkerErrorBudgetBurnSlow
+        runbook_url: https://runbooks.larkspur.example/alerts/NotifyWorkerErrorBudgetBurnSlow

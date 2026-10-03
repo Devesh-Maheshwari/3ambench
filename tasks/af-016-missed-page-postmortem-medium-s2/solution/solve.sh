@@ -82,7 +82,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.juniperledger.dev:9095/alerts/SRE
+  - url: http://jira-bridge.juniperledger.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-billing-eng
   pagerduty_configs:
@@ -155,7 +155,7 @@ spec:
         team: sre-core
       annotations:
         summary: '{{ $labels.service }} error ratio is {{ $value | humanizePercentage }}'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/HighErrorRatio
+        runbook_url: https://runbooks.juniperledger.example/alerts/HighErrorRatio
     - alert: PodMemoryHigh
       expr: max by (service) (container_memory_working_set_bytes{container="app"} / container_spec_memory_limit_bytes{container="app"}) > 0.9
       for: 5m
@@ -164,7 +164,7 @@ spec:
         team: sre-core
       annotations:
         summary: '{{ $labels.service }} has a container above its memory limit threshold'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/PodMemoryHigh
+        runbook_url: https://runbooks.juniperledger.example/alerts/PodMemoryHigh
     - alert: PodCrashLooping
       expr: sum by (service) (increase(kube_pod_container_status_restarts_total[15m])) > 3
       for: 10m
@@ -173,7 +173,7 @@ spec:
         team: sre-core
       annotations:
         summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/PodCrashLooping
+        runbook_url: https://runbooks.juniperledger.example/alerts/PodCrashLooping
     - alert: SlowRequestsP99
       expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 1
       for: 10m
@@ -182,7 +182,7 @@ spec:
         team: sre-core
       annotations:
         summary: '{{ $labels.service }} p99 latency is {{ $value | humanizeDuration }}'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/SlowRequestsP99
+        runbook_url: https://runbooks.juniperledger.example/alerts/SlowRequestsP99
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/service-health.yml' <<'AF_EOF'
@@ -205,7 +205,7 @@ spec:
         team: logistics
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/OrdersEdgeDown
+        runbook_url: https://runbooks.juniperledger.example/alerts/OrdersEdgeDown
     - alert: TaxEdgeDown
       expr: sum by (service) (up{service="tax-edge"}) == 0 or absent(up{service="tax-edge"})
       for: 3m
@@ -214,7 +214,7 @@ spec:
         team: fulfillment
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/TaxEdgeDown
+        runbook_url: https://runbooks.juniperledger.example/alerts/TaxEdgeDown
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-orders-edge.yml' <<'AF_EOF'
@@ -238,7 +238,7 @@ spec:
         slo: orders-edge-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/OrdersEdgeErrorBudgetBurnFast
+        runbook_url: https://runbooks.juniperledger.example/alerts/OrdersEdgeErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-recording.yml' <<'AF_EOF'
@@ -284,7 +284,7 @@ spec:
         slo: tax-edge-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/TaxEdgeErrorBudgetBurnSlow
+        runbook_url: https://runbooks.juniperledger.example/alerts/TaxEdgeErrorBudgetBurnSlow
     - alert: TaxEdgeErrorBudgetBurnFast
       expr: slo:sli_error:ratio_rate1h{service="tax-edge"} > (14.4 * 0.005) and slo:sli_error:ratio_rate5m{service="tax-edge"} > (14.4 * 0.005)
       for: 2m
@@ -294,5 +294,5 @@ spec:
         slo: tax-edge-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/TaxEdgeErrorBudgetBurnFast
+        runbook_url: https://runbooks.juniperledger.example/alerts/TaxEdgeErrorBudgetBurnFast
 AF_EOF

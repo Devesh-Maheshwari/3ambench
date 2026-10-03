@@ -8,7 +8,7 @@ groups:
       team: sre-core
     annotations:
       summary: Topic {{ $labels.topic }} under-replicated
-      runbook_url: https://runbooks.juniperledger.dev/alerts/KafkaTopicsReplicas
+      runbook_url: https://runbooks.juniperledger.example/alerts/KafkaTopicsReplicas
   - alert: KafkaConsumersGroupLag
     expr: sum by (consumergroup) (kafka_consumergroup_lag) > 50000
     for: 1m
@@ -17,7 +17,7 @@ groups:
       team: sre-core
     annotations:
       summary: Consumer group {{ $labels.consumergroup }} lagging
-      runbook_url: https://runbooks.juniperledger.dev/alerts/KafkaConsumersGroupLag
+      runbook_url: https://runbooks.juniperledger.example/alerts/KafkaConsumersGroupLag
   - alert: KafkaBrokerDown
     expr: count(kafka_broker_info) < 3
     for: 2m
@@ -26,7 +26,7 @@ groups:
       team: sre-core
     annotations:
       summary: Kafka broker count dropped
-      runbook_url: https://runbooks.juniperledger.dev/alerts/KafkaBrokerDown
+      runbook_url: https://runbooks.juniperledger.example/alerts/KafkaBrokerDown
   - alert: KafkaOfflinePartitions
     expr: sum(kafka_controller_kafkacontroller_offlinepartitionscount) > 0
     for: 1m
@@ -35,4 +35,4 @@ groups:
       team: sre-core
     annotations:
       summary: Kafka has offline partitions
-      runbook_url: https://runbooks.juniperledger.dev/alerts/KafkaOfflinePartitions
+      runbook_url: https://runbooks.juniperledger.example/alerts/KafkaOfflinePartitions

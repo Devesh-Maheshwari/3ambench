@@ -9,7 +9,7 @@ groups:
       team: payments
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.quillon.dev/alerts/ChatGwDown
+      runbook_url: https://runbooks.quillon.example/alerts/ChatGwDown
   - alert: BillingGwDown
     expr: sum by (service) (up{service="billing-gw"}) == 0 or absent(up{service="billing-gw"})
     for: 3m
@@ -18,4 +18,4 @@ groups:
       team: data-ingest
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.quillon.dev/alerts/BillingGwDown
+      runbook_url: https://runbooks.quillon.example/alerts/BillingGwDown

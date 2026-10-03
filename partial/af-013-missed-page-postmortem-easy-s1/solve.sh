@@ -71,7 +71,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.tidewater.dev:9095/alerts/SRE
+  - url: http://jira-bridge.tidewater.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-discovery
   pagerduty_configs:
@@ -129,7 +129,7 @@ groups:
       team: discovery
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.tidewater.dev/alerts/PricingGwDown
+      runbook_url: https://runbooks.tidewater.example/alerts/PricingGwDown
   - alert: ChatGwDown
     expr: sum by (service) (up{service="chat-gw"}) == 0 or absent(up{service="chat-gw"})
     for: 3m
@@ -138,7 +138,7 @@ groups:
       team: trust-safety
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.tidewater.dev/alerts/ChatGwDown
+      runbook_url: https://runbooks.tidewater.example/alerts/ChatGwDown
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-pricing-gw.yml' <<'AF_EOF'
@@ -163,5 +163,5 @@ groups:
       slo: pricing-gw-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-      runbook_url: https://runbooks.tidewater.dev/alerts/PricingGwErrorBudgetBurnSlow
+      runbook_url: https://runbooks.tidewater.example/alerts/PricingGwErrorBudgetBurnSlow
 AF_EOF

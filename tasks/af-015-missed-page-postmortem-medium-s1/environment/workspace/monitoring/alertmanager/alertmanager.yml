@@ -79,7 +79,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.marrowpine.dev:9095/alerts/SRE
+  - url: http://jira-bridge.marrowpine.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-fulfillment
   pagerduty_configs:

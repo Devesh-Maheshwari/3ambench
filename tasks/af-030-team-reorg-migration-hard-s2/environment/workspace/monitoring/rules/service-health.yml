@@ -9,7 +9,7 @@ groups:
       team: messaging
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.tidewater.dev/alerts/IdentitySvcDown
+      runbook_url: https://runbooks.tidewater.example/alerts/IdentitySvcDown
   - alert: PaymentsApiDown
     expr: sum by (service) (up{service="payments-api"}) == 0 or absent(up{service="payments-api"})
     for: 3m
@@ -18,4 +18,4 @@ groups:
       team: storefront
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.tidewater.dev/alerts/PaymentsApiDown
+      runbook_url: https://runbooks.tidewater.example/alerts/PaymentsApiDown

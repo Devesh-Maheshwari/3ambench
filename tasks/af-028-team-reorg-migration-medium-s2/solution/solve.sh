@@ -93,7 +93,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.juniperledger.dev:9095/alerts/SRE
+  - url: http://jira-bridge.juniperledger.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-data-ingest
   pagerduty_configs:
@@ -173,7 +173,7 @@ spec:
         team: data-ingest-core
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/ReportSvcDown
+        runbook_url: https://runbooks.juniperledger.example/alerts/ReportSvcDown
     - alert: ExportSvcDown
       expr: sum by (service) (up{service="export-svc"}) == 0 or absent(up{service="export-svc"})
       for: 3m
@@ -182,7 +182,7 @@ spec:
         team: data-ingest-edge
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/ExportSvcDown
+        runbook_url: https://runbooks.juniperledger.example/alerts/ExportSvcDown
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-export-svc.yml' <<'AF_EOF'
@@ -206,7 +206,7 @@ spec:
         slo: export-svc-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/ExportSvcErrorBudgetBurnSlow
+        runbook_url: https://runbooks.juniperledger.example/alerts/ExportSvcErrorBudgetBurnSlow
     - alert: ExportSvcErrorBudgetBurnFast
       expr: slo:sli_error:ratio_rate1h{service="export-svc"} > (14.4 * 0.005) and slo:sli_error:ratio_rate5m{service="export-svc"} > (14.4 * 0.005)
       for: 2m
@@ -216,7 +216,7 @@ spec:
         slo: export-svc-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/ExportSvcErrorBudgetBurnFast
+        runbook_url: https://runbooks.juniperledger.example/alerts/ExportSvcErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-recording.yml' <<'AF_EOF'
@@ -262,5 +262,5 @@ spec:
         slo: report-svc-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-        runbook_url: https://runbooks.juniperledger.dev/alerts/ReportSvcErrorBudgetBurnFast
+        runbook_url: https://runbooks.juniperledger.example/alerts/ReportSvcErrorBudgetBurnFast
 AF_EOF

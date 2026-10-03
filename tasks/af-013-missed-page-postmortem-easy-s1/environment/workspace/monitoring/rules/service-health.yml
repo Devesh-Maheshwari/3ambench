@@ -9,4 +9,4 @@ groups:
       team: trust-safety
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.tidewater.dev/alerts/ChatGwDown
+      runbook_url: https://runbooks.tidewater.example/alerts/ChatGwDown

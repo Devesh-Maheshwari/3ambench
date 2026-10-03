@@ -9,7 +9,7 @@ groups:
       team: platform
     annotations:
       summary: Node {{ $labels.node }} not ready
-      runbook_url: https://runbooks.tidewater.dev/alerts/KubeNodeNotReady
+      runbook_url: https://runbooks.tidewater.example/alerts/KubeNodeNotReady
   - alert: KubeDeploymentReplicasMismatch
     expr: kube_deployment_spec_replicas != kube_deployment_status_replicas_available
     for: 15m
@@ -18,7 +18,7 @@ groups:
       team: platform
     annotations:
       summary: Deployment {{ $labels.deployment }} replicas mismatch
-      runbook_url: https://runbooks.tidewater.dev/alerts/KubeDeploymentReplicasMismatch
+      runbook_url: https://runbooks.tidewater.example/alerts/KubeDeploymentReplicasMismatch
   - alert: KubePersistentVolumeFillingUp
     expr: kubelet_volume_stats_available_bytes / kubelet_volume_stats_capacity_bytes < 0.03
     for: 1m
@@ -27,7 +27,7 @@ groups:
       team: platform
     annotations:
       summary: PVC {{ $labels.persistentvolumeclaim }} is almost full
-      runbook_url: https://runbooks.tidewater.dev/alerts/KubePersistentVolumeFillingUp
+      runbook_url: https://runbooks.tidewater.example/alerts/KubePersistentVolumeFillingUp
   - alert: KubeJobFailed
     expr: kube_job_failed > 0
     for: 15m
@@ -36,7 +36,7 @@ groups:
       team: platform
     annotations:
       summary: Job {{ $labels.job_name }} failed
-      runbook_url: https://runbooks.tidewater.dev/alerts/KubeJobFailed
+      runbook_url: https://runbooks.tidewater.example/alerts/KubeJobFailed
   - alert: KubeHpaMaxedOut
     expr: kube_horizontalpodautoscaler_status_current_replicas == kube_horizontalpodautoscaler_spec_max_replicas
     for: 15m
@@ -45,7 +45,7 @@ groups:
       team: platform
     annotations:
       summary: HPA {{ $labels.horizontalpodautoscaler }} at max replicas
-      runbook_url: https://runbooks.tidewater.dev/alerts/KubeHpaMaxedOut
+      runbook_url: https://runbooks.tidewater.example/alerts/KubeHpaMaxedOut
   - alert: KubeCPUOvercommit
     expr: sum(kube_resourcequota{resource="requests.cpu",type="used"}) / sum(kube_node_status_allocatable{resource="cpu"}) > 1.5
     for: 5m
@@ -54,7 +54,7 @@ groups:
       team: platform
     annotations:
       summary: Cluster CPU overcommitted
-      runbook_url: https://runbooks.tidewater.dev/alerts/KubeCPUOvercommit
+      runbook_url: https://runbooks.tidewater.example/alerts/KubeCPUOvercommit
   - alert: KubeletTooManyPods
     expr: kubelet_running_pods / on (node) kube_node_status_capacity{resource="pods"} > 0.95
     for: 15m
@@ -63,4 +63,4 @@ groups:
       team: platform
     annotations:
       summary: Kubelet {{ $labels.node }} near pod limit
-      runbook_url: https://runbooks.tidewater.dev/alerts/KubeletTooManyPods
+      runbook_url: https://runbooks.tidewater.example/alerts/KubeletTooManyPods

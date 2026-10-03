@@ -71,7 +71,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.larkspur.dev:9095/alerts/SRE
+  - url: http://jira-bridge.larkspur.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-infra
   pagerduty_configs:
@@ -129,7 +129,7 @@ groups:
       team: payments
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.larkspur.dev/alerts/CouponSvcDown
+      runbook_url: https://runbooks.larkspur.example/alerts/CouponSvcDown
   - alert: ChatEdgeDown
     expr: sum by (service) (up{service="chat-edge"}) == 0 or absent(up{service="chat-edge"})
     for: 3m
@@ -138,7 +138,7 @@ groups:
       team: messaging
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.larkspur.dev/alerts/ChatEdgeDown
+      runbook_url: https://runbooks.larkspur.example/alerts/ChatEdgeDown
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-coupon-svc.yml' <<'AF_EOF'
@@ -154,7 +154,7 @@ groups:
       slo: coupon-svc-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.larkspur.dev/alerts/CouponSvcErrorBudgetBurnFast
+      runbook_url: https://runbooks.larkspur.example/alerts/CouponSvcErrorBudgetBurnFast
   - alert: CouponSvcErrorBudgetBurnSlow
     expr: slo:sli_error:ratio_rate6h{service="coupon-svc"} > (6 * 0.0005) and slo:sli_error:ratio_rate30m{service="coupon-svc"} > (6 * 0.0005)
     for: 15m

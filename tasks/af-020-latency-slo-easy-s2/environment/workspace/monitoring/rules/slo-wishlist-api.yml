@@ -10,4 +10,4 @@ groups:
       slo: wishlist-api-latency
     annotations:
       summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/WishlistApiErrorBudgetBurnSlow
+      runbook_url: https://runbooks.marrowpine.example/alerts/WishlistApiErrorBudgetBurnSlow

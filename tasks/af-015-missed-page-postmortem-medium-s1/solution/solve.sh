@@ -82,7 +82,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.marrowpine.dev:9095/alerts/SRE
+  - url: http://jira-bridge.marrowpine.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-fulfillment
   pagerduty_configs:
@@ -155,7 +155,7 @@ spec:
         team: infra
       annotations:
         summary: '{{ $labels.service }} error ratio is {{ $value | humanizePercentage }}'
-        runbook_url: https://runbooks.marrowpine.dev/alerts/HTTPErrorRatioHigh
+        runbook_url: https://runbooks.marrowpine.example/alerts/HTTPErrorRatioHigh
     - alert: PodMemoryHigh
       expr: max by (service) (container_memory_working_set_bytes{container="app"} / container_spec_memory_limit_bytes{container="app"}) > 0.85
       for: 5m
@@ -164,7 +164,7 @@ spec:
         team: infra
       annotations:
         summary: '{{ $labels.service }} has a container above its memory limit threshold'
-        runbook_url: https://runbooks.marrowpine.dev/alerts/PodMemoryHigh
+        runbook_url: https://runbooks.marrowpine.example/alerts/PodMemoryHigh
     - alert: ContainerRestartingOften
       expr: sum by (service) (increase(kube_pod_container_status_restarts_total[15m])) > 3
       for: 10m
@@ -173,7 +173,7 @@ spec:
         team: infra
       annotations:
         summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-        runbook_url: https://runbooks.marrowpine.dev/alerts/ContainerRestartingOften
+        runbook_url: https://runbooks.marrowpine.example/alerts/ContainerRestartingOften
     - alert: LatencyP99High
       expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 0.5
       for: 10m
@@ -182,7 +182,7 @@ spec:
         team: infra
       annotations:
         summary: '{{ $labels.service }} p99 latency is {{ $value | humanizeDuration }}'
-        runbook_url: https://runbooks.marrowpine.dev/alerts/LatencyP99High
+        runbook_url: https://runbooks.marrowpine.example/alerts/LatencyP99High
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/service-health.yml' <<'AF_EOF'
@@ -205,7 +205,7 @@ spec:
         team: media-infra
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.marrowpine.dev/alerts/CouponApiDown
+        runbook_url: https://runbooks.marrowpine.example/alerts/CouponApiDown
     - alert: OrdersSvcDown
       expr: sum by (service) (up{service="orders-svc"}) == 0 or absent(up{service="orders-svc"})
       for: 3m
@@ -214,7 +214,7 @@ spec:
         team: fulfillment
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.marrowpine.dev/alerts/OrdersSvcDown
+        runbook_url: https://runbooks.marrowpine.example/alerts/OrdersSvcDown
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-coupon-api.yml' <<'AF_EOF'
@@ -238,7 +238,7 @@ spec:
         slo: coupon-api-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-        runbook_url: https://runbooks.marrowpine.dev/alerts/CouponApiErrorBudgetBurnFast
+        runbook_url: https://runbooks.marrowpine.example/alerts/CouponApiErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-orders-svc.yml' <<'AF_EOF'
@@ -262,7 +262,7 @@ spec:
         slo: orders-svc-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-        runbook_url: https://runbooks.marrowpine.dev/alerts/OrdersSvcErrorBudgetBurnSlow
+        runbook_url: https://runbooks.marrowpine.example/alerts/OrdersSvcErrorBudgetBurnSlow
     - alert: OrdersSvcErrorBudgetBurnFast
       expr: slo:sli_error:ratio_rate1h{service="orders-svc"} > (14.4 * 0.001) and slo:sli_error:ratio_rate5m{service="orders-svc"} > (14.4 * 0.001)
       for: 2m
@@ -272,7 +272,7 @@ spec:
         slo: orders-svc-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-        runbook_url: https://runbooks.marrowpine.dev/alerts/OrdersSvcErrorBudgetBurnFast
+        runbook_url: https://runbooks.marrowpine.example/alerts/OrdersSvcErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-recording.yml' <<'AF_EOF'

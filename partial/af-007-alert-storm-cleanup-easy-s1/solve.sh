@@ -71,7 +71,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.quillon.dev:9095/alerts/SRE
+  - url: http://jira-bridge.quillon.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-data-ingest
   pagerduty_configs:
@@ -137,7 +137,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} has a container above its memory limit threshold'
-      runbook_url: https://runbooks.quillon.dev/alerts/PodMemoryHigh
+      runbook_url: https://runbooks.quillon.example/alerts/PodMemoryHigh
   - alert: PodCrashLooping
     expr: sum by (service) (increase(kube_pod_container_status_restarts_total[15m])) > 3
     for: 10m
@@ -146,7 +146,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-      runbook_url: https://runbooks.quillon.dev/alerts/PodCrashLooping
+      runbook_url: https://runbooks.quillon.example/alerts/PodCrashLooping
   - alert: LatencyP99High
     expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 0.5
     for: 10m
@@ -155,7 +155,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} p99 latency is {{ $value | humanizeDuration }}'
-      runbook_url: https://runbooks.quillon.dev/alerts/LatencyP99High
+      runbook_url: https://runbooks.quillon.example/alerts/LatencyP99High
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-orders-svc.yml' <<'AF_EOF'
@@ -171,7 +171,7 @@ groups:
       slo: orders-svc-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-      runbook_url: https://runbooks.quillon.dev/alerts/OrdersSvcErrorBudgetBurnSlow
+      runbook_url: https://runbooks.quillon.example/alerts/OrdersSvcErrorBudgetBurnSlow
   - alert: OrdersSvcErrorBudgetBurnFast
     expr: slo:sli_error:ratio_rate1h{service="orders-svc"} > (14.4 * 0.01) and slo:sli_error:ratio_rate5m{service="orders-svc"} > (14.4 * 0.01)
     for: 2m
@@ -181,5 +181,5 @@ groups:
       slo: orders-svc-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.quillon.dev/alerts/OrdersSvcErrorBudgetBurnFast
+      runbook_url: https://runbooks.quillon.example/alerts/OrdersSvcErrorBudgetBurnFast
 AF_EOF

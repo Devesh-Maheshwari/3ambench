@@ -71,7 +71,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.marrowpine.dev:9095/alerts/SRE
+  - url: http://jira-bridge.marrowpine.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-discovery
   pagerduty_configs:
@@ -137,7 +137,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} has a container above its memory limit threshold'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/ContainerMemoryNearLimit
+      runbook_url: https://runbooks.marrowpine.example/alerts/ContainerMemoryNearLimit
   - alert: ContainerRestartingOften
     expr: sum by (service) (increase(kube_pod_container_status_restarts_total[15m])) > 3
     for: 10m
@@ -146,7 +146,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/ContainerRestartingOften
+      runbook_url: https://runbooks.marrowpine.example/alerts/ContainerRestartingOften
   - alert: LatencyP99High
     expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 1
     for: 10m
@@ -155,7 +155,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} p99 latency is {{ $value | humanizeDuration }}'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/LatencyP99High
+      runbook_url: https://runbooks.marrowpine.example/alerts/LatencyP99High
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-wishlist-api.yml' <<'AF_EOF'
@@ -171,7 +171,7 @@ groups:
       slo: wishlist-api-latency
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/WishlistApiErrorBudgetBurnFast
+      runbook_url: https://runbooks.marrowpine.example/alerts/WishlistApiErrorBudgetBurnFast
   - alert: WishlistApiErrorBudgetBurnSlow
     expr: slo:sli_error:ratio_rate6h{service="wishlist-api"} > (6 * 0.0005) and slo:sli_error:ratio_rate30m{service="wishlist-api"} > (6 * 0.0005)
     for: 15m
@@ -181,5 +181,5 @@ groups:
       slo: wishlist-api-latency
     annotations:
       summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/WishlistApiErrorBudgetBurnSlow
+      runbook_url: https://runbooks.marrowpine.example/alerts/WishlistApiErrorBudgetBurnSlow
 AF_EOF

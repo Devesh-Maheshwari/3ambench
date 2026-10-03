@@ -16,7 +16,7 @@ spec:
         team: infra
       annotations:
         summary: Topic {{ $labels.topic }} under-replicated
-        runbook_url: https://runbooks.tidewater.dev/alerts/KafkaTopicsReplicas
+        runbook_url: https://runbooks.tidewater.example/alerts/KafkaTopicsReplicas
     - alert: KafkaConsumersGroupLag
       expr: sum by (consumergroup) (kafka_consumergroup_lag) > 50000
       for: 1m
@@ -25,7 +25,7 @@ spec:
         team: infra
       annotations:
         summary: Consumer group {{ $labels.consumergroup }} lagging
-        runbook_url: https://runbooks.tidewater.dev/alerts/KafkaConsumersGroupLag
+        runbook_url: https://runbooks.tidewater.example/alerts/KafkaConsumersGroupLag
     - alert: KafkaBrokerDown
       expr: count(kafka_broker_info) < 3
       for: 2m
@@ -34,7 +34,7 @@ spec:
         team: infra
       annotations:
         summary: Kafka broker count dropped
-        runbook_url: https://runbooks.tidewater.dev/alerts/KafkaBrokerDown
+        runbook_url: https://runbooks.tidewater.example/alerts/KafkaBrokerDown
     - alert: KafkaOfflinePartitions
       expr: sum(kafka_controller_kafkacontroller_offlinepartitionscount) > 0
       for: 1m
@@ -43,4 +43,4 @@ spec:
         team: infra
       annotations:
         summary: Kafka has offline partitions
-        runbook_url: https://runbooks.tidewater.dev/alerts/KafkaOfflinePartitions
+        runbook_url: https://runbooks.tidewater.example/alerts/KafkaOfflinePartitions

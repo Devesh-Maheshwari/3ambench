@@ -93,7 +93,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.cobaltline.dev:9095/alerts/SRE
+  - url: http://jira-bridge.cobaltline.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-billing-eng
   pagerduty_configs:
@@ -171,7 +171,7 @@ groups:
       team: infra
     annotations:
       summary: '{{ $labels.service }} error ratio is {{ $value | humanizePercentage }}'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/HighErrorRatio
+      runbook_url: https://runbooks.cobaltline.example/alerts/HighErrorRatio
   - alert: ContainerMemoryNearLimit
     expr: max by (service) (container_memory_working_set_bytes{container="app"} / container_spec_memory_limit_bytes{container="app"}) > 0.9
     for: 5m
@@ -180,7 +180,7 @@ groups:
       team: infra
     annotations:
       summary: '{{ $labels.service }} has a container above its memory limit threshold'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/ContainerMemoryNearLimit
+      runbook_url: https://runbooks.cobaltline.example/alerts/ContainerMemoryNearLimit
   - alert: PodCrashLooping
     expr: sum by (service) (increase(kube_pod_container_status_restarts_total[15m])) > 3
     for: 10m
@@ -189,7 +189,7 @@ groups:
       team: infra
     annotations:
       summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/PodCrashLooping
+      runbook_url: https://runbooks.cobaltline.example/alerts/PodCrashLooping
   - alert: SlowRequestsP99
     expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 1
     for: 10m
@@ -198,7 +198,7 @@ groups:
       team: infra
     annotations:
       summary: '{{ $labels.service }} p99 latency is {{ $value | humanizeDuration }}'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/SlowRequestsP99
+      runbook_url: https://runbooks.cobaltline.example/alerts/SlowRequestsP99
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/service-health.yml' <<'AF_EOF'
@@ -213,7 +213,7 @@ groups:
       team: growth
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/IngestWorkerDown
+      runbook_url: https://runbooks.cobaltline.example/alerts/IngestWorkerDown
   - alert: ChatGwDown
     expr: sum by (service) (up{service="chat-gw"}) == 0 or absent(up{service="chat-gw"})
     for: 3m
@@ -222,7 +222,7 @@ groups:
       team: trust-safety
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/ChatGwDown
+      runbook_url: https://runbooks.cobaltline.example/alerts/ChatGwDown
   - alert: TaxEdgeDown
     expr: sum by (service) (up{service="tax-edge"}) == 0 or absent(up{service="tax-edge"})
     for: 3m
@@ -231,7 +231,7 @@ groups:
       team: logistics
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/TaxEdgeDown
+      runbook_url: https://runbooks.cobaltline.example/alerts/TaxEdgeDown
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-ingest-worker.yml' <<'AF_EOF'
@@ -247,7 +247,7 @@ groups:
       slo: ingest-worker-latency
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/IngestWorkerErrorBudgetBurnFast
+      runbook_url: https://runbooks.cobaltline.example/alerts/IngestWorkerErrorBudgetBurnFast
   - alert: IngestWorkerErrorBudgetBurnSlow
     expr: slo:sli_error:ratio_rate6h{service="ingest-worker"} > (6 * 0.001) and slo:sli_error:ratio_rate30m{service="ingest-worker"} > (6 * 0.001)
     for: 15m
@@ -257,7 +257,7 @@ groups:
       slo: ingest-worker-latency
     annotations:
       summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/IngestWorkerErrorBudgetBurnSlow
+      runbook_url: https://runbooks.cobaltline.example/alerts/IngestWorkerErrorBudgetBurnSlow
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-recording.yml' <<'AF_EOF'
@@ -293,5 +293,5 @@ groups:
       slo: tax-edge-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/TaxEdgeErrorBudgetBurnFast
+      runbook_url: https://runbooks.cobaltline.example/alerts/TaxEdgeErrorBudgetBurnFast
 AF_EOF

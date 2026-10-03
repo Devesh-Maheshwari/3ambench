@@ -9,7 +9,7 @@ groups:
       team: logistics
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.juniperledger.dev/alerts/InventorySvcDown
+      runbook_url: https://runbooks.juniperledger.example/alerts/InventorySvcDown
   - alert: RatingsSvcDown
     expr: sum by (service) (up{service="ratings-svc"}) == 0 or absent(up{service="ratings-svc"})
     for: 3m
@@ -18,4 +18,4 @@ groups:
       team: messaging
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.juniperledger.dev/alerts/RatingsSvcDown
+      runbook_url: https://runbooks.juniperledger.example/alerts/RatingsSvcDown

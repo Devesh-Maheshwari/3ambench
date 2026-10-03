@@ -93,7 +93,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.marrowpine.dev:9095/alerts/SRE
+  - url: http://jira-bridge.marrowpine.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-billing-eng
   pagerduty_configs:
@@ -165,7 +165,7 @@ groups:
       team: data-ingest-core
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/PricingWorkerDown
+      runbook_url: https://runbooks.marrowpine.example/alerts/PricingWorkerDown
   - alert: InventoryWorkerDown
     expr: sum by (service) (up{service="inventory-worker"}) == 0 or absent(up{service="inventory-worker"})
     for: 3m
@@ -174,7 +174,7 @@ groups:
       team: data-ingest-edge
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/InventoryWorkerDown
+      runbook_url: https://runbooks.marrowpine.example/alerts/InventoryWorkerDown
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-inventory-worker.yml' <<'AF_EOF'
@@ -190,7 +190,7 @@ groups:
       slo: inventory-worker-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/InventoryWorkerErrorBudgetBurnSlow
+      runbook_url: https://runbooks.marrowpine.example/alerts/InventoryWorkerErrorBudgetBurnSlow
   - alert: InventoryWorkerErrorBudgetBurnFast
     expr: slo:sli_error:ratio_rate1h{service="inventory-worker"} > (14.4 * 0.0005) and slo:sli_error:ratio_rate5m{service="inventory-worker"} > (14.4 * 0.0005)
     for: 2m
@@ -200,7 +200,7 @@ groups:
       slo: inventory-worker-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/InventoryWorkerErrorBudgetBurnFast
+      runbook_url: https://runbooks.marrowpine.example/alerts/InventoryWorkerErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-pricing-worker.yml' <<'AF_EOF'
@@ -216,7 +216,7 @@ groups:
       slo: pricing-worker-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/PricingWorkerErrorBudgetBurnFast
+      runbook_url: https://runbooks.marrowpine.example/alerts/PricingWorkerErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-recording.yml' <<'AF_EOF'

@@ -93,7 +93,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.tidewater.dev:9095/alerts/SRE
+  - url: http://jira-bridge.tidewater.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-identity
   pagerduty_configs:
@@ -172,7 +172,7 @@ groups:
       team: platform
     annotations:
       summary: '{{ $labels.service }} error ratio is {{ $value | humanizePercentage }}'
-      runbook_url: https://runbooks.tidewater.dev/alerts/HTTPErrorRatioHigh
+      runbook_url: https://runbooks.tidewater.example/alerts/HTTPErrorRatioHigh
   - alert: PodMemoryHigh
     expr: max by (service) (container_memory_working_set_bytes{container="app"} / container_spec_memory_limit_bytes{container="app"}) > 0.9
     for: 5m
@@ -181,7 +181,7 @@ groups:
       team: platform
     annotations:
       summary: '{{ $labels.service }} has a container above its memory limit threshold'
-      runbook_url: https://runbooks.tidewater.dev/alerts/PodMemoryHigh
+      runbook_url: https://runbooks.tidewater.example/alerts/PodMemoryHigh
   - alert: ContainerRestartingOften
     expr: sum by (service) (increase(kube_pod_container_status_restarts_total[15m])) > 3
     for: 10m
@@ -190,7 +190,7 @@ groups:
       team: platform
     annotations:
       summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-      runbook_url: https://runbooks.tidewater.dev/alerts/ContainerRestartingOften
+      runbook_url: https://runbooks.tidewater.example/alerts/ContainerRestartingOften
   - alert: SlowRequestsP99
     expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 0.5
     for: 10m
@@ -199,7 +199,7 @@ groups:
       team: platform
     annotations:
       summary: '{{ $labels.service }} p99 latency is {{ $value | humanizeDuration }}'
-      runbook_url: https://runbooks.tidewater.dev/alerts/SlowRequestsP99
+      runbook_url: https://runbooks.tidewater.example/alerts/SlowRequestsP99
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/service-health.yml' <<'AF_EOF'
@@ -214,7 +214,7 @@ groups:
       team: messaging-core
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.tidewater.dev/alerts/MediaEdgeDown
+      runbook_url: https://runbooks.tidewater.example/alerts/MediaEdgeDown
   - alert: IdentitySvcDown
     expr: sum by (service) (up{service="identity-svc"}) == 0 or absent(up{service="identity-svc"})
     for: 3m
@@ -223,7 +223,7 @@ groups:
       team: messaging
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.tidewater.dev/alerts/IdentitySvcDown
+      runbook_url: https://runbooks.tidewater.example/alerts/IdentitySvcDown
   - alert: PaymentsApiDown
     expr: sum by (service) (up{service="payments-api"}) == 0 or absent(up{service="payments-api"})
     for: 3m
@@ -232,7 +232,7 @@ groups:
       team: storefront
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.tidewater.dev/alerts/PaymentsApiDown
+      runbook_url: https://runbooks.tidewater.example/alerts/PaymentsApiDown
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-identity-svc.yml' <<'AF_EOF'
@@ -257,7 +257,7 @@ groups:
       slo: identity-svc-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.tidewater.dev/alerts/IdentitySvcErrorBudgetBurnFast
+      runbook_url: https://runbooks.tidewater.example/alerts/IdentitySvcErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-media-edge.yml' <<'AF_EOF'
@@ -273,7 +273,7 @@ groups:
       slo: media-edge-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-      runbook_url: https://runbooks.tidewater.dev/alerts/MediaEdgeErrorBudgetBurnSlow
+      runbook_url: https://runbooks.tidewater.example/alerts/MediaEdgeErrorBudgetBurnSlow
   - alert: MediaEdgeErrorBudgetBurnFast
     expr: slo:sli_error:ratio_rate1h{service="media-edge"} > (14.4 * 0.01) and slo:sli_error:ratio_rate5m{service="media-edge"} > (14.4 * 0.01)
     for: 2m
@@ -283,7 +283,7 @@ groups:
       slo: media-edge-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.tidewater.dev/alerts/MediaEdgeErrorBudgetBurnFast
+      runbook_url: https://runbooks.tidewater.example/alerts/MediaEdgeErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-recording.yml' <<'AF_EOF'

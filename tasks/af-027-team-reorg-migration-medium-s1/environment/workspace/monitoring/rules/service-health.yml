@@ -9,4 +9,4 @@ groups:
       team: data-ingest
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.marrowpine.dev/alerts/InventoryWorkerDown
+      runbook_url: https://runbooks.marrowpine.example/alerts/InventoryWorkerDown

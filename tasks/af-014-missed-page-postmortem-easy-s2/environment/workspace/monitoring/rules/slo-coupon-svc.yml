@@ -10,7 +10,7 @@ groups:
       slo: coupon-svc-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.larkspur.dev/alerts/CouponSvcErrorBudgetBurnFast
+      runbook_url: https://runbooks.larkspur.example/alerts/CouponSvcErrorBudgetBurnFast
   - alert: CouponSvcErrorBudgetBurnSlow
     expr: slo:sli_error:ratio_rate6h{service="coupon-svc"} > (6 * 0.0005) and slo:sli_error:ratio_rate30m{service="coupon-svc"} > (6 * 0.0005)
     for: 15m
@@ -20,4 +20,4 @@ groups:
       slo: coupon-svc-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-      runbook_url: https://runbooks.larkspur.dev/alerts/CouponSvcErrorBudgetBurnSlow
+      runbook_url: https://runbooks.larkspur.example/alerts/CouponSvcErrorBudgetBurnSlow

@@ -17,7 +17,7 @@ spec:
         team: commerce-core
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.quillon.dev/alerts/SearchEdgeDown
+        runbook_url: https://runbooks.quillon.example/alerts/SearchEdgeDown
     - alert: GeoGwDown
       expr: sum by (service) (up{service="geo-gw"}) == 0 or absent(up{service="geo-gw"})
       for: 3m
@@ -26,4 +26,4 @@ spec:
         team: trust-safety
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.quillon.dev/alerts/GeoGwDown
+        runbook_url: https://runbooks.quillon.example/alerts/GeoGwDown

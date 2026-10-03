@@ -93,7 +93,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.quillon.dev:9095/alerts/SRE
+  - url: http://jira-bridge.quillon.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-data-ingest
   pagerduty_configs:
@@ -179,7 +179,7 @@ spec:
         team: infra
       annotations:
         summary: '{{ $labels.service }} error ratio is {{ $value | humanizePercentage }}'
-        runbook_url: https://runbooks.quillon.dev/alerts/ServiceErrorRateHigh
+        runbook_url: https://runbooks.quillon.example/alerts/ServiceErrorRateHigh
     - alert: PodMemoryHigh
       expr: max by (service) (container_memory_working_set_bytes{container="app"} / container_spec_memory_limit_bytes{container="app"}) > 0.9
       for: 5m
@@ -188,7 +188,7 @@ spec:
         team: infra
       annotations:
         summary: '{{ $labels.service }} has a container above its memory limit threshold'
-        runbook_url: https://runbooks.quillon.dev/alerts/PodMemoryHigh
+        runbook_url: https://runbooks.quillon.example/alerts/PodMemoryHigh
     - alert: PodCrashLooping
       expr: sum by (service) (increase(kube_pod_container_status_restarts_total[15m])) > 3
       for: 10m
@@ -197,7 +197,7 @@ spec:
         team: infra
       annotations:
         summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-        runbook_url: https://runbooks.quillon.dev/alerts/PodCrashLooping
+        runbook_url: https://runbooks.quillon.example/alerts/PodCrashLooping
     - alert: LatencyP99High
       expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 0.5
       for: 10m
@@ -206,7 +206,7 @@ spec:
         team: infra
       annotations:
         summary: '{{ $labels.service }} p99 latency is {{ $value | humanizeDuration }}'
-        runbook_url: https://runbooks.quillon.dev/alerts/LatencyP99High
+        runbook_url: https://runbooks.quillon.example/alerts/LatencyP99High
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/service-health.yml' <<'AF_EOF'
@@ -229,7 +229,7 @@ spec:
         team: discovery
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.quillon.dev/alerts/PromoSvcDown
+        runbook_url: https://runbooks.quillon.example/alerts/PromoSvcDown
     - alert: FraudApiDown
       expr: sum by (service) (up{service="fraud-api"}) == 0 or absent(up{service="fraud-api"})
       for: 3m
@@ -238,7 +238,7 @@ spec:
         team: trust-safety
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.quillon.dev/alerts/FraudApiDown
+        runbook_url: https://runbooks.quillon.example/alerts/FraudApiDown
     - alert: AuthEdgeDown
       expr: sum by (service) (up{service="auth-edge"}) == 0 or absent(up{service="auth-edge"})
       for: 3m
@@ -247,7 +247,7 @@ spec:
         team: mobile-backend
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.quillon.dev/alerts/AuthEdgeDown
+        runbook_url: https://runbooks.quillon.example/alerts/AuthEdgeDown
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-auth-edge.yml' <<'AF_EOF'
@@ -271,7 +271,7 @@ spec:
         slo: auth-edge-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-        runbook_url: https://runbooks.quillon.dev/alerts/AuthEdgeErrorBudgetBurnFast
+        runbook_url: https://runbooks.quillon.example/alerts/AuthEdgeErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-fraud-api.yml' <<'AF_EOF'
@@ -295,7 +295,7 @@ spec:
         slo: fraud-api-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-        runbook_url: https://runbooks.quillon.dev/alerts/FraudApiErrorBudgetBurnSlow
+        runbook_url: https://runbooks.quillon.example/alerts/FraudApiErrorBudgetBurnSlow
     - alert: FraudApiErrorBudgetBurnFast
       expr: slo:sli_error:ratio_rate1h{service="fraud-api"} > (14.4 * 0.01) and slo:sli_error:ratio_rate5m{service="fraud-api"} > (14.4 * 0.01)
       for: 2m
@@ -305,7 +305,7 @@ spec:
         slo: fraud-api-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-        runbook_url: https://runbooks.quillon.dev/alerts/FraudApiErrorBudgetBurnFast
+        runbook_url: https://runbooks.quillon.example/alerts/FraudApiErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-promo-svc.yml' <<'AF_EOF'
@@ -329,7 +329,7 @@ spec:
         slo: promo-svc-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-        runbook_url: https://runbooks.quillon.dev/alerts/PromoSvcErrorBudgetBurnFast
+        runbook_url: https://runbooks.quillon.example/alerts/PromoSvcErrorBudgetBurnFast
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-recording.yml' <<'AF_EOF'

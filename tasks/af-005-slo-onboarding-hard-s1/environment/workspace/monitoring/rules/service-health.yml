@@ -9,7 +9,7 @@ groups:
       team: billing-eng
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.brightwell.dev/alerts/ChatEdgeDown
+      runbook_url: https://runbooks.brightwell.example/alerts/ChatEdgeDown
   - alert: CartEdgeDown
     expr: sum by (service) (up{service="cart-edge"}) == 0 or absent(up{service="cart-edge"})
     for: 3m
@@ -18,4 +18,4 @@ groups:
       team: logistics
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.brightwell.dev/alerts/CartEdgeDown
+      runbook_url: https://runbooks.brightwell.example/alerts/CartEdgeDown

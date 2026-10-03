@@ -17,7 +17,7 @@ spec:
         team: mobile-backend
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.cobaltline.dev/alerts/PaymentsEdgeDown
+        runbook_url: https://runbooks.cobaltline.example/alerts/PaymentsEdgeDown
     - alert: BillingApiDown
       expr: sum by (service) (up{service="billing-api"}) == 0
       for: 3m
@@ -26,4 +26,4 @@ spec:
         team: finance-eng
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.cobaltline.dev/alerts/BillingApiDown
+        runbook_url: https://runbooks.cobaltline.example/alerts/BillingApiDown

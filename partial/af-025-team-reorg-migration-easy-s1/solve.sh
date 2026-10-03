@@ -82,7 +82,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.larkspur.dev:9095/alerts/SRE
+  - url: http://jira-bridge.larkspur.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-fulfillment
   pagerduty_configs:
@@ -147,7 +147,7 @@ groups:
       team: fulfillment-core
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.larkspur.dev/alerts/LoyaltyGwDown
+      runbook_url: https://runbooks.larkspur.example/alerts/LoyaltyGwDown
   - alert: InvoiceWorkerDown
     expr: sum by (service) (up{service="invoice-worker"}) == 0 or absent(up{service="invoice-worker"})
     for: 3m
@@ -156,7 +156,7 @@ groups:
       team: trust-safety
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.larkspur.dev/alerts/InvoiceWorkerDown
+      runbook_url: https://runbooks.larkspur.example/alerts/InvoiceWorkerDown
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-loyalty-gw.yml' <<'AF_EOF'
@@ -172,5 +172,5 @@ groups:
       slo: loyalty-gw-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.larkspur.dev/alerts/LoyaltyGwErrorBudgetBurnFast
+      runbook_url: https://runbooks.larkspur.example/alerts/LoyaltyGwErrorBudgetBurnFast
 AF_EOF

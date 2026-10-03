@@ -93,7 +93,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.brightwell.dev:9095/alerts/SRE
+  - url: http://jira-bridge.brightwell.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-billing-eng
   pagerduty_configs:
@@ -165,7 +165,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} error ratio is {{ $value | humanizePercentage }}'
-      runbook_url: https://runbooks.brightwell.dev/alerts/HighErrorRatio
+      runbook_url: https://runbooks.brightwell.example/alerts/HighErrorRatio
   - alert: PodMemoryHigh
     expr: max by (service) (container_memory_working_set_bytes{container="app"} / container_spec_memory_limit_bytes{container="app"}) > 0.9
     for: 5m
@@ -174,7 +174,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} has a container above its memory limit threshold'
-      runbook_url: https://runbooks.brightwell.dev/alerts/PodMemoryHigh
+      runbook_url: https://runbooks.brightwell.example/alerts/PodMemoryHigh
   - alert: PodCrashLooping
     expr: sum by (service) (increase(kube_pod_container_status_restarts_total[15m])) > 3
     for: 10m
@@ -183,7 +183,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-      runbook_url: https://runbooks.brightwell.dev/alerts/PodCrashLooping
+      runbook_url: https://runbooks.brightwell.example/alerts/PodCrashLooping
   - alert: SlowRequestsP99
     expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 0.5
     for: 10m
@@ -192,7 +192,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} p99 latency is {{ $value | humanizeDuration }}'
-      runbook_url: https://runbooks.brightwell.dev/alerts/SlowRequestsP99
+      runbook_url: https://runbooks.brightwell.example/alerts/SlowRequestsP99
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/service-health.yml' <<'AF_EOF'
@@ -207,7 +207,7 @@ groups:
       team: trust-safety
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.brightwell.dev/alerts/ShippingApiDown
+      runbook_url: https://runbooks.brightwell.example/alerts/ShippingApiDown
   - alert: ChatEdgeDown
     expr: sum by (service) (up{service="chat-edge"}) == 0 or absent(up{service="chat-edge"})
     for: 3m
@@ -216,7 +216,7 @@ groups:
       team: billing-eng
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.brightwell.dev/alerts/ChatEdgeDown
+      runbook_url: https://runbooks.brightwell.example/alerts/ChatEdgeDown
   - alert: CartEdgeDown
     expr: sum by (service) (up{service="cart-edge"}) == 0 or absent(up{service="cart-edge"})
     for: 3m
@@ -225,7 +225,7 @@ groups:
       team: logistics
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.brightwell.dev/alerts/CartEdgeDown
+      runbook_url: https://runbooks.brightwell.example/alerts/CartEdgeDown
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-recording.yml' <<'AF_EOF'
@@ -257,7 +257,7 @@ groups:
       slo: shipping-api-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.brightwell.dev/alerts/ShippingApiErrorBudgetBurnFast
+      runbook_url: https://runbooks.brightwell.example/alerts/ShippingApiErrorBudgetBurnFast
   - alert: ShippingApiErrorBudgetBurnSlow
     expr: slo:sli_error:ratio_rate6h{service="shipping-api"} > (6 * 0.0005) and slo:sli_error:ratio_rate30m{service="shipping-api"} > (6 * 0.0005)
     for: 1m
@@ -267,5 +267,5 @@ groups:
       slo: shipping-api-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-      runbook_url: https://runbooks.brightwell.dev/alerts/ShippingApiErrorBudgetBurnSlow
+      runbook_url: https://runbooks.brightwell.example/alerts/ShippingApiErrorBudgetBurnSlow
 AF_EOF

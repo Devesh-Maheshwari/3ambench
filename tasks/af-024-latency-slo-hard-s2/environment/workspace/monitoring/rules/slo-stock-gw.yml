@@ -18,4 +18,4 @@ spec:
         slo: stock-gw-availability
       annotations:
         summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-        runbook_url: https://runbooks.tidewater.dev/alerts/StockGwErrorBudgetBurnSlow
+        runbook_url: https://runbooks.tidewater.example/alerts/StockGwErrorBudgetBurnSlow

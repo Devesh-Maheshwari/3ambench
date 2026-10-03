@@ -17,4 +17,4 @@ spec:
         team: fulfillment
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.marrowpine.dev/alerts/OrdersSvcDown
+        runbook_url: https://runbooks.marrowpine.example/alerts/OrdersSvcDown

@@ -9,4 +9,4 @@ groups:
       team: data-ingest
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.tidewater.dev/alerts/CheckoutWorkerDown
+      runbook_url: https://runbooks.tidewater.example/alerts/CheckoutWorkerDown

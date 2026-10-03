@@ -17,7 +17,7 @@ spec:
         team: infra
       annotations:
         summary: '{{ $labels.service }} error ratio is {{ $value | humanizePercentage }}'
-        runbook_url: https://runbooks.quillon.dev/alerts/ServiceErrorRateHigh
+        runbook_url: https://runbooks.quillon.example/alerts/ServiceErrorRateHigh
     - alert: PodMemoryHigh
       expr: max by (service) (container_memory_working_set_bytes{container="app"} / container_spec_memory_limit_bytes{container="app"}) > 0.9
       for: 5m
@@ -26,7 +26,7 @@ spec:
         team: infra
       annotations:
         summary: '{{ $labels.service }} has a container above its memory limit threshold'
-        runbook_url: https://runbooks.quillon.dev/alerts/PodMemoryHigh
+        runbook_url: https://runbooks.quillon.example/alerts/PodMemoryHigh
     - alert: PodCrashLooping
       expr: sum by (service) (kube_pod_container_status_restarts_total) > 3
       for: 10m
@@ -35,7 +35,7 @@ spec:
         team: infra
       annotations:
         summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-        runbook_url: https://runbooks.quillon.dev/alerts/PodCrashLooping
+        runbook_url: https://runbooks.quillon.example/alerts/PodCrashLooping
     - alert: LatencyP99High
       expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 0.5
       for: 10m
@@ -44,4 +44,4 @@ spec:
         team: infra
       annotations:
         summary: '{{ $labels.instance }} p99 latency is {{ $value | humanizeDuration }}'
-        runbook_url: https://runbooks.quillon.dev/alerts/LatencyP99High
+        runbook_url: https://runbooks.quillon.example/alerts/LatencyP99High

@@ -9,7 +9,7 @@ groups:
       team: logistics
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.quillon.dev/alerts/LoyaltyApiDown
+      runbook_url: https://runbooks.quillon.example/alerts/LoyaltyApiDown
   - alert: RatingsEdgeDown
     expr: sum by (service) (up{service="ratings-edge"}) == 0 or absent(up{service="ratings-edge"})
     for: 3m
@@ -18,4 +18,4 @@ groups:
       team: trust-safety
     annotations:
       summary: '{{ $labels.service }} has no healthy scrape targets'
-      runbook_url: https://runbooks.quillon.dev/alerts/RatingsEdgeDown
+      runbook_url: https://runbooks.quillon.example/alerts/RatingsEdgeDown

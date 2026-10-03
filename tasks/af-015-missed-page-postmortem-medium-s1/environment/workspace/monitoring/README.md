@@ -51,7 +51,7 @@ so a single failure at 4 a.m. does not page anyone.
 
 ### Annotations (every alert)
 - `summary`: must name the service with `{{ $labels.service }}`; only reference labels the expression keeps.
-- `runbook_url`: `https://runbooks.marrowpine.dev/alerts/<AlertName>`.
+- `runbook_url`: `https://runbooks.marrowpine.example/alerts/<AlertName>`.
 
 ### Routing policy
 Every team has a subtree matching `team="<team>"`:

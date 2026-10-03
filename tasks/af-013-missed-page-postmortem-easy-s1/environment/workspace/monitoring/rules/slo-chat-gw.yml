@@ -10,7 +10,7 @@ groups:
       slo: chat-gw-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.tidewater.dev/alerts/ChatGwErrorBudgetBurnFast
+      runbook_url: https://runbooks.tidewater.example/alerts/ChatGwErrorBudgetBurnFast
   - alert: ChatGwErrorBudgetBurnSlow
     expr: slo:sli_error:ratio_rate6h{service="chat-gw"} > (6 * 0.0005) and slo:sli_error:ratio_rate30m{service="chat-gw"} > (6 * 0.0005)
     for: 15m
@@ -20,4 +20,4 @@ groups:
       slo: chat-gw-availability
     annotations:
       summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-      runbook_url: https://runbooks.tidewater.dev/alerts/ChatGwErrorBudgetBurnSlow
+      runbook_url: https://runbooks.tidewater.example/alerts/ChatGwErrorBudgetBurnSlow

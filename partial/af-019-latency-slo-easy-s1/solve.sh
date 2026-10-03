@@ -71,7 +71,7 @@ receivers:
     send_resolved: true
 - name: jira-sre
   webhook_configs:
-  - url: http://jira-bridge.cobaltline.dev:9095/alerts/SRE
+  - url: http://jira-bridge.cobaltline.example:9095/alerts/SRE
 - name: null-sink
 - name: pagerduty-discovery
   pagerduty_configs:
@@ -129,7 +129,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} error ratio is {{ $value | humanizePercentage }}'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/HTTPErrorRatioHigh
+      runbook_url: https://runbooks.cobaltline.example/alerts/HTTPErrorRatioHigh
   - alert: ContainerMemoryNearLimit
     expr: max by (service) (container_memory_working_set_bytes{container="app"} / container_spec_memory_limit_bytes{container="app"}) > 0.85
     for: 5m
@@ -138,7 +138,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} has a container above its memory limit threshold'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/ContainerMemoryNearLimit
+      runbook_url: https://runbooks.cobaltline.example/alerts/ContainerMemoryNearLimit
   - alert: PodCrashLooping
     expr: sum by (service) (increase(kube_pod_container_status_restarts_total[15m])) > 3
     for: 10m
@@ -147,7 +147,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} containers restarted more than {{ $value }} times in 15m'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/PodCrashLooping
+      runbook_url: https://runbooks.cobaltline.example/alerts/PodCrashLooping
   - alert: SlowRequestsP99
     expr: histogram_quantile(0.99, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 1
     for: 1m
@@ -156,7 +156,7 @@ groups:
       team: sre-core
     annotations:
       summary: '{{ $labels.service }} p99 latency is {{ $value | humanizeDuration }}'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/SlowRequestsP99
+      runbook_url: https://runbooks.cobaltline.example/alerts/SlowRequestsP99
 AF_EOF
 mkdir -p 'rules'
 cat > 'rules/slo-ledger-gw.yml' <<'AF_EOF'
@@ -172,7 +172,7 @@ groups:
       slo: ledger-gw-latency
     annotations:
       summary: '{{ $labels.service }} is burning its error budget fast (14.4x over 1h and 5m)'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/LedgerGwErrorBudgetBurnFast
+      runbook_url: https://runbooks.cobaltline.example/alerts/LedgerGwErrorBudgetBurnFast
   - alert: LedgerGwErrorBudgetBurnSlow
     expr: slo:sli_error:ratio_rate6h{service="ledger-gw"} > (6 * 0.01) and slo:sli_error:ratio_rate30m{service="ledger-gw"} > (6 * 0.01)
     for: 15m
@@ -182,5 +182,5 @@ groups:
       slo: ledger-gw-latency
     annotations:
       summary: '{{ $labels.service }} is burning its error budget steadily (6x over 6h and 30m)'
-      runbook_url: https://runbooks.cobaltline.dev/alerts/LedgerGwErrorBudgetBurnSlow
+      runbook_url: https://runbooks.cobaltline.example/alerts/LedgerGwErrorBudgetBurnSlow
 AF_EOF

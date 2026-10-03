@@ -17,7 +17,7 @@ spec:
         team: fulfillment
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.larkspur.dev/alerts/OrdersWorkerDown
+        runbook_url: https://runbooks.larkspur.example/alerts/OrdersWorkerDown
     - alert: MediaApiDown
       expr: sum by (service) (up{service="media-api"}) == 0 or absent(up{service="media-api"})
       for: 3m
@@ -26,4 +26,4 @@ spec:
         team: messaging
       annotations:
         summary: '{{ $labels.service }} has no healthy scrape targets'
-        runbook_url: https://runbooks.larkspur.dev/alerts/MediaApiDown
+        runbook_url: https://runbooks.larkspur.example/alerts/MediaApiDown

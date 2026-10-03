@@ -9,7 +9,7 @@ groups:
       team: sre-core
     annotations:
       summary: Probe failed for {{ $labels.instance }}
-      runbook_url: https://runbooks.juniperledger.dev/alerts/ProbeFailed
+      runbook_url: https://runbooks.juniperledger.example/alerts/ProbeFailed
   - alert: ProbeSlowHttp
     expr: avg_over_time(probe_http_duration_seconds[1m]) > 2
     for: 5m
@@ -18,7 +18,7 @@ groups:
       team: sre-core
     annotations:
       summary: Slow HTTP probe for {{ $labels.instance }}
-      runbook_url: https://runbooks.juniperledger.dev/alerts/ProbeSlowHttp
+      runbook_url: https://runbooks.juniperledger.example/alerts/ProbeSlowHttp
   - alert: SslCertificateExpiresSoon
     expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 14
     labels:
@@ -26,7 +26,7 @@ groups:
       team: sre-core
     annotations:
       summary: TLS certificate for {{ $labels.instance }} expires in < 14 days
-      runbook_url: https://runbooks.juniperledger.dev/alerts/SslCertificateExpiresSoon
+      runbook_url: https://runbooks.juniperledger.example/alerts/SslCertificateExpiresSoon
   - alert: ProbeHttpStatusCode
     expr: probe_http_status_code <= 199 or probe_http_status_code >= 400
     for: 5m
@@ -35,7 +35,7 @@ groups:
       team: sre-core
     annotations:
       summary: Bad HTTP status for {{ $labels.instance }}
-      runbook_url: https://runbooks.juniperledger.dev/alerts/ProbeHttpStatusCode
+      runbook_url: https://runbooks.juniperledger.example/alerts/ProbeHttpStatusCode
   - alert: BlackboxProbeSlowPing
     expr: avg_over_time(probe_icmp_duration_seconds[1m]) > 1
     for: 5m
@@ -44,4 +44,4 @@ groups:
       team: sre-core
     annotations:
       summary: Slow ping for {{ $labels.instance }}
-      runbook_url: https://runbooks.juniperledger.dev/alerts/BlackboxProbeSlowPing
+      runbook_url: https://runbooks.juniperledger.example/alerts/BlackboxProbeSlowPing

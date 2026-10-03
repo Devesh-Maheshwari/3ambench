@@ -9,7 +9,7 @@ groups:
       team: infra
     annotations:
       summary: JVM heap filling up on {{ $labels.instance }}
-      runbook_url: https://runbooks.cobaltline.dev/alerts/JvmMemoryFillingUp
+      runbook_url: https://runbooks.cobaltline.example/alerts/JvmMemoryFillingUp
   - alert: JvmGcPausesLong
     expr: rate(jvm_gc_pause_seconds_sum[5m]) / rate(jvm_gc_pause_seconds_count[5m]) > 0.5
     for: 5m
@@ -18,7 +18,7 @@ groups:
       team: infra
     annotations:
       summary: Long GC pauses on {{ $labels.instance }}
-      runbook_url: https://runbooks.cobaltline.dev/alerts/JvmGcPausesLong
+      runbook_url: https://runbooks.cobaltline.example/alerts/JvmGcPausesLong
   - alert: JvmThreadsDeadlocked
     expr: jvm_threads_deadlocked > 0
     labels:
@@ -26,7 +26,7 @@ groups:
       team: infra
     annotations:
       summary: Deadlocked threads on {{ $labels.instance }}
-      runbook_url: https://runbooks.cobaltline.dev/alerts/JvmThreadsDeadlocked
+      runbook_url: https://runbooks.cobaltline.example/alerts/JvmThreadsDeadlocked
   - alert: JvmClassLoadingSpike
     expr: rate(jvm_classes_loaded_total[5m]) > 1000
     for: 10m
@@ -35,4 +35,4 @@ groups:
       team: infra
     annotations:
       summary: Class loading spike on {{ $labels.instance }}
-      runbook_url: https://runbooks.cobaltline.dev/alerts/JvmClassLoadingSpike
+      runbook_url: https://runbooks.cobaltline.example/alerts/JvmClassLoadingSpike
