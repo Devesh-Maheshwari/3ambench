@@ -177,7 +177,70 @@ def apply_v4a(files: dict, patch: str) -> tuple[list[tuple], bool]:
 
 def load_trajectory(path: str) -> dict:
     with open(path) as fh:
-        return json.load(fh)
+        return json.loads(renamed(fh.read()))
+
+
+# ---------------------------------------------------------------------------- renamed host names
+
+_RENAME: tuple | None = None   # (regex, mapping), set by load_renames
+_COPIES: list[str] = []
+
+
+def load_renames(path: str | None) -> int:
+    """`--rename-map FILE` ({"map": {old: new}}): host names a release renamed in the tasks (the fictional company
+    domains moved to reserved `.example` names in 0.2.0). Stored trajectories, traces and workspaces are read
+    through it, so that they replay and grade against the renamed tasks. Returns the number of names."""
+    global _RENAME
+    if not path:
+        _RENAME = None
+        return 0
+    with open(path) as fh:
+        m = json.load(fh)["map"]
+    keys = sorted(m, key=lambda k: (-len(k), k))
+    _RENAME = (re.compile(r"(?<![A-Za-z0-9-])(?:" + "|".join(map(re.escape, keys)) + r")(?![A-Za-z0-9])"), m)
+    return len(m)
+
+
+def renamed(text: str) -> str:
+    if _RENAME is None:
+        return text
+    rx, m = _RENAME
+    return rx.sub(lambda mo: m[mo.group(0)], text)
+
+
+def renamed_tree(root: str) -> str:
+    """`root` itself without a rename map; otherwise a scratch copy (removed at exit) with every UTF-8 file and file
+    name read through the map."""
+    if _RENAME is None:
+        return root
+    import atexit
+    import os
+    import shutil
+    import tempfile
+    if not _COPIES:
+        atexit.register(lambda: [shutil.rmtree(d, ignore_errors=True) for d in _COPIES])
+    dst = tempfile.mkdtemp(prefix="af-renamed-")
+    _COPIES.append(dst)
+    out = os.path.join(dst, os.path.basename(root.rstrip("/")))
+    for dp, dns, fns in os.walk(root):
+        dns[:] = [d for d in dns if d != "__pycache__"]
+        for fn in fns:
+            src = os.path.join(dp, fn)
+            if os.path.islink(src):
+                continue
+            rel = renamed(os.path.relpath(src, root))
+            p = os.path.join(out, rel)
+            os.makedirs(os.path.dirname(p), exist_ok=True)
+            with open(src, "rb") as fh:
+                data = fh.read()
+            try:
+                data = renamed(data.decode("utf-8")).encode("utf-8")
+            except UnicodeDecodeError:
+                pass
+            with open(p, "wb") as fh:
+                fh.write(data)
+            shutil.copymode(src, p)
+    return out
 
 
 def text_of(content) -> str:

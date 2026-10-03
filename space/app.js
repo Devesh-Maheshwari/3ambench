@@ -1,11 +1,10 @@
-/* 3amBench Replay: renders data/runs.json (written by scripts/export_runs.py). No dependencies. */
+/* 3amBench Replay: renders data/runs.json (written by scripts/export_runs.py). No dependencies.
+   board.js (loaded first) holds the tier switch, leaderboard, expert requirement panel and theme button. */
 "use strict";
 
 const GROUPS = ["alerts", "repairs", "recording", "routing", "inhibition", "preserved"];
-const CATS = [["req_alerts", "alerts"], ["req_repairs", "repairs"], ["req_recording", "recording"],
-  ["req_routing", "routing"], ["req_inhibit", "inhibition"]];
 const $ = (id) => document.getElementById(id);
-const S = { data: null, task: null, run: null, i: 0, timer: null };
+const S = { data: null, tier: "core", task: null, run: null, i: 0, timer: null, resize: null };
 
 function esc(s) {
   return String(s == null ? "" : s).replace(/[&<>"']/g, (c) =>
@@ -33,41 +32,26 @@ function markdown(src) {
   return out.join("");
 }
 
-/* ---------- leaderboard ---------- */
-function leaderboard(runs) {
-  const by = new Map();
-  for (const r of runs) {
-    const k = r.agent + "\u0000" + (r.model || "");
-    if (!by.has(k)) by.set(k, { agent: r.agent, model: r.model || "", source: r.source, runs: [] });
-    by.get(k).runs.push(r);
-  }
-  const mean = (xs) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null);
-  const rows = [...by.values()].map((g) => ({
-    ...g, n: g.runs.length, tasks: new Set(g.runs.map((r) => r.task_id)).size,
-    reward: mean(g.runs.map((r) => r.reward)),
-    solved: mean(g.runs.map((r) => (r.keys && r.keys.solved) || 0)),
-    cats: CATS.map(([k]) => mean(g.runs.filter((r) => r.keys && r.keys[k] != null).map((r) => r.keys[k]))),
-  })).sort((a, b) => b.reward - a.reward || a.agent.localeCompare(b.agent));
-  const head = `<thead><tr><th>Agent</th><th>Model</th><th class="num">Runs</th><th class="num">Tasks</th>
-    <th class="num">Mean reward</th><th class="num">Solved</th>${CATS.map(([, n]) => `<th class="num">${n}</th>`).join("")}
-    </tr></thead>`;
-  const body = rows.map((g) => `<tr><td>${esc(g.agent)} ${g.source === "harbor" ? '<span class="tag">Harbor</span>' :
-    '<span class="tag">OpenEnv</span>'}</td><td>${esc(g.model || "–")}</td><td class="num">${g.n}</td>
-    <td class="num">${g.tasks}</td><td class="num"><span class="bar" style="width:${Math.round(g.reward * 60)}px"></span>${fmt(g.reward)}</td>
-    <td class="num">${Math.round(g.solved * 100)}%</td>${g.cats.map((c) => `<td class="num">${fmt(c, 2)}</td>`).join("")}</tr>`).join("");
-  $("board").innerHTML = head + "<tbody>" + body + "</tbody>";
+/* ---------- tiers and pickers ---------- */
+const isExpert = (tid) => taskTier(S.data.tasks[tid]) === "expert";
+function tierTasks(tier) { return Object.keys(S.data.tasks).filter((t) => taskTier(S.data.tasks[t]) === tier).sort(); }
+function setTier(tier, tid, runId) {
+  stop(); S.tier = tier;
+  renderTierSwitch(); leaderboard(); fillTasks();
+  const ids = tierTasks(tier);
+  $("replay-section").hidden = !ids.length;
+  if (ids.length) selectTask(tid && ids.includes(tid) ? tid : ids[0], runId);
 }
-
-/* ---------- pickers ---------- */
 function runLabel(r) {
   const m = r.model ? ` · ${r.model}` : "";
-  return `${r.agent}${m} · reward ${fmt(r.reward)}${r.trial ? " · " + r.trial.slice(-8) : ""}`;
+  return `${r.agent}${m} · reward ${fmt(r.reward)}${r.trial ? " · " + r.trial.slice(-8) : ""}${r.invalid ? " · invalid" : ""}`;
 }
 function fillTasks() {
-  const ids = Object.keys(S.data.tasks).sort();
-  $("task-pick").innerHTML = ids.map((t) => {
+  $("task-pick").innerHTML = tierTasks(S.tier).map((t) => {
     const T = S.data.tasks[t]; const n = S.data.runs.filter((r) => r.task_id === t).length;
-    return `<option value="${esc(t)}">${esc(t)} (${esc(T.tier)}, ${n} run${n === 1 ? "" : "s"})</option>`;
+    const what = isExpert(t) ? ` · ${T.workflow || T.family || "expert"}` : "";
+    const diff = isExpert(t) ? "" : `${T.difficulty || T.tier}, `;
+    return `<option value="${esc(t)}">${esc(t)}${esc(what)} (${esc(diff)}${n} run${n === 1 ? "" : "s"})</option>`;
   }).join("");
 }
 function selectTask(tid, runId) {
@@ -77,27 +61,44 @@ function selectTask(tid, runId) {
   $("instruction").innerHTML = markdown(S.data.tasks[tid].instruction);
   selectRun(runId && runs.some((r) => r.id === runId) ? runId : runs[0].id);
 }
+function runMeta(r, T) {
+  const k = r.keys || {}; const exp = taskTier(T) === "expert";
+  const where = exp ? [T.workflow, T.family] : [T.workflow, T.difficulty || T.tier];
+  const reward = r.reward_original != null ? `re-graded <b>${fmt(r.reward)}</b> (Harbor ${fmt(r.reward_original)})`
+    : `final reward <b>${fmt(r.reward)}</b>`;
+  const extra = exp ? ` · diagnosis ${fmt(k.diagnosis, 2)} · routine ${fmt(k.routine, 2)} · preserved ${fmt(k.preservation, 2)}` : "";
+  let h = r.invalid ? `<div class="banner" role="note"><b>Invalid run</b>, left out of the leaderboard: ${esc(r.invalid)}</div>` : "";
+  h += `<div><b>${esc(r.agent)}</b>${r.model ? " · " + esc(r.model) : ""} · ${where.filter(Boolean).map(esc).join(" · ")}
+    · ${reward} · solved ${k.solved ? "yes" : "no"}${extra}${r.cost_usd ? " · $" + fmt(r.cost_usd, 2) : ""}</div>`;
+  if (!exp) {
+    const reqs = T.requirements.map((q) => {
+      const s = r.req_scores ? r.req_scores[q.id] : null;
+      return `<span title="${esc(q.title)}">${esc(q.id)} ${s == null ? "–" : fmt(s, 2)}</span>`;
+    }).join(" · ");
+    h += `<div class="small">Per-requirement score: ${reqs}</div>`;
+  }
+  if (r.reward_original != null) {
+    const ko = r.keys_original || {};
+    h += `<div class="note">Re-graded with the current hidden tests${r.regraded ? ` (${esc(r.regraded)})` : ""}; Harbor's
+      own verifier gave ${fmt(r.reward_original)}${ko.solved != null ? `, solved ${ko.solved ? "yes" : "no"}` : ""}.</div>`;
+  }
+  if (r.exception) h += `<div class="note">Harbor recorded ${esc(r.exception)} for this run; it still counts.</div>`;
+  return h + `<div class="note">${esc(r.curve_note || "")}</div>`;
+}
 function selectRun(id) {
   stop();
   S.run = S.data.runs.find((r) => r.id === id); $("run-pick").value = id;
   const r = S.run; const T = S.data.tasks[r.task_id];
-  const reqs = T.requirements.map((q) => {
-    const s = r.req_scores ? r.req_scores[q.id] : null;
-    return `<span title="${esc(q.title)}">${esc(q.id)} ${s == null ? "–" : fmt(s, 2)}</span>`;
-  }).join(" · ");
-  $("run-meta").innerHTML = `<div><b>${esc(r.agent)}</b>${r.model ? " · " + esc(r.model) : ""} · ${esc(T.workflow)} · ${esc(T.tier)}
-    · final reward <b>${fmt(r.reward)}</b> · solved ${r.keys && r.keys.solved ? "yes" : "no"}
-    ${r.cost_usd ? " · $" + fmt(r.cost_usd, 2) : ""}</div><div class="small">Per-requirement score: ${reqs}</div>
-    <div class="note">${esc(r.curve_note || "")}</div>`;
+  $("run-meta").innerHTML = runMeta(r, T);
   $("scrub").max = Math.max(0, r.steps.length - 1);
   buildTimeline(); drawCurve(); go(0);
-  const h = `#${encodeURIComponent(r.task_id)}/${r.id}`;
+  const h = `#${S.tier}/${encodeURIComponent(r.task_id)}/${r.id}`;
   if (location.hash !== h) history.replaceState(null, "", h);
 }
 
 /* ---------- step view ---------- */
 function stepTitle(s) {
-  if (s.kind === "think") return s.text.split("\n")[0];
+  if (s.kind === "think") return (s.text || "").split("\n")[0];
   if (s.kind === "tool_call") return `${s.tool} ${s.args || ""}`;
   return (s.output || "").split("\n")[0] || "(no output)";
 }
@@ -141,10 +142,10 @@ function go(i) {
   const cur = document.querySelector("#timeline li.cur");
   if (cur) { const box = $("timeline"); const t = cur.offsetTop - box.offsetTop;
     if (t < box.scrollTop || t > box.scrollTop + box.clientHeight - 30) box.scrollTop = t - box.clientHeight / 2; }
-  renderStep(); renderChecks(); moveCursor();
+  renderStep(); (isExpert(S.run.task_id) ? renderReqs : renderChecks)(); moveCursor();
 }
 
-/* ---------- checks panel ---------- */
+/* ---------- checks panel (core tier) ---------- */
 function checksAt(i) {
   let prev = null; let cur = null;
   for (let j = 0; j <= i; j++) if (S.run.steps[j].checks) { prev = cur; cur = S.run.steps[j].checks; }
@@ -156,6 +157,7 @@ function checksAt(i) {
 function renderChecks() {
   const T = S.data.tasks[S.run.task_id]; const { cur, prev } = checksAt(S.i);
   const graded = S.run.steps.some((s) => s.checks);
+  $("checks-title").textContent = "Checks";
   $("checks-when").textContent = cur ? (S.i === S.run.steps.length - 1 ? "(end of run)" : `(after step ${S.i})`) : "";
   if (!cur) {
     $("checks-summary").textContent = graded ? "Nothing graded yet at this step: the first edit has not happened."
@@ -187,6 +189,15 @@ function renderChecks() {
 /* ---------- reward curve (inline SVG) ---------- */
 const CV = { w: 900, h: 190, l: 44, r: 12, t: 12, b: 26 };
 function drawCurve() {
+  const terminal = S.run.curve === "terminal";
+  $("curve-fig").hidden = terminal; $("curve-none").hidden = !terminal;
+  if (terminal) {
+    $("curve").innerHTML = ""; CV.X = null;
+    $("curve-none").textContent = `Final reward only: Harbor grades the end state of this run (reward ${fmt(S.run.reward)}).`;
+    return;
+  }
+  CV.w = Math.max(320, Math.round($("curve").clientWidth || 900));   // draw at the real width: legible on phones
+  CV.h = CV.w >= 700 ? 230 : 190;
   const st = S.run.steps; const n = Math.max(1, st.length - 1);
   const pts = st.map((s, i) => ({ i, y: cumAt(i), r: s.r || 0 }));
   const X = (i) => CV.l + (i / n) * (CV.w - CV.l - CV.r);
@@ -219,14 +230,14 @@ function drawCurve() {
     tip.innerHTML = `<b>step ${i}</b> · ${esc(s.kind === "think" ? "thinking" : s.tool)}<br>cumulative ${fmt(cumAt(i))}` +
       (s.r ? ` · step ${signed(s.r)}` : "");
     const b = svg.getBoundingClientRect(); const px = (X(i) / CV.w) * b.width;
-    tip.style.left = Math.min(px + 10, b.width - 200) + "px"; tip.style.top = "8px";
+    tip.style.left = Math.max(0, Math.min(px + 10, b.width - 200)) + "px"; tip.style.top = "8px";
   });
   hit.addEventListener("mouseleave", () => { $("tip").hidden = true; });
   hit.addEventListener("click", (ev) => { stop(); go(idxAt(ev)); });
   CV.X = X; CV.Y = Y;
 }
 function moveCursor() {
-  const c = document.getElementById("cursor"); const dot = document.getElementById("cursor-dot"); if (!c) return;
+  const c = document.getElementById("cursor"); const dot = document.getElementById("cursor-dot"); if (!c || !CV.X) return;
   const x = CV.X(S.i); const y = CV.Y(Math.max(-0.05, Math.min(1.05, cumAt(S.i))));
   c.setAttribute("x1", x); c.setAttribute("x2", x); dot.setAttribute("cx", x); dot.setAttribute("cy", y);
 }
@@ -241,6 +252,10 @@ function play() {
 }
 
 function wire() {
+  $("tier-switch").addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-tier]"); if (b && b.dataset.tier !== S.tier) setTier(b.dataset.tier);
+  });
+  $("theme-btn").onclick = cycleTheme;
   $("task-pick").addEventListener("change", (e) => selectTask(e.target.value));
   $("run-pick").addEventListener("change", (e) => selectRun(e.target.value));
   $("btn-first").onclick = () => { stop(); go(0); };
@@ -251,6 +266,9 @@ function wire() {
   $("speed").onchange = () => { if (S.timer) { stop(); play(); } };
   $("scrub").addEventListener("input", (e) => { stop(); go(+e.target.value); });
   $("timeline").addEventListener("click", (e) => { const li = e.target.closest("li"); if (li) { stop(); go(+li.dataset.i); } });
+  window.addEventListener("resize", () => {
+    clearTimeout(S.resize); S.resize = setTimeout(() => { if (S.run) { drawCurve(); moveCursor(); } }, 150);
+  });
   document.addEventListener("keydown", (e) => {
     if (!S.run || /INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
     if (e.key === "ArrowRight") { stop(); go(S.i + 1); e.preventDefault(); }
@@ -275,10 +293,12 @@ async function main() {
   }
   if (!S.data.runs.length) { $("load-status").textContent = "No runs recorded yet."; return; }
   $("load-status").hidden = true; $("board-section").hidden = false; $("replay-section").hidden = false;
-  leaderboard(S.data.runs); fillTasks();
+  // #<tier>/<task>/<run>/<step>; the older #<task>/<run>/<step> still works (the tier comes from the task)
   const m = decodeURIComponent(location.hash.slice(1)).split("/");
-  const first = S.data.tasks[m[0]] ? m[0] : Object.keys(S.data.tasks).sort()[0];
-  selectTask(first, m[1]);
-  if (m[2] && S.task === first) go(+m[2] || 0);
+  let tier = TIER_ORDER.includes(m[0]) ? m.shift() : null;
+  const tid = S.data.tasks[m[0]] ? m[0] : null;
+  if (!tier || !tiersPresent().includes(tier)) tier = tid ? taskTier(S.data.tasks[tid]) : defaultTier();
+  setTier(tier, tid, m[1]);
+  if (m[2] && S.task === tid) go(+m[2] || 0);
 }
 main();

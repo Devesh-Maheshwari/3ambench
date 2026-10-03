@@ -4,20 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>3amBench Replay</title>
-  <meta name="description" content="Step through agent runs on 3amBench: tool calls, file diffs, per-step reward and which alerting checks pass.">
+  <meta name="description" content="Step through agent runs on 3amBench: tool calls, file diffs, per-step reward, which alerting checks pass and which expert-tier tickets get solved.">
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="top">
     <div class="wrap">
-      <h1>3amBench Replay</h1>
+      <div class="title-row">
+        <h1>3amBench Replay</h1>
+        <button type="button" id="theme-btn" class="ghost small" title="Colour theme: follow the system, light or dark">Theme: auto</button>
+      </div>
       <p class="pitch">Watch agents write Prometheus alerts and Alertmanager routes, step by step, with every change
         graded by hidden outage replays through <code>promtool</code> and <code>amtool</code>.</p>
       <nav class="links">
         <a href="https://github.com/Devesh-Maheshwari/3ambench">GitHub</a>
         <a href="https://huggingface.co/datasets/openenvforge/3ambench">Dataset</a>
-        <span class="cmd"><code id="docker-cmd">docker run -p 8000:8000 -e ENABLE_WEB_INTERFACE=true ghcr.io/devesh-maheshwari/3ambench-env:0.1.1</code>
+        <span class="cmd"><code id="docker-cmd">docker run -p 8000:8000 -e ENABLE_WEB_INTERFACE=true ghcr.io/devesh-maheshwari/3ambench-env:0.2.0</code>
           <button type="button" id="copy-cmd" class="ghost">Copy</button></span>
       </nav>
     </div>
@@ -25,12 +28,13 @@
 
   <main class="wrap">
     <p id="load-status" class="muted">Loading runs…</p>
+    <div id="tier-switch" class="tiers" role="group" aria-label="Tier" hidden></div>
 
     <section id="board-section" hidden>
-      <h2>Leaderboard</h2>
-      <p class="muted small">Mean over the recorded runs. <em>reference</em> rows are scripted policies (no model) that
-        calibrate the reward scale; model rows appear once real runs are recorded.</p>
+      <h2>Leaderboard <span id="board-tier" class="muted small"></span></h2>
+      <p id="board-caption" class="muted small">Mean over the recorded runs.</p>
       <div class="table-scroll"><table id="board"></table></div>
+      <details id="board-invalid" class="invalid-note small" hidden></details>
     </section>
 
     <section id="replay-section" hidden>
@@ -59,13 +63,14 @@
             <option value="1600">slow</option><option value="800" selected>normal</option><option value="300">fast</option>
           </select></label>
         </div>
-        <figure class="curve">
+        <figure id="curve-fig" class="curve">
           <figcaption class="small muted">Cumulative reward by step
             <span class="legend"><span class="tri up">▲</span> step gained reward
               <span class="tri down">▼</span> step lost reward</span></figcaption>
           <div id="curve"></div>
           <div id="tip" class="tip" hidden></div>
         </figure>
+        <p id="curve-none" class="small muted curve-none" hidden></p>
       </div>
 
       <div class="grid2">
@@ -81,7 +86,7 @@
         </div>
         <div class="col">
           <div class="card">
-            <h3>Checks <span id="checks-when" class="small muted"></span></h3>
+            <h3><span id="checks-title">Checks</span> <span id="checks-when" class="small muted"></span></h3>
             <div id="checks-summary" class="small"></div>
             <div id="checks"></div>
           </div>
@@ -93,6 +98,7 @@
   <footer class="wrap small muted">
     3amBench is an RL environment for Prometheus alerting and Alertmanager routing as code. Apache-2.0.
   </footer>
+  <script src="board.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

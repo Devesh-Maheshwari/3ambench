@@ -69,8 +69,10 @@ echo "job $JOB: $(ls "$STAGE" | wc -l | tr -d ' ') tasks x $ATTEMPTS attempts ->
 "$ROOT/scripts/harbor_local.sh" "$STAGE" -- -a "$AGENT" -m "$MODEL" -k "$ATTEMPTS" -n "$CONCURRENT" \
   -o "$JOBS_DIR" --job-name "$JOB" -y
 
-# re-export everything the Space shows: reference traces, local Harbor reference jobs, all agent jobs
+# re-export everything the Space shows: reference traces, local Harbor reference jobs, all agent jobs (both tiers)
 SOURCES=(--harbor "$JOBS_DIR")
-[ -d "$ROOT/dist/replay/harbor-jobs" ] && SOURCES+=("$ROOT/dist/replay/harbor-jobs")
+for d in harbor-jobs together-smoke agent-jobs agent-jobs-v02; do
+  [ -d "$ROOT/dist/replay/$d" ] && [ "$ROOT/dist/replay/$d" != "$JOBS_DIR" ] && SOURCES+=("$ROOT/dist/replay/$d")
+done
 [ -d "$ROOT/dist/replay/traces" ] && SOURCES=(--traces "$ROOT/dist/replay/traces" "${SOURCES[@]}")
 "${PYTHON:-python3}" "$ROOT/scripts/export_runs.py" "${SOURCES[@]}" --out "$ROOT/space/data/runs.json"

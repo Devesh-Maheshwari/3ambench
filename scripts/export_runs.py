@@ -12,20 +12,32 @@
           grader, which gives a per-step curve; the last step is always Harbor's own verifier reward.
           Edits that cannot be recovered (for example `sed -i` in a shell) make the curve approximate, and
           the run says so in `curve_note`.
+          Expert-tier trials (afx-*, tasks from --expert-tasks-dir) carry the grader's per-requirement breakdown;
+          their curve is drawn only when the replay is exact (scripts/export_expert.py), else `curve: terminal`.
+--regrade-tasks DIR
+          grade every stored workspace (Harbor's artifacts/workspace/monitoring) whose task is in DIR with
+          DIR/<task>/tests/grade.py, e.g. after hidden-test fixes; runs keep Harbor's numbers in
+          `reward_original` / `keys_original`.
+--invalid FILE
+          extra runs to leave out of leaderboards, one `<substring of the trial path>  <reason>` per line.
+          Infrastructure failures and runs whose prompt is not the task's current instruction are flagged
+          automatically (scripts/run_meta.py).
+--rename-map FILE
+          {"map": {old: new}}: host names the tasks renamed after the runs were recorded (0.2.0 moved the fictional
+          company domains to reserved `.example` names). Trajectories, traces and stored workspaces are read
+          through it before they are replayed, compared with the task or graded.
 Needs the pinned tools for replays: AF_PROMTOOL=/path/to/promtool AF_AMTOOL=/path/to/amtool.
 """
 
 from __future__ import annotations
 
 import argparse
-import difflib
 import glob
 import json
 import os
 import re
-import shutil
 import sys
-import tempfile
+import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from redact import redact  # noqa: E402
@@ -35,18 +47,19 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(ROOT, "src"))
 
-from replay_atif import apply_v4a, call_ops, iter_events, load_trajectory  # noqa: E402
+from export_expert import LEVELS, ExpertRuns, render, task_release  # noqa: E402
+from replay_atif import call_ops, iter_events, load_renames, load_trajectory, renamed, renamed_tree  # noqa: E402
 from replay_checks import Catalog  # noqa: E402
+from replay_expert import EXPERT_RE, grade_with  # noqa: E402
+from replay_ws import MAX_DIFF, MAX_OUT, MAX_THINK, Workspace, args_summary, clip  # noqa: E402
+from run_meta import fit, harbor_flags, load_invalid, model_family  # noqa: E402
 
 KEYS = ["reward", "solved", "outcome", "progress", "preservation", "req_alerts", "req_repairs", "req_recording",
         "req_routing", "req_inhibit", "fire_rate", "silent_rate", "label_rate", "check_pass_rate", "syntax_ok", "tamper"]
-MAX_OUT, MAX_DIFF, MAX_THINK, MAX_ARGS = 1200, 2400, 1200, 300
 TASK_RE = re.compile(r"(af-\d{3})")
-
-
-def clip(s: str | None, n: int) -> str:
-    s = s or ""
-    return s if len(s) <= n else s[:n] + f"\n… [{len(s) - n} more chars]"
+TIERS = {"core": {"label": "Standard", "release": "v0.1.1"}, "expert": {"label": "Expert", "release": "v0.2.0"}}
+CURVES = ("Expert runs get a per-step curve only when every edit replays exactly to the stored final workspace "
+          "(at most 10 graded states); the others show the final reward and requirement breakdown.")
 
 
 def meta_of(task_id: str) -> tuple[str, str]:
@@ -54,82 +67,23 @@ def meta_of(task_id: str) -> tuple[str, str]:
     return (m.group(1), m.group(2)) if m else ("", "")
 
 
-def args_summary(tool: str, a: dict) -> str:
-    if tool in ("write_file", "Write", "create_file"):
-        return f"{a.get('path') or a.get('file_path')} ({len(str(a.get('content', '')))} bytes)"
-    for k in ("path", "file_path", "command", "cmd", "keystrokes", "labels", "input"):
-        if k in a and a[k] not in (None, ""):
-            v = a[k]
-            head = f"{a.get('path') or a.get('file_path')}  " if k not in ("path", "file_path") and (
-                a.get("path") or a.get("file_path")) else ""
-            return clip(head + (json.dumps(v) if isinstance(v, (dict, list)) else str(v)), MAX_ARGS)
-    return clip(json.dumps(a), MAX_ARGS) if a else ""
-
-
-class Workspace:
-    """A scratch copy of a task's initial workspace: applies edits, returns diffs, grades on demand."""
-
-    def __init__(self, task_dir: str, grader=None):
-        self.root = tempfile.mkdtemp(prefix="af-replay-")
-        self.ws = os.path.join(self.root, "monitoring")
-        shutil.copytree(os.path.join(task_dir, "environment", "workspace", "monitoring"), self.ws, symlinks=True)
-        self.grader = grader
-
-    def read(self, rel: str) -> str | None:
-        p = os.path.join(self.ws, rel)
-        return open(p).read() if os.path.isfile(p) else None
-
-    def files(self) -> dict:
-        out = {}
-        for dp, _, fns in os.walk(self.ws):
-            for fn in fns:
-                rel = os.path.relpath(os.path.join(dp, fn), self.ws)
-                out[rel] = self.read(rel)
-        return out
-
-    def apply(self, op: tuple) -> tuple[str, bool]:
-        """Apply one op; returns (unified diff, ok)."""
-        if op[0] == "patch":
-            ops, ok = apply_v4a(self.files(), op[1])
-            diffs = [self.apply(o) for o in ops]
-            return "".join(d for d, _ in diffs), ok and all(k for _, k in diffs)
-        rel = op[1]
-        old = self.read(rel)
-        if op[0] == "write":
-            new = op[2]
-        elif op[0] == "replace":
-            _, _, a, b, every = op
-            if old is None or (a not in old):
-                return "", False
-            new = old.replace(a, b) if every else old.replace(a, b, 1)
-        elif op[0] == "delete":
-            if old is not None:
-                os.remove(os.path.join(self.ws, rel))
-            return self._diff(rel, old, ""), True
-        else:
-            return "", False
-        p = os.path.join(self.ws, rel)
-        os.makedirs(os.path.dirname(p), exist_ok=True)
-        with open(p, "w") as fh:
-            fh.write(new)
-        return self._diff(rel, old, new), True
-
-    @staticmethod
-    def _diff(rel: str, old: str | None, new: str) -> str:
-        return "".join(difflib.unified_diff((old or "").splitlines(True), new.splitlines(True),
-                                            f"a/{rel}" if old is not None else "/dev/null", f"b/{rel}", n=2))
-
-    def grade(self) -> tuple[dict, dict]:
-        return self.grader.grade(self.ws)
-
-    def close(self) -> None:
-        shutil.rmtree(self.root, ignore_errors=True)
+def leaderboard_tasks(registry: str, name: str = "3ambench-expert-lb") -> list[str]:
+    try:
+        with open(registry) as fh:
+            rows = [d for d in json.load(fh) if d.get("name") == name]
+    except (OSError, ValueError):
+        return []
+    return [t["name"] for t in rows[-1]["tasks"]] if rows else []
 
 
 class Exporter:
-    def __init__(self, tasks_dir: str, replay: bool = True):
+    def __init__(self, tasks_dir: str, replay: bool = True, expert: ExpertRuns | None = None,
+                 regrade_dirs: list[str] | None = None, invalid: list[tuple[str, str]] | None = None):
         self.tasks_dir = tasks_dir
         self.replay = replay
+        self.expert = expert
+        self.regrade_dirs = regrade_dirs or []
+        self.invalid = invalid or []
         self.catalogs: dict[str, Catalog] = {}
         self.graders: dict = {}
         self.runs: list[dict] = []
@@ -161,13 +115,13 @@ class Exporter:
         run["_final"] = cat.states(details) if details else {}
         wf, tier = meta_of(run["task_id"])
         run.setdefault("workflow", wf)
-        run.setdefault("tier", tier)
+        run.update(tier="core", difficulty=tier, model_family=model_family(run["agent"], run["model"], run["source"]))
         self.runs.append(run)
 
     # ------------------------------------------------------------------ OpenEnv traces
     def add_trace(self, path: str) -> None:
         with open(path) as fh:
-            tr = json.load(fh)
+            tr = json.loads(renamed(fh.read()))
         tdir = self.task_dir(tr["task_id"])
         tid = os.path.basename(tdir) if tdir else tr["task_id"]
         cat = self.catalog(tid)
@@ -224,21 +178,30 @@ class Exporter:
         rewards = (res.get("verifier_result") or {}).get("rewards")
         if not rewards:
             return
-        task_dir = self.task_dir(res.get("task_name") or res.get("trial_name") or tdir_)
-        if not task_dir:
+        ref = res.get("task_name") or res.get("trial_name") or tdir_
+        task_dir = None if EXPERT_RE.search(ref) else self.task_dir(ref)
+        if not task_dir and not (self.expert and EXPERT_RE.search(ref)):
             return
-        tid = os.path.basename(task_dir)
-        det_p = os.path.join(tdir_, "verifier", "details.json")
-        details = json.load(open(det_p)) if os.path.isfile(det_p) else None
         info = res.get("agent_info") or {}
         agent = info.get("name") or "agent"
         if agent == "oracle" and re.search(r"partial", tdir_):
             agent = "oracle (partial solution)"
         model_info = info.get("model_info") or {}
         model = model_info.get("name") or ((res.get("config") or {}).get("agent") or {}).get("model_name") or ""
-        run = {"task_id": tid, "agent": f"harbor: {agent}", "model": model, "source": "harbor",
+        run = {"agent": f"harbor: {agent}", "model": model, "source": "harbor",
                "trial": res.get("trial_name", os.path.basename(tdir_)),
                "cost_usd": (res.get("agent_result") or {}).get("cost_usd")}
+        flags = harbor_flags(tdir_, res, self.invalid)
+        if not task_dir:
+            run.update(model_family=model_family(run["agent"], model, "harbor"), **flags)
+            if not self.expert.add(tdir_, res, run, rewards):
+                print(f"skip {tdir_}: expert task not found in {self.expert.expert_dir}", file=sys.stderr)
+            return
+        tid = os.path.basename(task_dir)
+        run = {"task_id": tid, **run}
+        det_p = os.path.join(tdir_, "verifier", "details.json")
+        details = json.load(open(det_p)) if os.path.isfile(det_p) else None
+        rewards, details = self._regrade(tdir_, tid, run, rewards, details)
         traj = os.path.join(tdir_, "agent", "trajectory.json")
         if os.path.isfile(traj):
             run["steps"], run["curve"], run["curve_note"] = self._replay(task_dir, load_trajectory(traj), rewards["reward"])
@@ -251,7 +214,24 @@ class Exporter:
             steps.append(self._verifier_step(rewards["reward"], 0.0))
             run.update(steps=steps, curve="terminal", curve_note="Harbor reports a terminal reward only, and this "
                                                                  "trial has no agent trajectory to replay.")
+        run.update(flags)
         self._finish(run, rewards, details)
+
+    def _regrade(self, trial: str, tid: str, run: dict, rewards: dict, details: dict | None) -> tuple:
+        """Core trial whose task is in a --regrade-tasks dir: grade the stored workspace with that task's grader."""
+        rdir = next((os.path.join(d, tid) for d in self.regrade_dirs if os.path.isdir(os.path.join(d, tid))), None)
+        art = os.path.join(trial, "artifacts", "workspace", "monitoring")
+        if not rdir or not os.path.isdir(art):
+            return rewards, details
+        try:
+            keys, det = grade_with(rdir, renamed_tree(art))
+        except Exception as e:  # noqa: BLE001 - keep Harbor's result
+            print(f"re-grade failed for {trial}: {e}", file=sys.stderr)
+            return rewards, details
+        kept = ("reward", "solved", "progress", "preservation")
+        run.update(reward_original=rewards.get("reward", 0.0), regraded=task_release(rdir),
+                   keys_original={k: rewards[k] for k in kept if k in rewards})
+        return keys, det
 
     @staticmethod
     def _verifier_step(reward: float, cum: float) -> dict:
@@ -318,19 +298,25 @@ class Exporter:
     # ------------------------------------------------------------------ output
     def tasks_index(self) -> dict:
         out = {}
-        for tid in sorted({r["task_id"] for r in self.runs}):
+        for tid in sorted({r["task_id"] for r in self.runs if r["tier"] == "core"}):
             tdir = os.path.join(self.tasks_dir, tid)
             with open(os.path.join(tdir, "instruction.md")) as fh:
                 instr = re.sub(r"<!--.*?-->\s*", "", fh.read(), flags=re.S).strip()
             cat = self.catalog(tid)
             wf, tier = meta_of(tid)
-            out[tid] = {"workflow": wf, "tier": tier, "instruction": instr, "requirements": cat.requirements(),
-                        "checks": cat.export()}
+            out[tid] = {"workflow": wf, "tier": "core", "difficulty": tier, "instruction": instr,
+                        "requirements": cat.requirements(), "checks": cat.export()}
+        if self.expert:
+            out.update(self.expert.tasks_index())
         return out
 
-    def dump(self, out_path: str) -> dict:
+    def dump(self, out_path: str, budget: float = 4.5e6) -> dict:
+        if self.expert:
+            self.runs += self.expert.finish()
         tasks = self.tasks_index()
         for r in self.runs:
+            if r["tier"] != "core":
+                continue
             order = [c["id"] for c in tasks[r["task_id"]]["checks"]]
             enc = lambda st: "".join("1" if st.get(c) else ("0" if c in st else "-") for c in order)  # noqa: E731
             prev = None
@@ -343,12 +329,19 @@ class Exporter:
                         prev = e
             final = r.pop("_final")
             r["final_checks"] = enc(final) if final else prev
+        for r in self.runs:
             for i, s in enumerate(r["steps"]):
                 s["i"] = i
         self.runs.sort(key=lambda r: (r["task_id"], r["source"], r["agent"], r.get("trial", "")))
         for i, r in enumerate(self.runs):
             r["id"] = f"r{i}"
-        data = {"version": 1, "tasks": tasks, "runs": self.runs}
+        tiers = {k: dict(v) for k, v in TIERS.items()}
+        tiers["expert"].update(leaderboard_tasks=leaderboard_tasks(os.path.join(ROOT, "registry.json")), curves=CURVES)
+        data = {"version": 2, "tiers": tiers, "tasks": tasks, "runs": self.runs}
+        expert = [r for r in self.runs if r["tier"] == "expert"]
+        fit(data, expert, budget, render, len(LEVELS))
+        for r in expert:
+            r.pop("_raw", None)
         os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
         with open(out_path, "w") as fh:
             fh.write(redact(json.dumps(data, separators=(",", ":"))))  # never publish keys or local paths
@@ -367,19 +360,38 @@ def main() -> int:
     ap.add_argument("--traces", nargs="*", default=[], help="trace JSON files or dirs")
     ap.add_argument("--harbor", nargs="*", default=[], help="Harbor job dirs (searched recursively for trials)")
     ap.add_argument("--tasks-dir", default=os.path.join(ROOT, "tasks"))
+    ap.add_argument("--expert-tasks-dir", default=os.path.join(ROOT, "dist", "v02-candidates", "tasks"))
+    ap.add_argument("--regrade-tasks", nargs="+", default=[], metavar="DIR",
+                    help="re-grade stored workspaces of tasks found in DIR with DIR/<task>/tests/grade.py")
+    ap.add_argument("--invalid", help="file of `<trial path substring> <reason>` lines to flag as invalid")
+    ap.add_argument("--rename-map", help="JSON {\"map\": {old: new}} of host names renamed in the tasks since the runs")
+    ap.add_argument("--expert-curves", choices=["auto", "off"], default="auto",
+                    help="auto: grade up to 9 intermediate states of exactly replayable expert runs; off: final only")
+    ap.add_argument("--jobs", type=int, default=max(1, min(6, (os.cpu_count() or 2) // 2)),
+                    help="parallel expert grades")
+    ap.add_argument("--budget-mb", type=float, default=4.5, help="shorten expert step texts until runs.json fits")
     ap.add_argument("--out", default=os.path.join(ROOT, "space", "data", "runs.json"))
     ap.add_argument("--no-replay", action="store_true", help="do not grade Harbor trajectories step by step")
     a = ap.parse_args()
-    ex = Exporter(a.tasks_dir, replay=not a.no_replay)
+    t0 = time.time()
+    if a.rename_map:
+        print(f"reading stored runs through {load_renames(a.rename_map)} renamed host names", file=sys.stderr)
+    expert = ExpertRuns(a.expert_tasks_dir, a.regrade_tasks, a.jobs, a.expert_curves == "auto",
+                        leaderboard_tasks(os.path.join(ROOT, "registry.json")), ROOT)
+    ex = Exporter(a.tasks_dir, replay=not a.no_replay, expert=expert, regrade_dirs=a.regrade_tasks,
+                  invalid=load_invalid(a.invalid))
     for p in expand(a.traces, "*.json"):
         ex.add_trace(p)
     for p in a.harbor:
         ex.add_harbor(p)
-    data = ex.dump(a.out)
+    data = ex.dump(a.out, a.budget_mb * 1e6)
     size = os.path.getsize(a.out)
-    print(f"wrote {a.out}: {len(data['runs'])} runs over {len(data['tasks'])} tasks, {size / 1e6:.2f} MB")
+    print(f"wrote {a.out}: {len(data['runs'])} runs over {len(data['tasks'])} tasks, {size / 1e6:.2f} MB, "
+          f"{time.time() - t0:.0f} s")
     for r in data["runs"]:
-        print(f"  {r['task_id']:40s} {r['agent']:32s} {r['curve']:16s} reward={r['reward']:.4f}")
+        extra = (f" (Harbor {r['reward_original']:.4f})" if "reward_original" in r else "") + \
+            (f"  INVALID: {r['invalid']}" if r.get("invalid") else "")
+        print(f"  {r['task_id']:40s} {r['agent']:32s} {r['curve']:16s} reward={r['reward']:.4f}{extra}")
     if size > 5e6:
         print("warning: runs.json is over 5 MB; export fewer runs or lower the clip limits", file=sys.stderr)
     return 0
