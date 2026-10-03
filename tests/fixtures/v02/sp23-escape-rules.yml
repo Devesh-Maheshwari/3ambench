@@ -1,0 +1,40 @@
+groups:
+- name: g
+  rules:
+  - alert: Slow
+    expr: up == 0
+    for: 30m
+    labels: {severity: ticket}
+  # every Via* rule reads the pending ALERTS series of Slow (promtool fires them; see the escape test)
+  - alert: ViaHexEscape
+    expr: '{__name__="ALE\x52TS", alertstate="pending"}'
+    labels: {severity: page}
+  - alert: ViaOctalEscape
+    expr: '{__name__="ALERT\123", alertstate="pending"}'
+    labels: {severity: page}
+  - alert: ViaUnicodeEscape
+    expr: '{__name__="ALERTS", alertstate="pending"}'
+    labels: {severity: page}
+  - alert: ViaUnicodeQuotedName
+    expr: '{"ALERTS", alertstate="pending"}'
+    labels: {severity: page}
+  - alert: ViaQuotedHexName
+    expr: '{"ALERT\x53", alertstate="pending"}'
+    labels: {severity: page}
+  - alert: ViaBareLabel
+    expr: '{alertstate="pending", alertname="Slow"}'
+    labels: {severity: page}
+  # the H06 re-emitter: the broken alert stays pending, a second definition pages from its pending series
+  - alert: ViaReEmit
+    expr: max by (job) ({alertname="Slow", alertstate="pending", job=~".+"})
+    labels: {severity: page}
+  # controls: own firing state written out (hysteresis), an escaped regex, a bare selector that rules out both
+  - alert: Hysteresis
+    expr: up == 0 or on() count(ALERTS{alertname="Hysteresis", alertstate="firing"}) > 0
+    labels: {severity: ticket}
+  - alert: EscapedRegex
+    expr: 'up{job=~"\\w+"} == 0'
+    labels: {severity: ticket}
+  - alert: NameRuledOut
+    expr: '{__name__!~"ALERTS|ALERTS_FOR_STATE", job="x"} == 0'
+    labels: {severity: ticket}

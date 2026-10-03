@@ -72,7 +72,9 @@ def test_public_and_heldout_hide_phi(easy_task):
 
 @needs_tools
 def test_openenv_environment_in_process(easy_task, tmp_path, monkeypatch):
-    pytest.importorskip("openenv")
+    # The repo's openenv/ directory is also an importable namespace when the
+    # optional SDK is absent. Check the SDK, not that empty namespace.
+    pytest.importorskip("openenv.core.env_server")
     ds = tmp_path / "ds" / "tasks"
     ds.mkdir(parents=True)
     shutil.copytree(task_dir_of(easy_task), ds / "af-001-slo-onboarding-easy-s1")

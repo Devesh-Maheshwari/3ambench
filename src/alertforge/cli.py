@@ -3,6 +3,7 @@
   alertforge build  --out <env root> [--master-seed N] [--only substr] [--no-adversaries] [--gate-log path]
   alertforge sample --workflow W --tier T --seed S --out DIR          # one ad-hoc task (fresh seed)
   alertforge spread --out <env root> [--episodes N]                   # P-mut histogram + grader timing
+  alertforge expert --out <dir> [--families E1,..] [--seeds 1-8] [--knobs a,b]   # expert-tier candidates + gate
 """
 
 from __future__ import annotations
@@ -17,7 +18,7 @@ import time
 
 WORKFLOWS = ["slo-onboarding", "alert-storm-cleanup", "missed-page-postmortem", "latency-slo", "team-reorg-migration"]
 TIERS = ["easy", "medium", "hard"]
-RELEASE = "0.1.1"
+RELEASE = "0.2.0"
 
 
 def plan(seeds=(1, 2)) -> list[tuple[str, str, str, int]]:
@@ -149,7 +150,19 @@ def main(argv=None) -> int:
     p.add_argument("--only")
     p.add_argument("--report")
     p.add_argument("--master-seed", type=int, default=20260928)
+    x = sub.add_parser("expert")
+    x.add_argument("--out", required=True)
+    x.add_argument("--families", default="E1,E2,E3,E4,E5")
+    x.add_argument("--seeds", default="1-8")
+    x.add_argument("--master-seed", type=int, default=20260930)
+    x.add_argument("--jobs", type=int, default=4)
+    x.add_argument("--no-adversaries", action="store_true")
+    x.add_argument("--knobs", default=None, help="generator knobs, comma separated (default: decoys,e3-evidence)")
     a = ap.parse_args(argv)
+    if a.cmd == "expert":
+        _require_tools()
+        from .expert.cli import main as expert_main
+        return expert_main(a)
     return {"build": cmd_build, "sample": cmd_sample, "spread": cmd_spread}[a.cmd](a)
 
 

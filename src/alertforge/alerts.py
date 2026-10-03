@@ -63,7 +63,7 @@ class AlertSpec:
     @property
     def threshold(self) -> F:
         if self.kind in BURN:
-            return BURN[self.kind][2] * (1 - F(self.params["target"]))
+            return F(self.params.get("factor", BURN[self.kind][2])) * (1 - F(self.params["target"]))
         return F(self.params.get("thr", 0))
 
     def records_used(self) -> list[str]:

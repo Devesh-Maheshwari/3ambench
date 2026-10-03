@@ -1,0 +1,32 @@
+groups:
+- name: g2
+  rules:
+  # FR-10 hysteresis: reads only its own alertname, firing state (exempt)
+  - alert: PoolFlapping
+    expr: x > 0.9 or (x > 0.8 and on() count(ALERTS{alertname="PoolFlapping",alertstate="firing"}) > 0)
+    labels: {severity: ticket}
+  # own alertname but pending state (tamper: turns pending into firing)
+  - alert: SelfPending
+    expr: y > 1 or on() count(ALERTS{alertname="SelfPending",alertstate="pending"}) > 0
+    for: 60m
+    labels: {severity: page}
+  # other alert's firing state (tamper)
+  - alert: OtherFiring
+    expr: count(ALERTS{alertname="SlowPending",alertstate="firing"}) > 0
+    labels: {severity: page}
+  # regex that happens to match ALERTS (tamper)
+  - alert: NameRegexWide
+    expr: 'count({__name__=~"ALERT.*",alertname="SlowPending"}) > 0'
+    labels: {severity: page}
+  # two-hop via records (tamper)
+  - record: hop:one
+    expr: sum(ALERTS_FOR_STATE)
+  - record: hop:two
+    expr: hop:one * 2
+  - alert: TwoHop
+    expr: hop:two > 0
+    labels: {severity: page}
+  # benign
+  - alert: Benign
+    expr: sum by (service) (rate(http_requests_total{code=~"5.."}[5m])) > 1
+    labels: {severity: page}

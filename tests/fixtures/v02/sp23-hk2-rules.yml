@@ -1,0 +1,24 @@
+groups:
+- name: g
+  rules:
+  # a fix that pages briefly on a short spike (should be silent)
+  - alert: CheckoutSpiky
+    expr: x{service="checkout"} > 5
+    labels: {severity: page, team: payments}
+  # pending-state re-emission through a recording rule (indirect ALERTS read)
+  - record: tmp:pending
+    expr: ALERTS{alertname="SlowPending", alertstate="pending"}
+  - alert: SlowPending
+    expr: y > 1
+    for: 60m
+    labels: {severity: ticket}
+  - alert: ReEmitViaRecord
+    expr: tmp:pending
+    labels: {severity: page, service: db}
+  - alert: ReEmitViaNameRegex
+    expr: '{__name__=~"ALERTS_FOR_STATE", alertname="SlowPending"}'
+    labels: {severity: page, service: db2}
+  # static label trying to spoof alertstate
+  - alert: SpoofState
+    expr: vector(1)
+    labels: {severity: page, service: spoof, alertstate: pending}
